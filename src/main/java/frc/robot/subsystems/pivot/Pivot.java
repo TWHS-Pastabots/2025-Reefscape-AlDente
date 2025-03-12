@@ -1,0 +1,127 @@
+package frc.robot.subsystems.pivot;
+
+
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import frc.robot.Ports;
+import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.PivotConstants;
+
+public class Pivot {
+    // public PIDController pid = new PIDController(PivotConstants.pivotPCoefficient, 
+    //                                             PivotConstants.pivotICoefficient, 
+    //                                             PivotConstants.pivotDCoefficient);
+    public SparkMax pivotMotor;
+    private SparkMaxConfig config;
+    public ArmFeedforward feedForward;
+    private SparkClosedLoopController pivotController;
+    private static PivotState pivotState = PivotState.SIGMATEST;
+
+    private static Pivot instance;
+//erm change this joint later tee hee
+    public enum PivotState {
+        GROUND(3),
+        //0
+        LOWALGAEINTAKE(40.3), //was 163.7
+        HIGHALGAEINTAKE(50.5), // was 153.5
+        L1CORALSCORE(94.444),
+        L2CORALSCORE(104),
+        L3CORALSCORE(107),
+        L4CORALSCORE(107),
+        PROCESSOR(38),
+        HUMANSTATIONINTAKE(80.289),
+        TRANSITIONSTATE(95),
+        SHOOTINGNET(137.3),
+        SIGMATEST(102.3),
+        CLIMB(60);
+
+        public double position;
+        
+        
+        private PivotState(double position) {
+            this.position = position;
+            
+        }
+    }
+
+    public Pivot() {
+        //pid.enableContinuousInput(0, 180);
+        pivotMotor = new SparkMax(Ports.pivot, MotorType.kBrushless);
+        config = new SparkMaxConfig();
+        config
+        .closedLoopRampRate(1.8)
+            .inverted(true)
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(60);
+        config.absoluteEncoder
+            .inverted(true)
+            .positionConversionFactor(360);
+        config.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .pid(PivotConstants.pivotPCoefficient, PivotConstants.pivotICoefficient, PivotConstants.pivotDCoefficient)
+            //.pid(0.009, 0, .05)
+            .positionWrappingEnabled(true)
+            .positionWrappingInputRange(0, 360)
+            .outputRange(-1, 1);
+        // config.closedLoop.maxMotion
+        //     .allowedClosedLoopError(2)
+        //     .maxVelocity(12000)
+        //     .maxAcceleration(108000);
+      
+        pivotMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        pivotController = pivotMotor.getClosedLoopController();
+        feedForward = new ArmFeedforward(0, .7, 0, 0);
+        //was .73
+    }
+    public void updatePose() {
+        // pivotMotor.setVoltage(pid.calculate(pivotMotor.getAbsoluteEncoder().getPosition(), getState().position) 
+        // );
+        double angle = pivotMotor.getAbsoluteEncoder().getPosition() - 12.3;
+        if(angle < 0){
+            angle += 360.0;
+        }
+        //+ feedForward.calculate(pivotMotor.getAbsoluteEncoder().getPosition(),0)
+        pivotController.setReference(pivotState.position, ControlType.kPosition, ClosedLoopSlot.kSlot0,
+                feedForward.calculate(Math.toRadians(angle), 0));
+       
+        //pivotController.setReference(pivotState.position, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    }
+    public void setPivotPosition(double position)
+    {   
+        pivotState.position = position;
+    }
+    public double getPosition() {
+        return pivotMotor.getAbsoluteEncoder().getPosition();
+    }
+    public void setPivotState(PivotState state){
+        pivotState = state;
+    }
+    public boolean hasReachedPose(double tolerance) {
+        return Math.abs(getPosition() - pivotState.position) < tolerance;
+    }
+    public PivotState getState(){
+        return this.pivotState;
+    }
+    public static Pivot getInstance() {
+        if (instance == null)
+            instance = new Pivot();
+        return instance;
+    }
+}
