@@ -141,8 +141,8 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    // p:.145 d:.25
-    public static final double elevatorPCoefficient = .13;
+    // p:.13
+    public static final double elevatorPCoefficient = .1;
     public static final double elevatorICoefficient = 0;
     public static final double elevatorDCoefficient = 8;
 

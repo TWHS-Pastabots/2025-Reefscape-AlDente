@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Dictionary;
 
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
@@ -14,13 +15,14 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Constants;
-
+import frc.robot.subsystems.swerve.DriveSubsystem;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -29,6 +31,8 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.fasterxml.jackson.databind.type.ArrayType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,14 +46,15 @@ public class CameraSystem{
     private ArrayList<PhotonPoseEstimator> estimators;
     private ArrayList<Boolean> hasAprilTagDetection;
     private String test = "test";
-
+    public int lastTag = 0;
+    private ArrayList<PhotonPipelineResult> lastestResults;
     //public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.valueOf("BucketFieldLayout.json").loadAprilTagLayoutField();
     public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
-    
+    private SwerveDrivePoseEstimator swerveEst;
     //AprilTagFields.valueOf("BucketFieldLayout.json").loadAprilTagLayoutField();
     //new AprilTagFieldLayout("c:\\Documents/GitHub/2024-OffSeason-Juno/src/main/java/frc/robot/subsystems/vision/BucketFieldLayout.json");
     // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-
+    private HashMap<Integer, ArrayList<Pose2d>> dictionary = new HashMap<>();
     private static CameraSystem instance;
 
     private CameraSystem() {
@@ -59,14 +64,104 @@ public class CameraSystem{
         offsets  = new ArrayList<Transform3d>();
         estimators = new ArrayList<PhotonPoseEstimator>();
         hasAprilTagDetection = new ArrayList<Boolean>();
-
+        lastestResults = new ArrayList<PhotonPipelineResult>();
+        
         // Initialize fiducial map with Pose3d
         initializeFiducialMap(inchesToMeters);
+        fillDictionary();
+    }
+    // creates a table for for each tag ID (key) and the poses required to line up with the left and right pole
+    private void fillDictionary(){
+        // Positiions for the red side of the field and their associated april tag
+        ArrayList<Pose2d> poses6 = new ArrayList<Pose2d>();
+        poses6.add(new Pose2d(new Translation2d(13.702, 2.892), new Rotation2d()));
+        poses6.add(new Pose2d(new Translation2d(13.99, 3.036), new Rotation2d()));
+        dictionary.put(6, poses6);
+        ArrayList<Pose2d> poses7 = new ArrayList<Pose2d>();
+        poses7.add(new Pose2d(new Translation2d(14.373, 4.007), new Rotation2d()));
+        poses7.add(new Pose2d(new Translation2d(14.373, 4.343), new Rotation2d()));
+        dictionary.put(7, poses7);
+        ArrayList<Pose2d> poses8 = new ArrayList<Pose2d>();
+        poses8.add(new Pose2d(new Translation2d(13.726, 5.158), new Rotation2d()));
+        poses8.add(new Pose2d(new Translation2d(13.426, 5.35), new Rotation2d()));
+        dictionary.put(8, poses8);
+        ArrayList<Pose2d> poses9 = new ArrayList<Pose2d>();
+        poses9.add(new Pose2d(new Translation2d(12.419, 5.158), new Rotation2d()));
+        poses9.add(new Pose2d(new Translation2d(12.144, 4.99), new Rotation2d()));
+        dictionary.put(9, poses9);
+        ArrayList<Pose2d> poses10 = new ArrayList<Pose2d>();
+        poses10.add(new Pose2d(new Translation2d(11.772, 4.019), new Rotation2d()));
+        poses10.add(new Pose2d(new Translation2d(11.772, 3.683), new Rotation2d()));
+        dictionary.put(10, poses10);
+        ArrayList<Pose2d> poses11 = new ArrayList<Pose2d>();
+        poses11.add(new Pose2d(new Translation2d(12.382, 2.916), new Rotation2d()));
+        poses11.add(new Pose2d(new Translation2d(12.719, 2.736), new Rotation2d()));
+        dictionary.put(11, poses11);
+        // Positions for the blue side of the field and their associated april tag
+        ArrayList<Pose2d> poses17 = new ArrayList<Pose2d>();
+        poses17.add(new Pose2d(new Translation2d(4.06, 2.834), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(3.846, 3.018), new Rotation2d()));
+        dictionary.put(17, poses17);
+        ArrayList<Pose2d> poses18 = new ArrayList<Pose2d>();
+        poses18.add(new Pose2d(new Translation2d(3.157, 4.12), new Rotation2d()));
+        poses18.add(new Pose2d(new Translation2d(3.157, 3.78), new Rotation2d()));
+        dictionary.put(18, poses18);
+        ArrayList<Pose2d> poses19 = new ArrayList<Pose2d>();
+        poses19.add(new Pose2d(new Translation2d(3.888, 5.205), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.58, 4.983), new Rotation2d()));
+        dictionary.put(19, poses19);
+        ArrayList<Pose2d> poses20 = new ArrayList<Pose2d>();
+        poses20.add(new Pose2d(new Translation2d(5.199, 5.072), new Rotation2d()));
+        poses20.add(new Pose2d(new Translation2d(4.947, 5.316), new Rotation2d()));
+        dictionary.put(20, poses20);
+        ArrayList<Pose2d> poses21 = new ArrayList<Pose2d>();
+        poses21.add(new Pose2d(new Translation2d(5.752, 3.925), new Rotation2d()));
+        poses21.add(new Pose2d(new Translation2d(5.752, 4.267), new Rotation2d()));
+        dictionary.put(21, poses21);
+        ArrayList<Pose2d> poses22 = new ArrayList<Pose2d>();
+        poses22.add(new Pose2d(new Translation2d(5.053, 2.802), new Rotation2d()));
+        poses22.add(new Pose2d(new Translation2d(5.336, 2.958), new Rotation2d()));
+        dictionary.put(22, poses22);
     }
     // checks to see if the camera at the given position sees a tag
-    public PhotonPipelineResult getResult(int position){
-        return cameras.get(position).getLatestResult();
+    public List<PhotonPipelineResult> getResult(int position){
+        return cameras.get(position).getAllUnreadResults();
     }
+    // Updates the results list to include only the latest piprline result and sets the last tag seen as the closest target instead of
+    // the "best" target
+    public void updateLatestResult(boolean buttonPressed){
+        int cameraCount = 0;
+        for(PhotonCamera cam : cameras){
+            List<PhotonPipelineResult> results = cam.getAllUnreadResults();
+            if(!results.isEmpty()){
+                lastestResults.set(cameraCount, results.get(results.size() - 1));
+            }
+            cameraCount++;
+        }
+        if(lastestResults.get(0).hasTargets() && (lastestResults.get(0).getBestTarget().fiducialId == 17 
+        || lastestResults.get(0).getBestTarget().fiducialId == 18 
+        || lastestResults.get(0).getBestTarget().fiducialId == 19 || lastestResults.get(0).getBestTarget().fiducialId ==20
+        || lastestResults.get(0).getBestTarget().fiducialId == 21 || lastestResults.get(0).getBestTarget().fiducialId == 22)
+        && !buttonPressed)
+        {
+            lastTag = lastestResults.get(0).getBestTarget().fiducialId;
+            PhotonTrackedTarget closestTarget = null;
+            for(PhotonTrackedTarget target : lastestResults.get(0).targets){
+                if(closestTarget == null){
+                    closestTarget = target;
+                }
+                else{
+                    Transform3d currTar = closestTarget.getBestCameraToTarget();
+                    Transform3d newTar = target.getBestCameraToTarget();
+                    if(Math.abs(currTar.getX()) > Math.abs(newTar.getX()) && Math.abs(currTar.getY()) > Math.abs(newTar.getY())){
+                        closestTarget = target;
+                    } 
+                }
+            }
+            lastTag = closestTarget.fiducialId;
+        }
+    }
+    // updating to get all the latest results
     public PhotonCamera getCamera(int position)
     {
         return cameras.get(position);
@@ -78,22 +173,25 @@ public class CameraSystem{
     public void AddCamera(PhotonCamera camera, Transform3d offset, boolean hasAprilTagDetection){
         cameras.add(camera);
         offsets.add(offset);
+        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        lastestResults.add(results.get(results.size() -1));
         estimators.add(new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, offset));
         estimators.get(estimators.size() - 1).setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         this.hasAprilTagDetection.add(hasAprilTagDetection);
     }
     public void AddVisionMeasurements(SwerveDrivePoseEstimator swerveEstimator, Field2d visionField)
     {
+        swerveEst = swerveEstimator;
         int cameraCount = 0;
         for (var estimator : estimators) 
         {
             if(CameraHasAprilTagDetection(cameraCount))
             {
-                Optional<EstimatedRobotPose> estimatedPose = estimator.update(getResult(cameraCount));
-                visionField.setRobotPose(estimatedPose.get().estimatedPose.toPose2d());
-                Matrix<N3,N1> camStdDev = getEstimationStdDevs(estimatedPose, getResult(cameraCount).getTargets());
+                Optional<EstimatedRobotPose> estimatedPose = estimator.update(lastestResults.get(cameraCount));
+                Matrix<N3,N1> camStdDev = getEstimationStdDevs(estimatedPose, lastestResults.get(cameraCount).getTargets());
                 if(!estimatedPose.isEmpty() && camStdDev != null)
                 {
+                    visionField.setRobotPose(estimatedPose.get().estimatedPose.toPose2d());
                     Pose2d camRobotPose = estimatedPose.get().estimatedPose.toPose2d();
                     double timestamp = estimatedPose.get().timestampSeconds;
                     swerveEstimator.addVisionMeasurement(camRobotPose, timestamp, camStdDev);
@@ -237,7 +335,7 @@ public class CameraSystem{
         if(prevPose != null){
             estimators.get(position).setReferencePose(prevPose);
         }
-        return estimators.get(position).update(getResult(position));
+        return estimators.get(position).update(lastestResults.get(position));
     }
     // calculates the postition of tag to robot from one camera's results 
     private Pose3d calculatePoseFromCameraResult(PhotonPipelineResult result, Transform3d cameraOffset) {
@@ -279,13 +377,42 @@ public class CameraSystem{
         }
         return null;
     }
+    // returns the yaw required to be perpendicular to a tag to make it easy to score
+    public double getPerpendicularYaw(int position){
+        double desiredDegrees = 
+        aprilTagFieldLayout.getTagPose(lastTag).get().getRotation().toRotation2d().getDegrees();
+        double currentDegrees = swerveEst.getEstimatedPosition().getRotation().getDegrees();
+        // some tags have a angle smaller than -90, so in those cases you need to add 90 to be perpendicular instead of subtract, and
+        // this is because the odemetry is between (180, -180) degrees, so subtracting 90 is an impossible angle to reach
+        if(desiredDegrees < -90){
+            desiredDegrees += 270;
+        }
+        else{
+            desiredDegrees -= 90;
+        }
+        
+      
+        // else{
+        //     desiredDegrees += 90;
+        // }
+        return desiredDegrees - currentDegrees;
+    }
+    // calculates and returns the difference between the x and y values of the current and desired position to travel to
+    public ArrayList<Double> getPoseToTravel(int leftOrRight){
+        Pose2d desPose = dictionary.get(lastTag).get(leftOrRight);
+        Pose2d curPose = swerveEst.getEstimatedPosition();
+        ArrayList<Double> powers = new ArrayList<>();
+        powers.add(desPose.getX() - curPose.getX());
+        powers.add(desPose.getY() - curPose.getY());
+        return powers;
+    }
     public static CameraSystem getInstance() {
         if (instance == null) {
             instance = new CameraSystem();
         }
         return instance;
     }
-
+    
     // checks to see if the result sees any april tags
     public boolean hasTargets(){
         int cameraCount = 0;
@@ -317,9 +444,9 @@ public class CameraSystem{
     }
     // returns a Double Object, so need check if it is null
     public Double getYawForTag(int position, int ID){
-            if(getResult(position).hasTargets())
+            if(lastestResults.get(position).hasTargets())
             {
-                List<PhotonTrackedTarget> targets = getResult(position).getTargets();
+                List<PhotonTrackedTarget> targets = lastestResults.get(position).getTargets();
                 for(var target : targets)
                 {
                     if(target != null && target.getFiducialId() == ID)
@@ -352,7 +479,7 @@ public class CameraSystem{
         //         }
         // }
         
-            List<PhotonTrackedTarget> targets = getResult(position).getTargets();
+            List<PhotonTrackedTarget> targets = lastestResults.get(position).getTargets();
             for(PhotonTrackedTarget target : targets)
             {
                if(target.getFiducialId() == ID)

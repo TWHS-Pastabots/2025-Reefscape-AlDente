@@ -36,19 +36,20 @@ public class Pivot {
     private static Pivot instance;
 //erm change this joint later tee hee
     public enum PivotState {
-        GROUND(3),
+        GROUND(1),
         //0
         LOWALGAEINTAKE(40.3), //was 163.7
         HIGHALGAEINTAKE(50.5), // was 153.5
         L1CORALSCORE(94.444),
-        L2CORALSCORE(104),
+        L2CORALSCORE(110),
         L3CORALSCORE(107),
         L4CORALSCORE(107),
         PROCESSOR(38),
         HUMANSTATIONINTAKE(80.289),
         TRANSITIONSTATE(95),
-        SHOOTINGNET(137.3),
-        SIGMATEST(102.3),
+        SHOOTINGNET(80),
+
+        SIGMATEST(120.3),
         CLIMB(60);
 
         public double position;

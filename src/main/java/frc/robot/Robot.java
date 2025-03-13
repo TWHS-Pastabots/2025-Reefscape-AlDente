@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.ArrayList;
+
 import org.ietf.jgss.Oid;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.photonvision.PhotonCamera;
@@ -67,6 +69,7 @@ public class Robot extends LoggedRobot {
   private Claw claw;
   private Pivot pivot; 
   private Elevator elevator;
+  private CameraSystem camSystem;
   private WristCommand wristCommand;
   private GroundAlgaeIntake groundAlgaeIntake;
   private GroundIntakeCoral groundCoralIntake;
@@ -107,8 +110,13 @@ public class Robot extends LoggedRobot {
     // litty = LED.getInstance();
     wrist = Wrist.getInstance();
     climber = Climber.getInstance();
-     claw = Claw.getInstance();
-     pivot = Pivot.getInstance();
+    claw = Claw.getInstance();
+    pivot = Pivot.getInstance();
+    camSystem = CameraSystem.getInstance(); 
+    camSystem.AddCamera(new PhotonCamera("ClimbCam"), new Transform3d(
+      new Translation3d(0.00833, -0.22138, 0.14534), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), true);
+    camSystem.AddCamera(new PhotonCamera("SwerveCam"), new Transform3d(
+      new Translation3d(0.29921, -0.22773, 0.21773), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), true);
     transitionAuto = new TransitionAuto();
     wristCommand = new WristCommand(WristState.TEST);
     pivotCommand = new PivotCommand(PivotState.SIGMATEST);
@@ -185,8 +193,13 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putString("wristlaststate", wrist.lastState.toString());
     SmartDashboard.putBoolean("pivotisfinished", pivotCommand.isFinished());
 
+    SmartDashboard.putNumber("Last Tag Seen", camSystem.lastTag);
+    SmartDashboard.putNumber("Desired Degree", 
+    CameraSystem.aprilTagFieldLayout.getTagPose(18).get().getRotation().toRotation2d().getDegrees());
+    SmartDashboard.putNumber("Currenr Degree", DriveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees());
 
 
+    
 
     // SmartDashboard.putNumber("currentPose Angle L", wrist.ThoseWhoTroll[0]);
     // SmartDashboard.putNumber("currentPose Angle R", wrist.ThoseWhoTroll2[0]);
@@ -277,6 +290,7 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("Auto Y", drivebase.getPose().getY());
     // SmartDashboard.putNumber("Odometry X", pose.getX());
     // SmartDashboard.putNumber("Odometry Y", pose.getY());
+    camSystem.updateLatestResult(false);
   }
 
   @Override
@@ -306,6 +320,7 @@ public class Robot extends LoggedRobot {
     }else if(driver.getLeftTriggerAxis() >= .5){
     drivebase.setDriveState(DriveState.NORMAL);
     }
+    camSystem.updateLatestResult(driver.getBButton() || driver.getXButton());
     // if(pivot.getPosition() >= 120){
     //   ySpeed *= .7;
     //   xSpeed *= .7;
@@ -315,6 +330,42 @@ public class Robot extends LoggedRobot {
     // }
     if (driver.getPOV() == 0) {
       drivebase.zeroHeading();
+    }
+    if(driver.getBButton()){
+      Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
+      if(yaw != null){
+        rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
+      }
+      ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
+      xSpeed = speeds.get(0);
+      ySpeed = speeds.get(1);
+      if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
+        rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+      }
+      // rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+      // if(Math.abs(rot) < .1){
+      //   ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
+      //   xSpeed = speeds.get(0) * .6;
+      //   ySpeed = speeds.get(1) * .6;
+      // }
+    }
+    if(driver.getXButton()){
+      Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
+      if(yaw != null){
+        rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
+      }
+      ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
+      xSpeed = speeds.get(0);
+      ySpeed = speeds.get(1);
+      if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
+        rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+      }
+      // rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+      // if(Math.abs(rot) < .1){
+      //   ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
+      //   xSpeed = speeds.get(0) * .6;
+      //   ySpeed = speeds.get(1) * .6;
+      // }
     }
     drivebase.drive(xSpeed, ySpeed, rot, true);
     
@@ -342,6 +393,15 @@ public class Robot extends LoggedRobot {
     }else{
       climber.ClimbZero();
     }
+    if(driver.getBButton()){
+      Double yaw = camSystem.getYawForTag(0, 18);
+      if(yaw != null){
+        rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
+      }
+    }
+    
+    
+
     // if(operator.getPOV() == 0){
     //       pivotCommand.cancel();
     //       pivotCommand = new PivotCommand(PivotState.GROUND);
@@ -422,6 +482,13 @@ public class Robot extends LoggedRobot {
         CancelCommands();
         lowAlgaeIntake.initialize();
         lowAlgaeIntake.schedule();
+      }else if(operator.getPOV() == 90){
+        CancelCommands();
+        pivot.setPivotState(PivotState.SIGMATEST);
+        elevator.setElevatorState(ElevatorState.L4CORALSCORE);
+        wristCommand = new WristCommand(WristState.NET);
+        wristCommand.initialize();
+        wristCommand.schedule();
       }
     }
     if(operator.getYButton()){
@@ -451,7 +518,7 @@ public class Robot extends LoggedRobot {
     }
 
     if(operator.getBButton()){
-      elevator.updatePose();
+     pivot.setPivotState(PivotState.SHOOTINGNET);
     }
     // if(operator.getBButton()){
     //   elevator.setElevatorState(ElevatorState.L4CORALSCORE);

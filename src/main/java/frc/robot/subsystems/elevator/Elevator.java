@@ -43,11 +43,11 @@ public class Elevator {
     public static ElevatorFeedforward feedForward;
     public static ElevatorState elevatorState = ElevatorState.GROUND;
     public enum ElevatorState{
-        GROUND(2),    
+        GROUND(.5),    
         LOWALGAEINTAKE(27),
         HIGHALGAEINTAKE(39.7),
         L1CORALSCORE(0),
-        L2CORALSCORE(9.25),
+        L2CORALSCORE(13),
         L3CORALSCORE(36),
         L4CORALSCORE(80.6),
         PROCESSOR(9),
@@ -66,8 +66,11 @@ public class Elevator {
         configL = new SparkFlexConfig();
         configR = new SparkFlexConfig();
 
+        //closed .7
+        //.6
+
         configL
-            .closedLoopRampRate(.7)
+            .closedLoopRampRate(.5)
             .inverted(false)
             .idleMode(IdleMode.kBrake)
             
@@ -75,7 +78,7 @@ public class Elevator {
         configL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
-            .outputRange(-.6, .6);
+            .outputRange(-.7, .7);
          elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
          configR
@@ -86,7 +89,7 @@ public class Elevator {
         configR.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
-            .outputRange(-.6, .6);
+            .outputRange(-.7, .7);
          elevatorMotorR.configure(configR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         // kg: 0.2
         feedForward = new ElevatorFeedforward(0.16,0.23,0,0); //FILL THESE NUMBERS IN LATER

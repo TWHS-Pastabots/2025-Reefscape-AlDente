@@ -35,7 +35,8 @@ public class Wrist  {
         HUMANSTATIONINTAKE(91.08,74.88),
         TRANSITIONSTATE(0,84.6),
         TEST(90,110),
-        CLIMB(90,84.6);
+        CLIMB(90,84.6),
+        NET(96,102);
         public double rotate;
         public double tilt;
         private WristState(double rotate, double tilt) {
