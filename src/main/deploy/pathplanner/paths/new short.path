@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1268442622950818,
-        "y": 7.135809426229507
+        "x": 7.192622950819672,
+        "y": 6.296670081967212
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.39629442436782,
-        "y": 6.553402806014319
+        "x": 6.425409836065573,
+        "y": 6.1648053278688515
       },
       "isLocked": false,
-      "linkedName": "sigmahumanR"
+      "linkedName": "midbarge"
     },
     {
       "anchor": {
-        "x": 3.0568647540983607,
-        "y": 4.162858606557377
+        "x": 5.658196721311475,
+        "y": 6.056915983606557
       },
       "prevControl": {
-        "x": 2.5830002845442737,
-        "y": 5.105846569245428
+        "x": 6.461372950819672,
+        "y": 6.200768442622952
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -29.999999999999996
   },
   "reversed": false,
-  "folder": "CyclePaths RC",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 38.0
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

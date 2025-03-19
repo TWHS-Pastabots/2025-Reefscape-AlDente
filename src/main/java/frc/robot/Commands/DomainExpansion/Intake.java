@@ -28,15 +28,18 @@ public class Intake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    claw.clawReverse(1);
+    claw.clawReverse(.5);
     if(Timer.getFPGATimestamp() > timer + 1.5){
+      claw.clawOff(0);
       ended = true;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    
+  }
 
   // Returns true when the command should end.
   @Override

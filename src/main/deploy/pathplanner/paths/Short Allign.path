@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.39629442436782,
-        "y": 6.553402806014319
+        "x": 2.0738729508196716,
+        "y": 6.908043032786884
       },
       "isLocked": false,
       "linkedName": "sigmahumanR"
     },
     {
       "anchor": {
-        "x": 3.0568647540983607,
-        "y": 4.162858606557377
+        "x": 3.296618852459016,
+        "y": 6.344620901639344
       },
       "prevControl": {
-        "x": 2.5830002845442737,
-        "y": 5.105846569245428
+        "x": 2.9249999999999994,
+        "y": 6.644313524590163
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 14.999999999999998
   },
   "reversed": false,
-  "folder": "CyclePaths RC",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 38.0

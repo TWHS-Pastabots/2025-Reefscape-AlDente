@@ -28,8 +28,9 @@ public class Outtake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    claw.clawOn(1);
-    if(Timer.getFPGATimestamp() > timer + .2){
+    claw.clawOn(.5);
+    if(Timer.getFPGATimestamp() > timer + 1){
+      claw.clawOff(0);
       ended = true;
     }
   }
@@ -37,7 +38,7 @@ public class Outtake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    claw.clawOff(0);
+    
   }
 
   // Returns true when the command should end.

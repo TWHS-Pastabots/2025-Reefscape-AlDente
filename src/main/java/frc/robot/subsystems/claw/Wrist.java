@@ -94,8 +94,8 @@ public class Wrist  {
         MotorConfigL = new SparkMaxConfig();
         MotorConfigR = new SparkMaxConfig();
 
-        feedforwardR = new ArmFeedforward(0, .4,0);
-        feedforwardL = new ArmFeedforward(0, .4, 0);
+        feedforwardR = new ArmFeedforward(0, .37,0);
+        feedforwardL = new ArmFeedforward(0, .37, 0);
         // el: 88.2 piv: 56.5 rt:
         MotorConfigL
                 .inverted(false)

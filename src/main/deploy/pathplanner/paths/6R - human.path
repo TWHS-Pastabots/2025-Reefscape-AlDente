@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6082991803278692,
-        "y": 5.217776639344262
+        "x": 3.560348360655738,
+        "y": 5.061936475409836
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.852283225551848,
-        "y": 5.163262552392875
+        "x": 3.804332405879717,
+        "y": 5.0074223884584494
       },
       "isLocked": false,
       "linkedName": "6RScore"
     },
     {
       "anchor": {
-        "x": 1.066905737704918,
-        "y": 7.267674180327869
+        "x": 1.1268442622950818,
+        "y": 7.135809426229507
       },
       "prevControl": {
-        "x": 0.8085669403257734,
-        "y": 7.447623679879904
+        "x": 0.8685054649159372,
+        "y": 7.315758925781542
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.6338832487309625,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 4.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -48,7 +62,7 @@
   "folder": "CyclePaths RC",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -150.0
+    "rotation": 29.999999999999996
   },
   "useDefaultConstraints": true
 }

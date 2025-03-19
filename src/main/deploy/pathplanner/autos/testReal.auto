@@ -73,6 +73,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -85,7 +91,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoAllignL"
+                  "name": "AutoAllignR"
                 }
               },
               {
@@ -98,21 +104,34 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "outtake"
           }
         },
         {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "6R - human"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "HumanIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Transition"
+            "name": "intake"
           }
         }
       ]

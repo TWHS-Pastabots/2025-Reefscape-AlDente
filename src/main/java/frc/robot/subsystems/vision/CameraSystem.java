@@ -80,7 +80,7 @@ public class CameraSystem{
         dictionary.put(6, poses6);
         ArrayList<Pose2d> poses7 = new ArrayList<Pose2d>();
         poses7.add(new Pose2d(new Translation2d(14.349, 3.995), new Rotation2d()));
-        poses7.add(new Pose2d(new Translation2d(14.361, 4.307), new Rotation2d()));
+        poses7.add(new Pose2d(new Translation2d(14.361, 4.249), new Rotation2d()));
         dictionary.put(7, poses7);
         ArrayList<Pose2d> poses8 = new ArrayList<Pose2d>();
         poses8.add(new Pose2d(new Translation2d(13.762, 5.072), new Rotation2d()));
@@ -100,28 +100,28 @@ public class CameraSystem{
         dictionary.put(11, poses11);
         // Positions for the blue side of the field and their associated april tag
         ArrayList<Pose2d> poses17 = new ArrayList<Pose2d>();
-        poses17.add(new Pose2d(new Translation2d(3.800, 2.916), new Rotation2d()));
-        poses17.add(new Pose2d(new Translation2d(4.076, 2.748), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(3.730, 2.816), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(3.956, 2.728), new Rotation2d()));
         dictionary.put(17, poses17);
         ArrayList<Pose2d> poses18 = new ArrayList<Pose2d>();
-        poses18.add(new Pose2d(new Translation2d(3.201, 4.055), new Rotation2d()));
-        poses18.add(new Pose2d(new Translation2d(3.201, 3.743), new Rotation2d()));
+        poses18.add(new Pose2d(new Translation2d(3.101, 4.135), new Rotation2d()));
+        poses18.add(new Pose2d(new Translation2d(3.101, 3.823), new Rotation2d()));
         dictionary.put(18, poses18);
         ArrayList<Pose2d> poses19 = new ArrayList<Pose2d>();
-        poses19.add(new Pose2d(new Translation2d(3.872, 5.182), new Rotation2d()));
-        poses19.add(new Pose2d(new Translation2d(3.584, 5.014), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.872, 5.282), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.564, 5.134), new Rotation2d()));
         dictionary.put(19, poses19);
         ArrayList<Pose2d> poses20 = new ArrayList<Pose2d>();
-        poses20.add(new Pose2d(new Translation2d(5.179, 5.134), new Rotation2d()));
-        poses20.add(new Pose2d(new Translation2d(4.879, 5.290), new Rotation2d()));
+        poses20.add(new Pose2d(new Translation2d(5.279, 5.134), new Rotation2d()));
+        poses20.add(new Pose2d(new Translation2d(5.019, 5.330), new Rotation2d()));
         dictionary.put(20, poses20);
         ArrayList<Pose2d> poses21 = new ArrayList<Pose2d>();
-        poses21.add(new Pose2d(new Translation2d(5.790, 3.971), new Rotation2d()));
-        poses21.add(new Pose2d(new Translation2d(5.790, 4.319), new Rotation2d()));
+        poses21.add(new Pose2d(new Translation2d(5.843, 3.901), new Rotation2d()));
+        poses21.add(new Pose2d(new Translation2d(5.843, 4.249), new Rotation2d()));
         dictionary.put(21, poses21);
         ArrayList<Pose2d> poses22 = new ArrayList<Pose2d>();
-        poses22.add(new Pose2d(new Translation2d(4.987, 2.820), new Rotation2d()));
-        poses22.add(new Pose2d(new Translation2d(5.406, 3.048), new Rotation2d()));
+        poses22.add(new Pose2d(new Translation2d(4.987, 2.720), new Rotation2d()));
+        poses22.add(new Pose2d(new Translation2d(5.406, 2.928), new Rotation2d()));
         dictionary.put(22, poses22);
     }
     // checks to see if the camera at the given position sees a tag

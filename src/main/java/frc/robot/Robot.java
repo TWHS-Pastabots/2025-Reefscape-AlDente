@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.WristCommand;
+import frc.robot.Commands.DomainExpansion.AutoAllignL;
 import frc.robot.Commands.DomainExpansion.AutoAllignR;
 import frc.robot.Commands.DomainExpansion.GroundAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.GroundIntakeCoral;
@@ -91,6 +92,7 @@ public class Robot extends LoggedRobot {
   private Outtake outtake;
   private Intake intake;
   private AutoAllignR autoAllignR;
+  private AutoAllignL autoAllignL;
   // private LED litty;
   // private CameraSystem camSystem;
   private String mode = "coral";
@@ -140,6 +142,7 @@ public class Robot extends LoggedRobot {
     intake = new Intake();
     outtake = new Outtake();
     autoAllignR = new AutoAllignR();
+    autoAllignL = new AutoAllignL();
     // camSystem = CameraSystem.getInstance();
     // camSystem.AddCamera(new PhotonCamera("Cam1"), new Transform3d(
     // new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0.0, 0.0, 0.0))
@@ -161,14 +164,15 @@ public class Robot extends LoggedRobot {
     NamedCommands.registerCommand("Elevator", elevatorCommand);
     NamedCommands.registerCommand("Transition", transition);
     NamedCommands.registerCommand("outtake", outtake);
-    NamedCommands.registerCommand("Intake", intake);
+    NamedCommands.registerCommand("intake", intake);
     NamedCommands.registerCommand("AutoAllignR", autoAllignR);
+    NamedCommands.registerCommand("AutoAllignL", autoAllignL);
     m_chooser.addOption("1_C_1_P1C", new PathPlannerAuto("1_C_1_P1C"));
     m_chooser.addOption("test", new PathPlannerAuto("test"));
     m_chooser.addOption("test2", new PathPlannerAuto("test2"));
     // SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData(m_chooser);
-    drivebase.zeroHeading();
+    
   }
 
   @Override
@@ -280,6 +284,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    robotInit();
     // getting the value we chose from the dashboard and putting it into motion in
     // the auton
     m_autoSelected = m_chooser.getSelected();
@@ -347,6 +352,12 @@ public class Robot extends LoggedRobot {
       drivebase.zeroHeading();
     }
     if(driver.getYButton()){
+      autoAllignL.cancel();
+      autoAllignL = new AutoAllignL();
+      autoAllignL.initialize();
+      autoAllignL.schedule();
+    }
+    if(driver.getAButton()){
       autoAllignR.cancel();
       autoAllignR = new AutoAllignR();
       autoAllignR.initialize();

@@ -48,7 +48,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 public class DriveSubsystem extends SubsystemBase {
   public enum DriveState {
     NORMAL(1),
-    SLOW(0.5);
+    SLOW(0.2);
 
     public double driveSpeed;
 

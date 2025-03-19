@@ -16,7 +16,7 @@ import frc.robot.subsystems.vision.CameraSystem;
 import frc.robot.Constants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoAllignR extends Command {
+public class AutoAllignL extends Command {
   /** Creates a new AutoAllignR. */
   private DriveSubsystem drivebase;
   private CameraSystem camSystem;
@@ -28,7 +28,7 @@ public class AutoAllignR extends Command {
   private double timer;
   Pose2d desPose = null;
   
-  public AutoAllignR() {
+  public AutoAllignL() {
     // Use addRequirements() here to declare subsystem dependencies.
     camSystem = CameraSystem.getInstance();
     drivebase = DriveSubsystem.getInstance();
@@ -60,7 +60,7 @@ public class AutoAllignR extends Command {
       if(yaw != null){
         rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
       }
-      ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
+      ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
       xSpeed = MathUtil.clamp(speeds.get(0), -.3, .3);
       ySpeed = MathUtil.clamp(speeds.get(1), -.3, .3);
       if(!camSystem.hasTargets()){
