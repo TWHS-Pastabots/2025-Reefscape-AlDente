@@ -50,11 +50,12 @@ public class CameraSystem{
     private ArrayList<PhotonPipelineResult> lastestResults;
     //public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.valueOf("BucketFieldLayout.json").loadAprilTagLayoutField();
     public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
-    private SwerveDrivePoseEstimator swerveEst;
+    public SwerveDrivePoseEstimator swerveEst;
+    public boolean isBlueSide;
     //AprilTagFields.valueOf("BucketFieldLayout.json").loadAprilTagLayoutField();
     //new AprilTagFieldLayout("c:\\Documents/GitHub/2024-OffSeason-Juno/src/main/java/frc/robot/subsystems/vision/BucketFieldLayout.json");
     // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    private HashMap<Integer, ArrayList<Pose2d>> dictionary = new HashMap<>();
+    public HashMap<Integer, ArrayList<Pose2d>> dictionary = new HashMap<>();
     private static CameraSystem instance;
 
     private CameraSystem() {
@@ -74,53 +75,53 @@ public class CameraSystem{
     private void fillDictionary(){
         // Positiions for the red side of the field and their associated april tag
         ArrayList<Pose2d> poses6 = new ArrayList<Pose2d>();
-        poses6.add(new Pose2d(new Translation2d(13.702, 2.892), new Rotation2d()));
-        poses6.add(new Pose2d(new Translation2d(13.99, 3.036), new Rotation2d()));
+        poses6.add(new Pose2d(new Translation2d(13.690, 2.880), new Rotation2d()));
+        poses6.add(new Pose2d(new Translation2d(13.978, 3.048), new Rotation2d()));
         dictionary.put(6, poses6);
         ArrayList<Pose2d> poses7 = new ArrayList<Pose2d>();
-        poses7.add(new Pose2d(new Translation2d(14.373, 4.007), new Rotation2d()));
-        poses7.add(new Pose2d(new Translation2d(14.373, 4.343), new Rotation2d()));
+        poses7.add(new Pose2d(new Translation2d(14.349, 3.995), new Rotation2d()));
+        poses7.add(new Pose2d(new Translation2d(14.361, 4.307), new Rotation2d()));
         dictionary.put(7, poses7);
         ArrayList<Pose2d> poses8 = new ArrayList<Pose2d>();
-        poses8.add(new Pose2d(new Translation2d(13.726, 5.158), new Rotation2d()));
-        poses8.add(new Pose2d(new Translation2d(13.426, 5.35), new Rotation2d()));
+        poses8.add(new Pose2d(new Translation2d(13.762, 5.072), new Rotation2d()));
+        poses8.add(new Pose2d(new Translation2d(13.474, 5.314), new Rotation2d()));
         dictionary.put(8, poses8);
         ArrayList<Pose2d> poses9 = new ArrayList<Pose2d>();
-        poses9.add(new Pose2d(new Translation2d(12.419, 5.158), new Rotation2d()));
-        poses9.add(new Pose2d(new Translation2d(12.144, 4.99), new Rotation2d()));
+        poses9.add(new Pose2d(new Translation2d(12.443, 5.170), new Rotation2d()));
+        poses9.add(new Pose2d(new Translation2d(12.168, 5.002), new Rotation2d()));
         dictionary.put(9, poses9);
         ArrayList<Pose2d> poses10 = new ArrayList<Pose2d>();
-        poses10.add(new Pose2d(new Translation2d(11.772, 4.019), new Rotation2d()));
-        poses10.add(new Pose2d(new Translation2d(11.772, 3.683), new Rotation2d()));
+        poses10.add(new Pose2d(new Translation2d(11.772, 4.055), new Rotation2d()));
+        poses10.add(new Pose2d(new Translation2d(11.772, 3.743), new Rotation2d()));
         dictionary.put(10, poses10);
         ArrayList<Pose2d> poses11 = new ArrayList<Pose2d>();
-        poses11.add(new Pose2d(new Translation2d(12.382, 2.916), new Rotation2d()));
-        poses11.add(new Pose2d(new Translation2d(12.719, 2.736), new Rotation2d()));
+        poses11.add(new Pose2d(new Translation2d(12.383, 2.904), new Rotation2d()));
+        poses11.add(new Pose2d(new Translation2d(12.659, 2.772), new Rotation2d()));
         dictionary.put(11, poses11);
         // Positions for the blue side of the field and their associated april tag
         ArrayList<Pose2d> poses17 = new ArrayList<Pose2d>();
-        poses17.add(new Pose2d(new Translation2d(4.06, 2.834), new Rotation2d()));
-        poses17.add(new Pose2d(new Translation2d(3.846, 3.018), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(3.800, 2.916), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(4.076, 2.748), new Rotation2d()));
         dictionary.put(17, poses17);
         ArrayList<Pose2d> poses18 = new ArrayList<Pose2d>();
-        poses18.add(new Pose2d(new Translation2d(3.157, 4.12), new Rotation2d()));
-        poses18.add(new Pose2d(new Translation2d(3.157, 3.78), new Rotation2d()));
+        poses18.add(new Pose2d(new Translation2d(3.201, 4.055), new Rotation2d()));
+        poses18.add(new Pose2d(new Translation2d(3.201, 3.743), new Rotation2d()));
         dictionary.put(18, poses18);
         ArrayList<Pose2d> poses19 = new ArrayList<Pose2d>();
-        poses19.add(new Pose2d(new Translation2d(3.888, 5.205), new Rotation2d()));
-        poses19.add(new Pose2d(new Translation2d(3.58, 4.983), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.872, 5.182), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.584, 5.014), new Rotation2d()));
         dictionary.put(19, poses19);
         ArrayList<Pose2d> poses20 = new ArrayList<Pose2d>();
-        poses20.add(new Pose2d(new Translation2d(5.199, 5.072), new Rotation2d()));
-        poses20.add(new Pose2d(new Translation2d(4.947, 5.316), new Rotation2d()));
+        poses20.add(new Pose2d(new Translation2d(5.179, 5.134), new Rotation2d()));
+        poses20.add(new Pose2d(new Translation2d(4.879, 5.290), new Rotation2d()));
         dictionary.put(20, poses20);
         ArrayList<Pose2d> poses21 = new ArrayList<Pose2d>();
-        poses21.add(new Pose2d(new Translation2d(5.752, 3.925), new Rotation2d()));
-        poses21.add(new Pose2d(new Translation2d(5.752, 4.267), new Rotation2d()));
+        poses21.add(new Pose2d(new Translation2d(5.790, 3.971), new Rotation2d()));
+        poses21.add(new Pose2d(new Translation2d(5.790, 4.319), new Rotation2d()));
         dictionary.put(21, poses21);
         ArrayList<Pose2d> poses22 = new ArrayList<Pose2d>();
-        poses22.add(new Pose2d(new Translation2d(5.053, 2.802), new Rotation2d()));
-        poses22.add(new Pose2d(new Translation2d(5.336, 2.958), new Rotation2d()));
+        poses22.add(new Pose2d(new Translation2d(4.987, 2.820), new Rotation2d()));
+        poses22.add(new Pose2d(new Translation2d(5.406, 3.048), new Rotation2d()));
         dictionary.put(22, poses22);
     }
     // checks to see if the camera at the given position sees a tag
@@ -138,27 +139,39 @@ public class CameraSystem{
             }
             cameraCount++;
         }
-        if(lastestResults.get(0).hasTargets() && (lastestResults.get(0).getBestTarget().fiducialId == 17 
-        || lastestResults.get(0).getBestTarget().fiducialId == 18 
-        || lastestResults.get(0).getBestTarget().fiducialId == 19 || lastestResults.get(0).getBestTarget().fiducialId ==20
-        || lastestResults.get(0).getBestTarget().fiducialId == 21 || lastestResults.get(0).getBestTarget().fiducialId == 22)
+        if(lastestResults.get(0).hasTargets() 
+        && ((lastestResults.get(0).getBestTarget().fiducialId >= 17 && lastestResults.get(0).getBestTarget().fiducialId <= 22)
+        || (lastestResults.get(0).getBestTarget().fiducialId >= 6 && lastestResults.get(0).getBestTarget().fiducialId <= 11))
         && !buttonPressed)
         {
             lastTag = lastestResults.get(0).getBestTarget().fiducialId;
             PhotonTrackedTarget closestTarget = null;
             for(PhotonTrackedTarget target : lastestResults.get(0).targets){
-                if(closestTarget == null){
+                if(closestTarget == null 
+                && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11))){
                     closestTarget = target;
                 }
                 else{
-                    Transform3d currTar = closestTarget.getBestCameraToTarget();
-                    Transform3d newTar = target.getBestCameraToTarget();
-                    if(Math.abs(currTar.getX()) > Math.abs(newTar.getX()) && Math.abs(currTar.getY()) > Math.abs(newTar.getY())){
-                        closestTarget = target;
-                    } 
+                    // Transform3d currTar = closestTarget.getBestCameraToTarget();
+                    // Transform3d newTar = target.getBestCameraToTarget();
+                    // if(Math.abs(currTar.getX()) > Math.abs(newTar.getX()) && Math.abs(currTar.getY()) > Math.abs(newTar.getY()) 
+                    // && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11))){
+                    //     closestTarget = target;
+                    // } 
+                    if(closestTarget != null){
+                        Double currAng = getYawForTag(0, closestTarget.fiducialId);
+                        Double tarAng = getYawForTag(0, target.fiducialId);
+                        if(currAng != null && tarAng != null && Math.abs(currAng) > Math.abs(tarAng) 
+                        && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11)))
+                        {
+                            closestTarget = target;
+                        } 
+                    }
                 }
             }
-            lastTag = closestTarget.fiducialId;
+            if(closestTarget != null){
+                lastTag = closestTarget.fiducialId;
+            }
         }
     }
     // updating to get all the latest results
@@ -378,7 +391,7 @@ public class CameraSystem{
         return null;
     }
     // returns the yaw required to be perpendicular to a tag to make it easy to score
-    public double getPerpendicularYaw(int position){
+    public double getPerpendicularYaw(){
         double desiredDegrees = 
         aprilTagFieldLayout.getTagPose(lastTag).get().getRotation().toRotation2d().getDegrees();
         double currentDegrees = swerveEst.getEstimatedPosition().getRotation().getDegrees();
@@ -399,11 +412,17 @@ public class CameraSystem{
     }
     // calculates and returns the difference between the x and y values of the current and desired position to travel to
     public ArrayList<Double> getPoseToTravel(int leftOrRight){
-        Pose2d desPose = dictionary.get(lastTag).get(leftOrRight);
+        Pose2d desPose = null;
         Pose2d curPose = swerveEst.getEstimatedPosition();
+        if(lastTag != 0){
+            desPose = dictionary.get(lastTag).get(leftOrRight);
+        }
+        else{
+            desPose = curPose;
+        }
         ArrayList<Double> powers = new ArrayList<>();
-        powers.add(desPose.getX() - curPose.getX());
-        powers.add(desPose.getY() - curPose.getY());
+        powers.add((isBlueSide ? 1 : -1) *(desPose.getX() - curPose.getX()));
+        powers.add((isBlueSide ? 1 : -1) *(desPose.getY() - curPose.getY()));
         return powers;
     }
     public static CameraSystem getInstance() {

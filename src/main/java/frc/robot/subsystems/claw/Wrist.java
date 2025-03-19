@@ -24,7 +24,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
     public enum WristState {
-        GROUND(90,102), //was 84.6, 96.5
+        GROUND(90,110), //was 84.6, 96.5
         LOWALGAEINTAKE(0,76),
         HIGHALGAEINTAKE(0,72),
         L1CORALSCORE(5.04,347.04), //was 264.2
@@ -94,8 +94,8 @@ public class Wrist  {
         MotorConfigL = new SparkMaxConfig();
         MotorConfigR = new SparkMaxConfig();
 
-        feedforwardR = new ArmFeedforward(0, .55,0);
-        feedforwardL = new ArmFeedforward(0, .55, 0);
+        feedforwardR = new ArmFeedforward(0, .4,0);
+        feedforwardL = new ArmFeedforward(0, .4, 0);
         // el: 88.2 piv: 56.5 rt:
         MotorConfigL
                 .inverted(false)

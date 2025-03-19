@@ -13,9 +13,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "named",
                       "data": {
-                        "pathName": "MidBarge - 1R"
+                        "name": "AutoAllignR"
                       }
                     },
                     {
@@ -43,7 +43,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 2.0
+                              "waitTime": 1.0
                             }
                           }
                         ]
@@ -61,7 +61,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.0
                 }
               }
             ]
@@ -82,9 +82,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "named",
                       "data": {
-                        "pathName": "human - 6L"
+                        "name": "AutoAllignR"
                       }
                     },
                     {
@@ -100,7 +100,7 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "6L - human"
+                              "pathName": "6R - human"
                             }
                           },
                           {
@@ -112,7 +112,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 2.0
+                              "waitTime": 1.0
                             }
                           }
                         ]
@@ -130,7 +130,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.0
                 }
               }
             ]

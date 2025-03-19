@@ -148,6 +148,8 @@ public class DriveSubsystem extends SubsystemBase {
     PathPlannerLogging.setLogCurrentPoseCallback(
         curr -> field.getObject("pathplanner curr pose").setPose(curr));
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+
+    system.isBlueSide = !shouldFlipPath().getAsBoolean();
   }
   public ChassisSpeeds getSpeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());

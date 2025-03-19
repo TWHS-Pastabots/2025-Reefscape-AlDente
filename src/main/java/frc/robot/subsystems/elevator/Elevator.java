@@ -43,11 +43,11 @@ public class Elevator {
     public static ElevatorFeedforward feedForward;
     public static ElevatorState elevatorState = ElevatorState.GROUND;
     public enum ElevatorState{
-        GROUND(.5),    
+        GROUND(0.25),    
         LOWALGAEINTAKE(27),
         HIGHALGAEINTAKE(39.7),
         L1CORALSCORE(0),
-        L2CORALSCORE(13),
+        L2CORALSCORE(10),
         L3CORALSCORE(36),
         L4CORALSCORE(80.6),
         PROCESSOR(9),

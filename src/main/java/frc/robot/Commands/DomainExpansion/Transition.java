@@ -63,7 +63,10 @@ public class Transition extends Command {
       elevator.schedule();
       wrist.initialize();
       wrist.schedule();
-      
+      if(wrist.isFinished() && pivot.isFinished() && elevator.isFinished())
+    {
+      ended = true;
+    }
     }else if(wristData.lastState == WristState.GROUND || wristData.lastState == WristState.LOWALGAEINTAKE 
     || wristData.lastState == WristState.HIGHALGAEINTAKE){
       pivot.initialize();

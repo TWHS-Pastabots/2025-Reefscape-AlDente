@@ -31,12 +31,12 @@ public class Pivot {
     private SparkMaxConfig config;
     public ArmFeedforward feedForward;
     private SparkClosedLoopController pivotController;
-    private static PivotState pivotState = PivotState.SIGMATEST;
+    private static PivotState pivotState = PivotState.TRANSITIONSTATE;
 
     private static Pivot instance;
 //erm change this joint later tee hee
     public enum PivotState {
-        GROUND(1),
+        GROUND(0),
         //0
         LOWALGAEINTAKE(40.3), //was 163.7
         HIGHALGAEINTAKE(50.5), // was 153.5
@@ -88,7 +88,7 @@ public class Pivot {
         pivotMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         pivotController = pivotMotor.getClosedLoopController();
-        feedForward = new ArmFeedforward(0, .7, 0, 0);
+        feedForward = new ArmFeedforward(0, .6, 0, 0);
         //was .73
     }
     public void updatePose() {

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.3306352459016395,
-        "y": 7.075870901639344
+        "x": 1.066905737704918,
+        "y": 7.267674180327869
       },
       "prevControl": {
-        "x": 2.3016393442622953,
-        "y": 6.0928790983606556
+        "x": 2.037909836065574,
+        "y": 6.28468237704918
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
+    "maxVelocity": 1.5,
     "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -142.0
+    "rotation": 38.0
   },
   "reversed": false,
   "folder": "CyclePaths RF",

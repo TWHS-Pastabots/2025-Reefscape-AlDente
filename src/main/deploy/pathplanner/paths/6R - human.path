@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.3306352459016395,
-        "y": 7.075870901639344
+        "x": 1.066905737704918,
+        "y": 7.267674180327869
       },
       "prevControl": {
-        "x": 1.0722964485224948,
-        "y": 7.255820401191379
+        "x": 0.8085669403257734,
+        "y": 7.447623679879904
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
+    "maxVelocity": 1.5,
     "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -142.0
+    "rotation": 38.0
   },
   "reversed": false,
   "folder": "CyclePaths RC",

@@ -31,15 +31,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.WristCommand;
+import frc.robot.Commands.DomainExpansion.AutoAllignR;
 import frc.robot.Commands.DomainExpansion.GroundAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.GroundIntakeCoral;
 import frc.robot.Commands.DomainExpansion.HighAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.HumanPlayerIntake;
+import frc.robot.Commands.DomainExpansion.Intake;
 import frc.robot.Commands.DomainExpansion.L1CoralScore;
 import frc.robot.Commands.DomainExpansion.L2CoralScore;
 import frc.robot.Commands.DomainExpansion.L3CoralScore;
 import frc.robot.Commands.DomainExpansion.L4CoralScore;
 import frc.robot.Commands.DomainExpansion.LowAlgaeIntake;
+import frc.robot.Commands.DomainExpansion.Outtake;
 import frc.robot.Commands.DomainExpansion.ProcessorScore;
 import frc.robot.Commands.DomainExpansion.Transition;
 import frc.robot.Commands.DomainExpansion.TransitionAuto;
@@ -85,6 +88,9 @@ public class Robot extends LoggedRobot {
   private ElevatorCommand elevatorCommand;
   private Transition transition;
   private TransitionAuto transitionAuto;
+  private Outtake outtake;
+  private Intake intake;
+  private AutoAllignR autoAllignR;
   // private LED litty;
   // private CameraSystem camSystem;
   private String mode = "coral";
@@ -119,7 +125,7 @@ public class Robot extends LoggedRobot {
       new Translation3d(0.29921, -0.22773, 0.21773), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), true);
     transitionAuto = new TransitionAuto();
     wristCommand = new WristCommand(WristState.TEST);
-    pivotCommand = new PivotCommand(PivotState.SIGMATEST);
+    pivotCommand = new PivotCommand(PivotState.TRANSITIONSTATE);
     elevatorCommand = new ElevatorCommand(ElevatorState.TEST);
     groundAlgaeIntake = new GroundAlgaeIntake();
     highAlgaeIntake = new HighAlgaeIntake();
@@ -131,6 +137,9 @@ public class Robot extends LoggedRobot {
     lowAlgaeIntake = new LowAlgaeIntake();
     processorScore = new ProcessorScore();
     transition = new Transition();
+    intake = new Intake();
+    outtake = new Outtake();
+    autoAllignR = new AutoAllignR();
     // camSystem = CameraSystem.getInstance();
     // camSystem.AddCamera(new PhotonCamera("Cam1"), new Transform3d(
     // new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0.0, 0.0, 0.0))
@@ -151,11 +160,15 @@ public class Robot extends LoggedRobot {
     NamedCommands.registerCommand("ProcessorScore", processorScore);
     NamedCommands.registerCommand("Elevator", elevatorCommand);
     NamedCommands.registerCommand("Transition", transition);
-
+    NamedCommands.registerCommand("outtake", outtake);
+    NamedCommands.registerCommand("Intake", intake);
+    NamedCommands.registerCommand("AutoAllignR", autoAllignR);
     m_chooser.addOption("1_C_1_P1C", new PathPlannerAuto("1_C_1_P1C"));
-    m_chooser.addOption("testing", new PathPlannerAuto("testing"));
+    m_chooser.addOption("test", new PathPlannerAuto("test"));
+    m_chooser.addOption("test2", new PathPlannerAuto("test2"));
     // SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData(m_chooser);
+    drivebase.zeroHeading();
   }
 
   @Override
@@ -197,6 +210,7 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("Desired Degree", 
     CameraSystem.aprilTagFieldLayout.getTagPose(18).get().getRotation().toRotation2d().getDegrees());
     SmartDashboard.putNumber("Currenr Degree", DriveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    // SmartDashboard.putNumber("Currenr Degree", CameraSystem.get);
 
 
     
@@ -219,7 +233,7 @@ public class Robot extends LoggedRobot {
     // Pose2d cameraPositionTele = camSystem.calculateRobotPosition();
 
     // Pose2d posTele = drivebase.updateOdometry(cameraPositionTele);
-
+   
     // SmartDashboard.putNumber("Odometry X", posTele.getX());
     // SmartDashboard.putNumber("Odometry Y", posTele.getY());
 
@@ -258,9 +272,9 @@ public class Robot extends LoggedRobot {
     // putting all of the info from the subsystems into the dashvoard so we can test
     // things
     
-    // SmartDashboard.putNumber("Gyro Angle:", (drivebase.getHeading() + 90) % 360);
-    // SmartDashboard.putNumber("X-coordinate", drivebase.getPose().getX());
-    // SmartDashboard.putNumber("Y-coordinate", drivebase.getPose().getY());
+    SmartDashboard.putNumber("Gyro Angle:", (drivebase.getHeading() + 90) % 360);
+    SmartDashboard.putNumber("X-coordinate", drivebase.getPose().getX());
+    SmartDashboard.putNumber("Y-coordinate", drivebase.getPose().getY());
 
   }
 
@@ -290,6 +304,7 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("Auto Y", drivebase.getPose().getY());
     // SmartDashboard.putNumber("Odometry X", pose.getX());
     // SmartDashboard.putNumber("Odometry Y", pose.getY());
+    drivebase.periodic();
     camSystem.updateLatestResult(false);
   }
 
@@ -331,6 +346,12 @@ public class Robot extends LoggedRobot {
     if (driver.getPOV() == 0) {
       drivebase.zeroHeading();
     }
+    if(driver.getYButton()){
+      autoAllignR.cancel();
+      autoAllignR = new AutoAllignR();
+      autoAllignR.initialize();
+      autoAllignR.schedule();
+    }
     if(driver.getBButton()){
       Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
       if(yaw != null){
@@ -340,7 +361,7 @@ public class Robot extends LoggedRobot {
       xSpeed = speeds.get(0);
       ySpeed = speeds.get(1);
       if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
-        rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+        rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       }
       // rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       // if(Math.abs(rot) < .1){
@@ -358,7 +379,7 @@ public class Robot extends LoggedRobot {
       xSpeed = speeds.get(0);
       ySpeed = speeds.get(1);
       if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
-        rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+        rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       }
       // rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       // if(Math.abs(rot) < .1){
@@ -505,8 +526,6 @@ public class Robot extends LoggedRobot {
       claw.clawOn(1);
     }else if(operator.getLeftBumperButton()){
       claw.clawReverse(1);
-    }else if(operator.getXButton()){
-      claw.clawOn(-1);
     }else{
       claw.clawReverse(clawZeroPower);
     }
@@ -516,7 +535,11 @@ public class Robot extends LoggedRobot {
       transition.initialize();
       transition.schedule();
     }
-
+    if(operator.getXButton()){
+      pivotCommand = new PivotCommand(PivotState.CLIMB);
+      pivotCommand.initialize();
+      pivotCommand.schedule();
+    }
     if(operator.getBButton()){
      pivot.setPivotState(PivotState.SHOOTINGNET);
     }
