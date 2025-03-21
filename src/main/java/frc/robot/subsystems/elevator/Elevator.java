@@ -48,10 +48,10 @@ public class Elevator {
         HIGHALGAEINTAKE(39.7),
         L1CORALSCORE(0),
         L2CORALSCORE(11.5),
-        L3CORALSCORE(36),
+        L3CORALSCORE(37),
         L4CORALSCORE(80.6),
         PROCESSOR(9),
-        HUMANSTATIONINTAKE(11),
+        HUMANSTATIONINTAKE(13.5),
         AUTONTRANSITION(9),
         TEST(60);
 

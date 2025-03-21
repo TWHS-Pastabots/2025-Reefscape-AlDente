@@ -50,7 +50,7 @@ public class Pivot {
         SHOOTINGNET(80),
 
         SIGMATEST(120.3),
-        CLIMB(60);
+        CLIMB(70);
 
         public double position;
         

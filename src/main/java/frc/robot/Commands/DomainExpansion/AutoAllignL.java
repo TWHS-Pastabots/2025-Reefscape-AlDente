@@ -61,12 +61,23 @@ public class AutoAllignL extends Command {
         rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
       }
       ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
-      xSpeed = MathUtil.clamp(speeds.get(0), -.4, .4);
-      ySpeed = MathUtil.clamp(speeds.get(1), -.4, .4);
+      if(!camSystem.side.getSelected()){
+        xSpeed = -MathUtil.clamp(speeds.get(0), -.4, .4);
+      ySpeed = -MathUtil.clamp(speeds.get(1), -.4, .4);
       if(!camSystem.hasTargets()){
+        xSpeed = -MathUtil.clamp(speeds.get(0), -.1, .1);
+        ySpeed = -MathUtil.clamp(speeds.get(1), -.1, .1);
+      }
+      }
+      else{
+        xSpeed = MathUtil.clamp(speeds.get(0), -.4, .4);
+        ySpeed = MathUtil.clamp(speeds.get(1), -.4, .4);
+        if(!camSystem.hasTargets()){
         xSpeed = MathUtil.clamp(speeds.get(0), -.1, .1);
         ySpeed = MathUtil.clamp(speeds.get(1), -.1, .1);
+        }
       }
+      
       if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
         rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       }

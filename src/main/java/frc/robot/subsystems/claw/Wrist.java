@@ -24,7 +24,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
     public enum WristState {
-        GROUND(90,110), //was 84.6, 96.5
+        GROUND(90,104), //was 84.6, 96.5
         LOWALGAEINTAKE(0,76),
         HIGHALGAEINTAKE(0,72),
         L1CORALSCORE(5.04,347.04), //was 264.2

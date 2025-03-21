@@ -107,13 +107,16 @@ public class Robot extends LoggedRobot {
   private Command m_autoSelected;
   Double targetRange = null;
   Double targetAngle = null;
-
+  double invert = 1;
+  
   // that is a chooser for the autons utilizing the sendableChooser which allows
   // us to choose the auton commands
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
+  
 
   @Override
   public void robotInit() {
+    
     speedMod = 1;
     drivebase = DriveSubsystem.getInstance();
     elevator = Elevator.getInstance();
@@ -145,6 +148,7 @@ public class Robot extends LoggedRobot {
     outtake = new Outtake();
     autoAllignR = new AutoAllignR();
     autoAllignL = new AutoAllignL();
+    
     // camSystem = CameraSystem.getInstance();
     // camSystem.AddCamera(new PhotonCamera("Cam1"), new Transform3d(
     // new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0.0, 0.0, 0.0))
@@ -179,6 +183,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putData(camSystem.side);
+    //camSystem.isBlue = SmartDashboard.getBoolean("isBlue", camSystem.isBlue);
     SmartDashboard.putNumber("MotorL Current", wrist.MotorL.getOutputCurrent());
     SmartDashboard.putNumber("feedforwards/feedforwardL", wrist.feedforwardL.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
     SmartDashboard.putNumber("feedforwards/feedforwardR", wrist.feedforwardR.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
@@ -289,6 +295,7 @@ public class Robot extends LoggedRobot {
     robotInit();
     // getting the value we chose from the dashboard and putting it into motion in
     // the auton
+   
     m_autoSelected = m_chooser.getSelected();
 
      //drivebase.resetOdometry(PathPlannerAuto.getStartingPoseFromAutoFile(m_chooser.getSelected().getName()));
@@ -353,26 +360,43 @@ public class Robot extends LoggedRobot {
     if (driver.getPOV() == 0) {
       drivebase.zeroHeading();
     }
-    if(driver.getYButton()){
-      autoAllignL.cancel();
-      autoAllignL = new AutoAllignL();
-      autoAllignL.initialize();
-      autoAllignL.schedule();
-    }
-    if(driver.getAButton()){
-      autoAllignR.cancel();
-      autoAllignR = new AutoAllignR();
-      autoAllignR.initialize();
-      autoAllignR.schedule();
-    }
+    // if(driver.getPOV() == 180){
+    //   autoAllignL.cancel();
+    //   autoAllignR.cancel();
+    // }
+    // if(driver.getYButton()){
+    //   autoAllignL.cancel();
+    //   autoAllignL = new AutoAllignL();
+    //   autoAllignL.initialize();
+    //   autoAllignL.schedule();
+    // }
+    // if(driver.getAButton()){
+    //   autoAllignR.cancel();
+    //   autoAllignR = new AutoAllignR();
+    //   autoAllignR.initialize();
+    //   autoAllignR.schedule();
+    // }
+    // if(driver.getPOV() == 90){
+    //   invert = 1;
+    // }else if(driver.getPOV() == 270){
+    //   invert = -1;
+    // }
+
     if(driver.getBButton()){
       Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
       if(yaw != null){
         rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
       }
       ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
-      xSpeed = speeds.get(0);
-      ySpeed = speeds.get(1);
+
+      if(!camSystem.side.getSelected()){
+        xSpeed = -speeds.get(0);
+        ySpeed = -speeds.get(1);
+      }else{
+        xSpeed = speeds.get(0);
+        ySpeed = speeds.get(1);
+      }
+      
       if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
         rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       }
@@ -391,6 +415,13 @@ public class Robot extends LoggedRobot {
       ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
       xSpeed = speeds.get(0);
       ySpeed = speeds.get(1);
+      if(!camSystem.side.getSelected()){
+        xSpeed = -speeds.get(0);
+        ySpeed = -speeds.get(1);
+      }else{
+        xSpeed = speeds.get(0);
+        ySpeed = speeds.get(1);
+      }
       if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
         rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       }
@@ -401,7 +432,9 @@ public class Robot extends LoggedRobot {
       //   ySpeed = speeds.get(1) * .6;
       // }
     }
-    drivebase.drive(xSpeed, ySpeed, rot, true);
+    
+      drivebase.drive(invert*xSpeed, invert*ySpeed, invert*rot, true);
+    
     
     if(operator.getRightTriggerAxis() > 0.5 && mode == "coral" && Timer.getFPGATimestamp() > switchTimer + .5){
       switchTimer = Timer.getFPGATimestamp();

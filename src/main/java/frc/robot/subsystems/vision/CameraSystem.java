@@ -21,6 +21,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.DriveSubsystem;
 import org.photonvision.EstimatedRobotPose;
@@ -52,21 +54,25 @@ public class CameraSystem{
     public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     public SwerveDrivePoseEstimator swerveEst;
     public boolean isBlueSide;
+    public boolean isBlue;
     //AprilTagFields.valueOf("BucketFieldLayout.json").loadAprilTagLayoutField();
     //new AprilTagFieldLayout("c:\\Documents/GitHub/2024-OffSeason-Juno/src/main/java/frc/robot/subsystems/vision/BucketFieldLayout.json");
     // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     public HashMap<Integer, ArrayList<Pose2d>> dictionary = new HashMap<>();
     private static CameraSystem instance;
+    public SendableChooser<Boolean> side = new SendableChooser<>();
 
     private CameraSystem() {
-
+    
         double inchesToMeters = 0.0254;
         cameras = new ArrayList<PhotonCamera>();
         offsets  = new ArrayList<Transform3d>();
         estimators = new ArrayList<PhotonPoseEstimator>();
         hasAprilTagDetection = new ArrayList<Boolean>();
         lastestResults = new ArrayList<PhotonPipelineResult>();
-        
+        side.addOption("Blue", true);
+        side.addOption("Red", false);
+        SmartDashboard.putData(side);
         // Initialize fiducial map with Pose3d
         initializeFiducialMap(inchesToMeters);
         fillDictionary();
@@ -75,20 +81,20 @@ public class CameraSystem{
     private void fillDictionary(){
         // Positiions for the red side of the field and their associated april tag
         ArrayList<Pose2d> poses6 = new ArrayList<Pose2d>();
-        poses6.add(new Pose2d(new Translation2d(13.540, 2.750), new Rotation2d()));
-        poses6.add(new Pose2d(new Translation2d(13.908, 2.978), new Rotation2d()));
+        poses6.add(new Pose2d(new Translation2d(13.620, 2.810), new Rotation2d()));
+        poses6.add(new Pose2d(new Translation2d(13.938, 3.008), new Rotation2d()));
         dictionary.put(6, poses6);
         ArrayList<Pose2d> poses7 = new ArrayList<Pose2d>();
         poses7.add(new Pose2d(new Translation2d(14.319, 3.915), new Rotation2d()));
         poses7.add(new Pose2d(new Translation2d(14.319, 4.169), new Rotation2d()));
         dictionary.put(7, poses7);
         ArrayList<Pose2d> poses8 = new ArrayList<Pose2d>();
-        poses8.add(new Pose2d(new Translation2d(13.752, 4.982), new Rotation2d()));
-        poses8.add(new Pose2d(new Translation2d(13.474, 5.234), new Rotation2d()));
+        poses8.add(new Pose2d(new Translation2d(13.772, 5.002), new Rotation2d()));
+        poses8.add(new Pose2d(new Translation2d(13.444, 5.314), new Rotation2d()));
         dictionary.put(8, poses8);
         ArrayList<Pose2d> poses9 = new ArrayList<Pose2d>();
         poses9.add(new Pose2d(new Translation2d(12.563, 5.170), new Rotation2d()));
-        poses9.add(new Pose2d(new Translation2d(12.288, 5.002), new Rotation2d()));
+        poses9.add(new Pose2d(new Translation2d(12.358, 5.072), new Rotation2d()));
         dictionary.put(9, poses9);
         ArrayList<Pose2d> poses10 = new ArrayList<Pose2d>();
         poses10.add(new Pose2d(new Translation2d(11.802, 4.135), new Rotation2d()));
@@ -96,20 +102,20 @@ public class CameraSystem{
         dictionary.put(10, poses10);
         ArrayList<Pose2d> poses11 = new ArrayList<Pose2d>();
         poses11.add(new Pose2d(new Translation2d(12.313, 2.904), new Rotation2d()));
-        poses11.add(new Pose2d(new Translation2d(12.619, 2.822), new Rotation2d()));
+        poses11.add(new Pose2d(new Translation2d(12.539, 2.752), new Rotation2d()));
         dictionary.put(11, poses11);
         // Positions for the blue side of the field and their associated april tag
         ArrayList<Pose2d> poses17 = new ArrayList<Pose2d>();
         poses17.add(new Pose2d(new Translation2d(3.760, 2.846), new Rotation2d()));
-        poses17.add(new Pose2d(new Translation2d(3.986, 2.758), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(4.016, 2.728), new Rotation2d()));
         dictionary.put(17, poses17);
         ArrayList<Pose2d> poses18 = new ArrayList<Pose2d>();
         poses18.add(new Pose2d(new Translation2d(3.131, 4.135), new Rotation2d()));
         poses18.add(new Pose2d(new Translation2d(3.131, 3.823), new Rotation2d()));
         dictionary.put(18, poses18);
         ArrayList<Pose2d> poses19 = new ArrayList<Pose2d>();
-        poses19.add(new Pose2d(new Translation2d(3.902, 5.252), new Rotation2d()));
-        poses19.add(new Pose2d(new Translation2d(3.594, 5.104), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.872, 5.232), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.564, 5.074), new Rotation2d()));
         dictionary.put(19, poses19);
         ArrayList<Pose2d> poses20 = new ArrayList<Pose2d>();
         poses20.add(new Pose2d(new Translation2d(5.249, 5.104), new Rotation2d()));
@@ -121,7 +127,7 @@ public class CameraSystem{
         dictionary.put(21, poses21);
         ArrayList<Pose2d> poses22 = new ArrayList<Pose2d>();
         poses22.add(new Pose2d(new Translation2d(4.957, 2.750), new Rotation2d()));
-        poses22.add(new Pose2d(new Translation2d(5.376, 2.958), new Rotation2d()));
+        poses22.add(new Pose2d(new Translation2d(5.406, 2.988), new Rotation2d()));
         dictionary.put(22, poses22);
     }
     // checks to see if the camera at the given position sees a tag
@@ -421,8 +427,8 @@ public class CameraSystem{
             desPose = curPose;
         }
         ArrayList<Double> powers = new ArrayList<>();
-        powers.add((isBlueSide ? 1 : -1) *(desPose.getX() - curPose.getX()));
-        powers.add((isBlueSide ? 1 : -1) *(desPose.getY() - curPose.getY()));
+        powers.add((isBlueSide ? 1 : 1) *(desPose.getX() - curPose.getX()));
+        powers.add((isBlueSide ? 1 : 1) *(desPose.getY() - curPose.getY()));
         return powers;
     }
     public static CameraSystem getInstance() {

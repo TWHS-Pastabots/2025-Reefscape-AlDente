@@ -26,11 +26,11 @@ public class Climber {
     }
 
     public void ClimbDown(){
-        climberMotor.set(.75);
+        climberMotor.set(1);
     }
 
     public void ClimbUp(){
-        climberMotor.set(-.75);
+        climberMotor.set(-1);
     }
 
     public void ClimbZero(){
