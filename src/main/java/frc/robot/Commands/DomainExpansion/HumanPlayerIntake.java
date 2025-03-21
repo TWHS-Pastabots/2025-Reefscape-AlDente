@@ -50,7 +50,7 @@ public class HumanPlayerIntake extends Command {
     if(!transitionReady){
       pivot.schedule();
       elevator.schedule();
-      if(pivot.isFinished()&&Timer.getFPGATimestamp() > timer +.75){
+      if(pivot.isFinished()){
         //claw.clawOn(.6);
         wrist.schedule();
       }

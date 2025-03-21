@@ -61,8 +61,8 @@ public class AutoAllignL extends Command {
         rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
       }
       ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
-      xSpeed = MathUtil.clamp(speeds.get(0), -.3, .3);
-      ySpeed = MathUtil.clamp(speeds.get(1), -.3, .3);
+      xSpeed = MathUtil.clamp(speeds.get(0), -.4, .4);
+      ySpeed = MathUtil.clamp(speeds.get(1), -.4, .4);
       if(!camSystem.hasTargets()){
         xSpeed = MathUtil.clamp(speeds.get(0), -.1, .1);
         ySpeed = MathUtil.clamp(speeds.get(1), -.1, .1);

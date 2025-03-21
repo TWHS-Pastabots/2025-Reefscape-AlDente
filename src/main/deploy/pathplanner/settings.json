@@ -16,7 +16,7 @@
     "Start 1",
     "Start 3"
   ],
-  "defaultMaxVel": 1.5,
+  "defaultMaxVel": 2.0,
   "defaultMaxAccel": 4.5,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

@@ -66,6 +66,7 @@ import frc.robot.subsystems.vision.CameraSystem;
 
 public class Robot extends LoggedRobot {
   // all the initialing for the systems
+  public double speedMod;
   public double clawZeroPower;
   private Climber climber;
   private DriveSubsystem drivebase;
@@ -113,6 +114,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
+    speedMod = 1;
     drivebase = DriveSubsystem.getInstance();
     elevator = Elevator.getInstance();
     // litty = LED.getInstance();
@@ -332,13 +334,13 @@ public class Robot extends LoggedRobot {
     elevator.updatePose();
     pivot.updatePose();
     
-    double ySpeed = drivebase.inputDeadband(-driver.getLeftX());
-    double xSpeed = drivebase.inputDeadband(-driver.getLeftY());
-    double rot = drivebase.inputDeadband(-driver.getRightX());
+    double ySpeed = drivebase.inputDeadband(-driver.getLeftX()) * speedMod;
+    double xSpeed = drivebase.inputDeadband(-driver.getLeftY()) * speedMod;
+    double rot = drivebase.inputDeadband(-driver.getRightX()) * speedMod;
     if(driver.getRightTriggerAxis() >= .5){
-      drivebase.setDriveState(DriveState.SLOW);
+      speedMod = .5;
     }else if(driver.getLeftTriggerAxis() >= .5){
-    drivebase.setDriveState(DriveState.NORMAL);
+      speedMod = 1;
     }
     camSystem.updateLatestResult(driver.getBButton() || driver.getXButton());
     // if(pivot.getPosition() >= 120){
@@ -531,6 +533,11 @@ public class Robot extends LoggedRobot {
       CancelCommands();
       groundAlgaeIntake.initialize();
       groundAlgaeIntake.schedule();
+    }else if(operator.getXButton()){
+      CancelCommands();
+      pivotCommand = new PivotCommand(PivotState.CLIMB);
+      pivotCommand.initialize();
+      pivotCommand.schedule();
     }
 
     if(operator.getRightBumperButton()){

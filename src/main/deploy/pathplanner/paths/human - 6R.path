@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1268442622950818,
-        "y": 7.135809426229507
+        "x": 1.0788934426229508,
+        "y": 7.171772540983605
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.367700688890479,
-        "y": 7.068815532719008
+        "x": 1.319749869218348,
+        "y": 7.104778647473107
       },
       "isLocked": false,
       "linkedName": "sigmahumanR"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 2.0,
     "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
