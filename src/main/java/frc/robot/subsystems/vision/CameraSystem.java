@@ -81,7 +81,7 @@ public class CameraSystem{
     private void fillDictionary(){
         // Positiions for the red side of the field and their associated april tag
         ArrayList<Pose2d> poses6 = new ArrayList<Pose2d>();
-        poses6.add(new Pose2d(new Translation2d(13.620, 2.810), new Rotation2d()));
+        poses6.add(new Pose2d(new Translation2d(13.594, 2.784), new Rotation2d()));
         poses6.add(new Pose2d(new Translation2d(13.938, 3.008), new Rotation2d()));
         dictionary.put(6, poses6);
         ArrayList<Pose2d> poses7 = new ArrayList<Pose2d>();
@@ -102,12 +102,12 @@ public class CameraSystem{
         dictionary.put(10, poses10);
         ArrayList<Pose2d> poses11 = new ArrayList<Pose2d>();
         poses11.add(new Pose2d(new Translation2d(12.313, 2.904), new Rotation2d()));
-        poses11.add(new Pose2d(new Translation2d(12.539, 2.752), new Rotation2d()));
+        poses11.add(new Pose2d(new Translation2d(12.611,2.724), new Rotation2d()));
         dictionary.put(11, poses11);
         // Positions for the blue side of the field and their associated april tag
         ArrayList<Pose2d> poses17 = new ArrayList<Pose2d>();
-        poses17.add(new Pose2d(new Translation2d(3.760, 2.846), new Rotation2d()));
-        poses17.add(new Pose2d(new Translation2d(4.016, 2.728), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(3.730, 2.876), new Rotation2d()));
+        poses17.add(new Pose2d(new Translation2d(3.976, 2.688), new Rotation2d()));
         dictionary.put(17, poses17);
         ArrayList<Pose2d> poses18 = new ArrayList<Pose2d>();
         poses18.add(new Pose2d(new Translation2d(3.131, 4.135), new Rotation2d()));

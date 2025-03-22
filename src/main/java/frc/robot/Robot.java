@@ -347,7 +347,9 @@ public class Robot extends LoggedRobot {
     if(driver.getRightTriggerAxis() >= .5){
       speedMod = .5;
     }else if(driver.getLeftTriggerAxis() >= .5){
-      speedMod = 1;
+      speedMod = .2;
+    }else{
+      speedMod =1;
     }
     camSystem.updateLatestResult(driver.getBButton() || driver.getXButton());
     // if(pivot.getPosition() >= 120){

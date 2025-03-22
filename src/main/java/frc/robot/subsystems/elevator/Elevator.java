@@ -51,7 +51,7 @@ public class Elevator {
         L3CORALSCORE(37),
         L4CORALSCORE(80.6),
         PROCESSOR(9),
-        HUMANSTATIONINTAKE(13.5),
+        HUMANSTATIONINTAKE(14.75),
         AUTONTRANSITION(9),
         TEST(60);
 
