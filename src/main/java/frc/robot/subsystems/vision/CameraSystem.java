@@ -1,9 +1,11 @@
 package frc.robot.subsystems.vision;
+import java.math.MathContext;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Dictionary;
 
 import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -42,6 +44,11 @@ import java.util.Map;
 import java.util.Optional;
 public class CameraSystem{
 
+    public enum PoleSide{
+        LEFT,
+        RIGHT;
+    }
+    public PoleSide poleSide = PoleSide.LEFT;
     private final Map<Integer, Pose3d> fiducialMap = new HashMap<>();
     private ArrayList<PhotonCamera> cameras;
     private ArrayList<Transform3d> offsets;
@@ -55,6 +62,7 @@ public class CameraSystem{
     public SwerveDrivePoseEstimator swerveEst;
     public boolean isBlueSide;
     public boolean isBlue;
+    public int focusCamIndex;
     //AprilTagFields.valueOf("BucketFieldLayout.json").loadAprilTagLayoutField();
     //new AprilTagFieldLayout("c:\\Documents/GitHub/2024-OffSeason-Juno/src/main/java/frc/robot/subsystems/vision/BucketFieldLayout.json");
     // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -63,7 +71,7 @@ public class CameraSystem{
     public SendableChooser<Boolean> side = new SendableChooser<>();
 
     private CameraSystem() {
-    
+        focusCamIndex = 0;
         double inchesToMeters = 0.0254;
         cameras = new ArrayList<PhotonCamera>();
         offsets  = new ArrayList<Transform3d>();
@@ -135,8 +143,9 @@ public class CameraSystem{
         return cameras.get(position).getAllUnreadResults();
     }
     // Updates the results list to include only the latest piprline result and sets the last tag seen as the closest target instead of
-    // the "best" target
-    public void updateLatestResult(boolean buttonPressed){
+    // the "best" target, made for Reefscape 2025 Season
+    public void updateLatestResult(boolean buttonPressed)
+    {
         int cameraCount = 0;
         for(PhotonCamera cam : cameras){
             List<PhotonPipelineResult> results = cam.getAllUnreadResults();
@@ -145,40 +154,119 @@ public class CameraSystem{
             }
             cameraCount++;
         }
-        if(lastestResults.get(0).hasTargets() 
-        && ((lastestResults.get(0).getBestTarget().fiducialId >= 17 && lastestResults.get(0).getBestTarget().fiducialId <= 22)
-        || (lastestResults.get(0).getBestTarget().fiducialId >= 6 && lastestResults.get(0).getBestTarget().fiducialId <= 11))
-        && !buttonPressed)
+        cameraCount = 0;
+        if(lastestResults.get(0).hasTargets() && lastestResults.get(1).hasTargets())
         {
-            lastTag = lastestResults.get(0).getBestTarget().fiducialId;
-            PhotonTrackedTarget closestTarget = null;
-            for(PhotonTrackedTarget target : lastestResults.get(0).targets){
-                if(closestTarget == null 
-                && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11))){
-                    closestTarget = target;
+            //used to calculate if both cameras see the same tag on a side of the reef
+            int highestSeenCount = 0;
+            int seenCount = 0;
+            // used for a back up case if the cameras don't see a common tag
+            double closestTarget = 100;
+            if(!isBlue){
+                for(int i = 6; i <=11; i++){
+                    for (PhotonPipelineResult result : lastestResults) {
+                        for(PhotonTrackedTarget target : result.targets){
+                            if(target.fiducialId == i){
+                                seenCount++;
+                            }
+                        }
+                        if(seenCount > highestSeenCount){
+                            highestSeenCount = seenCount;
+                            lastTag = i;
+                        }
+                        seenCount = 0;
+                    }
                 }
-                else{
-                    // Transform3d currTar = closestTarget.getBestCameraToTarget();
-                    // Transform3d newTar = target.getBestCameraToTarget();
-                    // if(Math.abs(currTar.getX()) > Math.abs(newTar.getX()) && Math.abs(currTar.getY()) > Math.abs(newTar.getY()) 
-                    // && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11))){
-                    //     closestTarget = target;
-                    // } 
-                    if(closestTarget != null){
-                        Double currAng = getYawForTag(0, closestTarget.fiducialId);
-                        Double tarAng = getYawForTag(0, target.fiducialId);
-                        if(currAng != null && tarAng != null && Math.abs(currAng) > Math.abs(tarAng) 
-                        && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11)))
-                        {
-                            closestTarget = target;
-                        } 
+                if(highestSeenCount < 2){
+                    for(PhotonPipelineResult result : lastestResults){
+                        for (PhotonTrackedTarget target : result.getTargets()) {
+                            if(target.fiducialId >= 6 && target.fiducialId <= 11 
+                            && getTargetRange(cameraCount, target.fiducialId) != null 
+                            && getTargetRange(cameraCount, target.fiducialId) < closestTarget){
+                                closestTarget = getTargetRange(cameraCount, target.fiducialId);
+                                lastTag = target.fiducialId;
+                            }
+                        }
                     }
                 }
             }
-            if(closestTarget != null){
-                lastTag = closestTarget.fiducialId;
+            else{
+                for(int i = 17; i <=22; i++){
+                    for (PhotonPipelineResult result : lastestResults) {
+                        for(PhotonTrackedTarget target : result.targets){
+                            if(target.fiducialId == i){
+                                seenCount++;
+                            }
+                        }
+                        if(seenCount > highestSeenCount){
+                            highestSeenCount = seenCount;
+                            lastTag = i;
+                        }
+                        seenCount = 0;
+                    }
+                }
+                if(highestSeenCount < 2){
+                    for(PhotonPipelineResult result : lastestResults){
+                        for (PhotonTrackedTarget target : result.getTargets()) {
+                            if(target.fiducialId >= 17 && target.fiducialId <= 22 
+                            && getTargetRange(cameraCount, target.fiducialId) != null 
+                            && getTargetRange(cameraCount, target.fiducialId) < closestTarget){
+                                closestTarget = getTargetRange(cameraCount, target.fiducialId);
+                                lastTag = target.fiducialId;
+                            }
+                        }
+                    }
+                }
             }
+            
         }
+        
+        
+        // if(lastestResults.get(focusCamIndex).hasTargets() 
+        // && ((lastestResults.get(focusCamIndex).getBestTarget().fiducialId >= 17 
+        // && lastestResults.get(focusCamIndex).getBestTarget().fiducialId <= 22)
+        // || (lastestResults.get(focusCamIndex).getBestTarget().fiducialId >= 6 
+        // && lastestResults.get(focusCamIndex).getBestTarget().fiducialId <= 11))
+        // && !buttonPressed)
+        // {
+        //     lastTag = lastestResults.get(0).getBestTarget().fiducialId;
+        //     PhotonTrackedTarget closestTarget = null;
+        //     for(PhotonTrackedTarget target : lastestResults.get(0).targets){
+        //         if(closestTarget == null 
+        //         && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11))){
+        //             for(PhotonTrackedTarget otherTarget : lastestResults.get(1).targets){
+        //                 if(target.fiducialId == otherTarget.fiducialId){
+        //                     closestTarget = target;
+        //                 }
+        //             }
+                    
+        //         }
+        //         else{
+        //             // Transform3d currTar = closestTarget.getBestCameraToTarget();
+        //             // Transform3d newTar = target.getBestCameraToTarget();
+        //             // if(Math.abs(currTar.getX()) > Math.abs(newTar.getX()) && Math.abs(currTar.getY()) > Math.abs(newTar.getY()) 
+        //             // && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11))){
+        //             //     closestTarget = target;
+        //             // } 
+        //             if(closestTarget != null){
+        //                 Double currAng = getYawForTag(focusCamIndex, closestTarget.fiducialId);
+        //                 Double tarAng = getYawForTag(focusCamIndex, target.fiducialId);
+        //                 if(currAng != null && tarAng != null && Math.abs(currAng) > Math.abs(tarAng) 
+        //                 && ((target.fiducialId >= 17 && target.fiducialId <= 22) || (target.fiducialId >= 6 && target.fiducialId <= 11)))
+        //                 {
+        //                     for(PhotonTrackedTarget otherTarget : lastestResults.get(1).targets){
+        //                         if(target.fiducialId == otherTarget.fiducialId){
+        //                             closestTarget = target;
+        //                         }
+        //                     }
+        //                 } 
+        //             }
+        //         }
+        //     }
+        //     if(closestTarget != null){
+        //         lastTag = closestTarget.fiducialId;
+        //     }
+        //}
     }
     // updating to get all the latest results
     public PhotonCamera getCamera(int position)
@@ -440,13 +528,21 @@ public class CameraSystem{
     
     // checks to see if the result sees any april tags
     public boolean hasTargets(){
-        int cameraCount = 0;
+        
        for(PhotonCamera cam : cameras)
         {
             if(cam.getLatestResult().hasTargets()){
                 return true;
             } 
-            cameraCount++;
+        }
+        return false;
+    }
+    
+    public boolean hasDesiredTarget(int position, int ID){
+        for(PhotonTrackedTarget target : lastestResults.get(position).targets){
+            if(target.fiducialId == ID){
+                return true;
+            }
         }
         return false;
     }
