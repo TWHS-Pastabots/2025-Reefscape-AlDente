@@ -142,7 +142,7 @@ public final class Constants {
 
   public static final class ElevatorConstants {
     // p:.13
-    public static final double elevatorPCoefficient = .1;
+    public static final double elevatorPCoefficient = .075;
     public static final double elevatorICoefficient = 0;
     public static final double elevatorDCoefficient = 8;
 
@@ -152,7 +152,7 @@ public final class Constants {
 
   public static final class PivotConstants {
     //P = .0007 I = 0 D = 6
-    public static final double pivotPCoefficient = .0065;
+    public static final double pivotPCoefficient = .008; //was .0065
     public static final double pivotICoefficient = 0.0;
     public static final double pivotDCoefficient = .2;
 

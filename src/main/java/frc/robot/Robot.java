@@ -47,6 +47,7 @@ import frc.robot.Commands.DomainExpansion.Outtake;
 import frc.robot.Commands.DomainExpansion.ProcessorScore;
 import frc.robot.Commands.DomainExpansion.Transition;
 import frc.robot.Commands.DomainExpansion.TransitionAuto;
+import frc.robot.Commands.AlignToCoral;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
 import frc.robot.subsystems.IO.LED;
@@ -63,6 +64,7 @@ import frc.robot.subsystems.swerve.DriveSubsystem;
 import frc.robot.subsystems.swerve.MAXSwerveModule;
 import frc.robot.subsystems.swerve.DriveSubsystem.DriveState;
 import frc.robot.subsystems.vision.CameraSystem;
+import frc.robot.subsystems.vision.CameraSystem.PoleSide;
 
 public class Robot extends LoggedRobot {
   // all the initialing for the systems
@@ -94,6 +96,7 @@ public class Robot extends LoggedRobot {
   private Intake intake;
   private AutoAllignR autoAllignR;
   private AutoAllignL autoAllignL;
+  private AlignToCoral alignToCoral;
   // private LED litty;
   // private CameraSystem camSystem;
   private String mode = "coral";
@@ -127,9 +130,14 @@ public class Robot extends LoggedRobot {
     pivot = Pivot.getInstance();
     camSystem = CameraSystem.getInstance(); 
     camSystem.AddCamera(new PhotonCamera("ClimbCam"), new Transform3d(
-      new Translation3d(0.00833, -0.22138, 0.14534), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), true);
+      new Translation3d(0.00833, -0.22138, 0.14534), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), 
+      true);
     camSystem.AddCamera(new PhotonCamera("SwerveCam"), new Transform3d(
-      new Translation3d(0.29921, -0.22773, 0.21773), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), true);
+      new Translation3d(0.29921, -0.22773, 0.21773), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), 
+      true);
+      camSystem.AddCamera(new PhotonCamera("MiddleCam"), new Transform3d(
+        new Translation3d(0.00833, -0.22138, 0.14534), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), 
+        true);
     transitionAuto = new TransitionAuto();
     wristCommand = new WristCommand(WristState.TEST);
     pivotCommand = new PivotCommand(PivotState.TRANSITIONSTATE);
@@ -149,6 +157,7 @@ public class Robot extends LoggedRobot {
     autoAllignR = new AutoAllignR();
     autoAllignL = new AutoAllignL();
     
+    alignToCoral = new AlignToCoral();
     // camSystem = CameraSystem.getInstance();
     // camSystem.AddCamera(new PhotonCamera("Cam1"), new Transform3d(
     // new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0.0, 0.0, 0.0))
@@ -183,7 +192,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putData(camSystem.side);
+    
     //camSystem.isBlue = SmartDashboard.getBoolean("isBlue", camSystem.isBlue);
     SmartDashboard.putNumber("MotorL Current", wrist.MotorL.getOutputCurrent());
     SmartDashboard.putNumber("feedforwards/feedforwardL", wrist.feedforwardL.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
@@ -347,9 +356,9 @@ public class Robot extends LoggedRobot {
     if(driver.getRightTriggerAxis() >= .5){
       speedMod = .5;
     }else if(driver.getLeftTriggerAxis() >= .5){
-      speedMod = .2;
+      speedMod = .1;
     }else{
-      speedMod =1;
+      speedMod = 1;
     }
     camSystem.updateLatestResult(driver.getBButton() || driver.getXButton());
     // if(pivot.getPosition() >= 120){
@@ -385,23 +394,28 @@ public class Robot extends LoggedRobot {
     // }
 
     if(driver.getBButton()){
-      Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
-      if(yaw != null){
-        rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
-      }
-      ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
+      camSystem.poleSide = PoleSide.RIGHT;
+      alignToCoral.cancel();
+      alignToCoral = new AlignToCoral();
+      alignToCoral.initialize();
+      alignToCoral.schedule();
+      // Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
+      // if(yaw != null){
+      //   rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
+      // }
+      // ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
 
-      if(!camSystem.side.getSelected()){
-        xSpeed = -speeds.get(0);
-        ySpeed = -speeds.get(1);
-      }else{
-        xSpeed = speeds.get(0);
-        ySpeed = speeds.get(1);
-      }
+      // if(!camSystem.side.getSelected()){
+      //   xSpeed = -speeds.get(0);
+      //   ySpeed = -speeds.get(1);
+      // }else{
+      //   xSpeed = speeds.get(0);
+      //   ySpeed = speeds.get(1);
+      // }
       
-      if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
-        rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
-      }
+      // if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
+      //   rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+      // }
       // rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       // if(Math.abs(rot) < .1){
       //   ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
@@ -410,23 +424,28 @@ public class Robot extends LoggedRobot {
       // }
     }
     if(driver.getXButton()){
-      Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
-      if(yaw != null){
-        rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
-      }
-      ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
-      xSpeed = speeds.get(0);
-      ySpeed = speeds.get(1);
-      if(!camSystem.side.getSelected()){
-        xSpeed = -speeds.get(0);
-        ySpeed = -speeds.get(1);
-      }else{
-        xSpeed = speeds.get(0);
-        ySpeed = speeds.get(1);
-      }
-      if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
-        rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
-      }
+      camSystem.poleSide = PoleSide.LEFT;
+      alignToCoral.cancel();
+      alignToCoral = new AlignToCoral();
+      alignToCoral.initialize();
+      alignToCoral.schedule();
+      // Double yaw = camSystem.getYawForTag(0, camSystem.lastTag);
+      // if(yaw != null){
+      //   rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
+      // }
+      // ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
+      // xSpeed = speeds.get(0);
+      // ySpeed = speeds.get(1);
+      // if(!camSystem.side.getSelected()){
+      //   xSpeed = -speeds.get(0);
+      //   ySpeed = -speeds.get(1);
+      // }else{
+      //   xSpeed = speeds.get(0);
+      //   ySpeed = speeds.get(1);
+      // }
+      // if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
+      //   rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+      // }
       // rot = camSystem.getPerpendicularYaw(0) * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       // if(Math.abs(rot) < .1){
       //   ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
@@ -434,7 +453,10 @@ public class Robot extends LoggedRobot {
       //   ySpeed = speeds.get(1) * .6;
       // }
     }
-    
+    if(driver.getAButton()){
+      alignToCoral.cancel();
+      alignToCoral = new AlignToCoral();
+    }
       drivebase.drive(invert*xSpeed, invert*ySpeed, invert*rot, true);
     
     
@@ -449,7 +471,7 @@ public class Robot extends LoggedRobot {
       operator.setRumble(RumbleType.kLeftRumble, .5);
       mode = "coral";
       rumbleTimer = Timer.getFPGATimestamp();
-      clawZeroPower = 0;
+      clawZeroPower = .01;
     }else if(Timer.getFPGATimestamp() > rumbleTimer + 0.5){
       operator.setRumble(RumbleType.kRightRumble, 0);
       operator.setRumble(RumbleType.kLeftRumble, 0);

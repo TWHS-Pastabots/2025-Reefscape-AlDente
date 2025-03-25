@@ -45,7 +45,7 @@ public class Pivot {
         L3CORALSCORE(107),
         L4CORALSCORE(107),
         PROCESSOR(38),
-        HUMANSTATIONINTAKE(80.289),
+        HUMANSTATIONINTAKE(80.289), //other side is 80.289
         TRANSITIONSTATE(95),
         SHOOTINGNET(80),
 
@@ -66,7 +66,7 @@ public class Pivot {
         pivotMotor = new SparkMax(Ports.pivot, MotorType.kBrushless);
         config = new SparkMaxConfig();
         config
-        .closedLoopRampRate(1.8)
+        .closedLoopRampRate(1) //was 1.8
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(60);

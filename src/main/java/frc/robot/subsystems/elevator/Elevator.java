@@ -47,9 +47,9 @@ public class Elevator {
         LOWALGAEINTAKE(27),
         HIGHALGAEINTAKE(39.7),
         L1CORALSCORE(0),
-        L2CORALSCORE(11.5),
+        L2CORALSCORE(12),
         L3CORALSCORE(37),
-        L4CORALSCORE(80.6),
+        L4CORALSCORE(81.5),
         PROCESSOR(9),
         HUMANSTATIONINTAKE(14.75),
         AUTONTRANSITION(9),
@@ -70,26 +70,25 @@ public class Elevator {
         //.6
 
         configL
-            .closedLoopRampRate(.5)
+            .closedLoopRampRate(.6)
             .inverted(false)
             .idleMode(IdleMode.kBrake)
-            
             .smartCurrentLimit(60);
         configL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
-            .outputRange(-.7, .7);
+            .outputRange(-1, 1);
          elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
          configR
-            .closedLoopRampRate(.7)
+            .closedLoopRampRate(.6)
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(60);
         configR.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
-            .outputRange(-.7, .7);
+            .outputRange(-1, 1);
          elevatorMotorR.configure(configR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         // kg: 0.2
         feedForward = new ElevatorFeedforward(0.16,0.23,0,0); //FILL THESE NUMBERS IN LATER

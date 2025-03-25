@@ -32,7 +32,7 @@ public class Wrist  {
         L3CORALSCORE(96.12,201),// was r:98.64, t: 202.68
         L4CORALSCORE(96.12,205.56), // t: 
         PROCESSOR(0,60),
-        HUMANSTATIONINTAKE(91.08,74.88),
+        HUMANSTATIONINTAKE(91.08,74.88), //was 91.08
         TRANSITIONSTATE(0,84.6),
         TEST(90,110),
         CLIMB(90,84.6),
@@ -163,8 +163,8 @@ public class Wrist  {
         + pivot.feedForward.calculate(Math.toRadians(angle),0);
         rVolts = -pitchVoltage + rollVoltage - feedforwardR.calculate(2*Math.PI*MotorL.getAbsoluteEncoder().getPosition(), 0)
         + pivot.feedForward.calculate(Math.toRadians(angle),0);
-        lVolts = MathUtil.clamp(lVolts, -8, 8);
-        rVolts = MathUtil.clamp(rVolts, -8, 8);
+        lVolts = MathUtil.clamp(lVolts, -14, 14);
+        rVolts = MathUtil.clamp(rVolts, -14, 14);
         setVoltage(lVolts, rVolts);
     }
 
