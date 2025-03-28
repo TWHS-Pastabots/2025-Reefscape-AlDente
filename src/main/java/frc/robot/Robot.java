@@ -244,6 +244,15 @@ public class Robot extends LoggedRobot {
       SmartDashboard.putNumber("ClimbCam yaw", camSystem.getYawForTag(0, camSystem.lastTag));
     }
     SmartDashboard.putNumber("heading", drivebase.getWorkingHeading());
+    if(alignToCoral != null && alignToCoral.xController != null 
+    && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
+    && alignToCoral.yController != null && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
+      SmartDashboard.putNumber("xController", alignToCoral.xController.calculate(
+        camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()));
+      SmartDashboard.putNumber("yController", alignToCoral.yController.calculate(
+        camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()));
+    }
+    SmartDashboard.putString("Focus Cam", camSystem.focusCamIndex == 0 ? "climb" : "swerve");
     // SmartDashboard.putNumber("Currenr Degree", CameraSystem.get);
 
 
