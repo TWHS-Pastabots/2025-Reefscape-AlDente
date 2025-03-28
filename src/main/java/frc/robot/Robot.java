@@ -130,10 +130,10 @@ public class Robot extends LoggedRobot {
     pivot = Pivot.getInstance();
     camSystem = CameraSystem.getInstance(); 
     camSystem.AddCamera(new PhotonCamera("ClimbCam"), new Transform3d(
-      new Translation3d(0.00833, -0.22138, 0.14534), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), 
+      new Translation3d(-0.30043, -0.26457, 0.31945), new Rotation3d(0.0, 0.0, Math.toRadians(-55.56095))), 
       true);
     camSystem.AddCamera(new PhotonCamera("SwerveCam"), new Transform3d(
-      new Translation3d(0.29921, -0.22773, 0.21773), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), 
+      new Translation3d(0.28831, -0.2421, 0.29561), new Rotation3d(0.0, Math.toRadians(2.5), Math.toRadians(-105))), 
       true);
       camSystem.AddCamera(new PhotonCamera("MiddleCam"), new Transform3d(
         new Translation3d(0.00833, -0.22138, 0.14534), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), 
@@ -185,6 +185,7 @@ public class Robot extends LoggedRobot {
     m_chooser.addOption("1_C_1_P1C", new PathPlannerAuto("1_C_1_P1C"));
     m_chooser.addOption("test", new PathPlannerAuto("test"));
     m_chooser.addOption("test2", new PathPlannerAuto("test2"));
+    m_chooser.addOption("straight", new PathPlannerAuto("straight"));
     // SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData(m_chooser);
     
@@ -231,6 +232,18 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("Desired Degree", 
     CameraSystem.aprilTagFieldLayout.getTagPose(18).get().getRotation().toRotation2d().getDegrees());
     SmartDashboard.putNumber("Currenr Degree", DriveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+
+    if(camSystem.getTargetRange(1, camSystem.lastTag) != null && camSystem.getYawForTag(1, camSystem.lastTag)!= null)
+    {
+      SmartDashboard.putNumber("SwerveCam dist", camSystem.getTargetRange(1, camSystem.lastTag));
+      SmartDashboard.putNumber("SwerveCam yaw", camSystem.getYawForTag(1, camSystem.lastTag));
+    }
+    if(camSystem.getTargetRange(0, camSystem.lastTag) != null && camSystem.getYawForTag(0, camSystem.lastTag)!= null)
+    {
+      SmartDashboard.putNumber("ClimbCam dist", camSystem.getTargetRange(0, camSystem.lastTag));
+      SmartDashboard.putNumber("ClimbCam yaw", camSystem.getYawForTag(0, camSystem.lastTag));
+    }
+    SmartDashboard.putNumber("heading", drivebase.getWorkingHeading());
     // SmartDashboard.putNumber("Currenr Degree", CameraSystem.get);
 
 
@@ -471,7 +484,7 @@ public class Robot extends LoggedRobot {
       operator.setRumble(RumbleType.kLeftRumble, .5);
       mode = "coral";
       rumbleTimer = Timer.getFPGATimestamp();
-      clawZeroPower = .01;
+      clawZeroPower = .05;
     }else if(Timer.getFPGATimestamp() > rumbleTimer + 0.5){
       operator.setRumble(RumbleType.kRightRumble, 0);
       operator.setRumble(RumbleType.kLeftRumble, 0);
@@ -479,17 +492,19 @@ public class Robot extends LoggedRobot {
 
     if(driver.getRightBumperButton()){
       climber.ClimbUp();
+      climber.ClimbDeploy();
     }else if(driver.getLeftBumperButton()){
       climber.ClimbDown();
+      climber.ClimbRetract();
     }else{
       climber.ClimbZero();
     }
-    if(driver.getBButton()){
-      Double yaw = camSystem.getYawForTag(0, 18);
-      if(yaw != null){
-        rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
-      }
-    }
+    // if(driver.getBButton()){
+    //   Double yaw = camSystem.getYawForTag(0, 18);
+    //   if(yaw != null){
+    //     rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
+    //   }
+    // }
     
     
 

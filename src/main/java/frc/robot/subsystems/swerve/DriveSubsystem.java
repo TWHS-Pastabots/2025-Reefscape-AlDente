@@ -82,7 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+  public final AHRS gyro = new AHRS(SPI.Port.kMXP);
   // private final ADIS16470_IMU gyro = new ADIS16470_IMU();
   public static SwerveDrivePoseEstimator poseEstimator;
 
@@ -326,6 +326,12 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(-gyro.getAngle()).getDegrees();
+  }
+  public double getWorkingHeading(){
+    if(Rotation2d.fromDegrees(-gyro.getAngle()).getDegrees() >= 0)
+      return (Rotation2d.fromDegrees(-gyro.getAngle()).getDegrees()) % 360;
+    else
+    return 360 - Math.abs(Rotation2d.fromDegrees(-gyro.getAngle()).getDegrees() % 360);
   }
   public void setDriveState(DriveState state) {
     driveState = state;

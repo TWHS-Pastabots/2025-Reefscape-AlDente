@@ -6,17 +6,20 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Ports;
 import frc.robot.subsystems.elevator.Elevator;
 
 
 public class Climber {
     public SparkFlex climberMotor;
+    public Servo deployer;
     public SparkFlexConfig MotorConfig;
     public static Climber instance;
 
     public Climber(){
         climberMotor = new SparkFlex(Ports.climber, MotorType.kBrushless);
+        deployer = new Servo(0);
         MotorConfig = new SparkFlexConfig();
         MotorConfig
             .inverted(false)
@@ -27,6 +30,13 @@ public class Climber {
 
     public void ClimbDown(){
         climberMotor.set(1);
+    }
+    public void ClimbRetract(){
+        deployer.set(0);
+    }
+
+    public void ClimbDeploy(){
+        deployer.set(1);
     }
 
     public void ClimbUp(){

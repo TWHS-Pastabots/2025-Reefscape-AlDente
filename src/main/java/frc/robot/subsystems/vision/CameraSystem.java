@@ -161,8 +161,9 @@ public class CameraSystem{
             int highestSeenCount = 0;
             int seenCount = 0;
             // used for a back up case if the cameras don't see a common tag
+            //Set to 100 to garuntee if there are targets that one will be closer
             double closestTarget = 100;
-            if(!isBlue){
+            if(!side.getSelected()){
                 for(int i = 6; i <=11; i++){
                     for (PhotonPipelineResult result : lastestResults) {
                         for(PhotonTrackedTarget target : result.targets){
@@ -605,7 +606,7 @@ public class CameraSystem{
             {
                if(target.getFiducialId() == ID)
                {
-                    targetRange = PhotonUtils.calculateDistanceToTargetMeters(-offsets.get(position).getZ(), 
+                    targetRange = PhotonUtils.calculateDistanceToTargetMeters(offsets.get(position).getZ(), 
                     aprilTagFieldLayout.getTagPose(ID).get().getZ(), 
                     offsets.get(position).getRotation().getY(), 
                     Units.degreesToRadians(target.getPitch()));

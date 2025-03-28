@@ -70,7 +70,7 @@ public class Elevator {
         //.6
 
         configL
-            .closedLoopRampRate(.6)
+            .closedLoopRampRate(.5)
             .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(60);
@@ -81,7 +81,7 @@ public class Elevator {
          elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
          configR
-            .closedLoopRampRate(.6)
+            .closedLoopRampRate(.5)
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(60);

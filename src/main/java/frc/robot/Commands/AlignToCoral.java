@@ -23,30 +23,34 @@ public class AlignToCoral extends Command {
   private PIDController xController;
   private PIDController yController;
   private PIDController thetaController;
+  private double heading;
   public AlignToCoral() {
     camSystem = CameraSystem.getInstance();
     driveBase = DriveSubsystem.getInstance();
     side = camSystem.poleSide;
-    xController = new PIDController(0, 0, 0);
-    yController = new PIDController(0, 0, 0);
-    thetaController = new PIDController(0, 0, 0);
-    
-    xController.setSetpoint(0.11);
+    xController = new PIDController(.005, 0, 0);
+    yController = new PIDController(.01, 0, 0);
+    thetaController = new PIDController(0.005, 0, 0);
+    //heading = -driveBase.gyro.getAngle() + 90;
+    //heading = driveBase.getHeading() % 180;
+    //xController.setSetpoint(0.11);//temporary number
     thetaController.setSetpoint(0);
     if(side == PoleSide.LEFT){
-      yController.setSetpoint(0);
+      xController.setSetpoint(0.227);
+      yController.setSetpoint(-6.252);
       camSystem.focusCamIndex = 0;
     }
     else {
-      yController.setSetpoint(0);
+      xController.setSetpoint(0.211);
+      yController.setSetpoint(20.74);
       camSystem.focusCamIndex = 1;
     }
     
     thetaController.enableContinuousInput(-180, 180);
 
-    xController.setTolerance(.01);
-    yController.setTolerance(.01);
-    thetaController.setTolerance(.1);
+    xController.setTolerance(.1);
+    yController.setTolerance(.1);
+    thetaController.setTolerance(2);
     
   }
 
@@ -66,13 +70,26 @@ public class AlignToCoral extends Command {
       updateThetaControllerSetpoint(camSystem.lastTag);
 
       driveBase.drive(
-        -xController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()),
+        xController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()),
         camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue() < 0.4
           ? yController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag))
           : 0,
-        thetaController.calculate(driveBase.getHeading()),
+        thetaController.calculate(driveBase.getWorkingHeading()),
         false);
-    } 
+    }
+    else if(camSystem.hasDesiredTarget(camSystem.focusCamIndex, camSystem.lastTag) 
+    && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null 
+    && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
+      updateThetaControllerSetpoint(camSystem.lastTag);
+
+      driveBase.drive(
+        xController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()),
+        camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue() < 0.4
+          ? yController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag))
+          : 0,
+        thetaController.calculate(driveBase.getWorkingHeading()),
+        false);
+    }
     else if(!camSystem.hasDesiredTarget(camSystem.focusCamIndex, camSystem.lastTag)){
       Double yaw = camSystem.getYawForTag(2, camSystem.lastTag);
       // Double yaw = null;
@@ -96,12 +113,12 @@ public class AlignToCoral extends Command {
   }
   private void updateThetaControllerSetpoint(int targetID) {
     switch (targetID) {
-      case 6, 19 -> thetaController.setSetpoint(300);
-      case 7, 18 -> thetaController.setSetpoint(0);
-      case 8, 17 -> thetaController.setSetpoint(60);
-      case 9, 22 -> thetaController.setSetpoint(120);
-      case 10, 21 -> thetaController.setSetpoint(180);
-      case 11, 20 -> thetaController.setSetpoint(240);
+      case 6, 19 -> thetaController.setSetpoint(30);
+      case 7, 18 -> thetaController.setSetpoint(90);
+      case 8, 17 -> thetaController.setSetpoint(150);
+      case 9, 22 -> thetaController.setSetpoint(210);
+      case 10, 21 -> thetaController.setSetpoint(270);
+      case 11, 20 -> thetaController.setSetpoint(330);
     }
 
     PPHolonomicDriveController.clearXFeedbackOverride();
