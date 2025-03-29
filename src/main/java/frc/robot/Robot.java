@@ -246,12 +246,15 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("heading", drivebase.getWorkingHeading());
     if(alignToCoral != null && alignToCoral.xController != null 
     && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
-    && alignToCoral.yController != null && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
+    && alignToCoral.yController != null && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null
+    && alignToCoral.thetaController != null){
       SmartDashboard.putNumber("xController", alignToCoral.xController.calculate(
         camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()));
       SmartDashboard.putNumber("yController", alignToCoral.yController.calculate(
         camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()));
+      SmartDashboard.putNumber("thetaController", alignToCoral.thetaController.calculate(drivebase.getWorkingHeading()));
     }
+    
     SmartDashboard.putString("Focus Cam", camSystem.focusCamIndex == 0 ? "climb" : "swerve");
     // SmartDashboard.putNumber("Currenr Degree", CameraSystem.get);
 
@@ -355,6 +358,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    robotInit();
     // as soon as we begin teleop we desable the auton selection
     // litty.setBlue();
     if (m_autoSelected != null) {
