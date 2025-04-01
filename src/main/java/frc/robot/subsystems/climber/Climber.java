@@ -13,13 +13,12 @@ import frc.robot.subsystems.elevator.Elevator;
 
 public class Climber {
     public SparkFlex climberMotor;
-    public Servo deployer;
     public SparkFlexConfig MotorConfig;
     public static Climber instance;
 
     public Climber(){
         climberMotor = new SparkFlex(Ports.climber, MotorType.kBrushless);
-        deployer = new Servo(0);
+    
         MotorConfig = new SparkFlexConfig();
         MotorConfig
             .inverted(false)
@@ -31,14 +30,9 @@ public class Climber {
     public void ClimbDown(){
         climberMotor.set(1);
     }
-    public void ClimbRetract(){
-        deployer.set(0);
-    }
+   
 
-    public void ClimbDeploy(){
-        deployer.set(1);
-    }
-
+    
     public void ClimbUp(){
         climberMotor.set(-1);
     }

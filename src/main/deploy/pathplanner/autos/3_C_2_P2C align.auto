@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "new short"
+            "pathName": "start3 to 3 align"
           }
         },
         {
@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CoralAlign"
+                  "name": "CoralAlignL"
                 }
               },
               {
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "1R - human"
+                  "pathName": "3L - human"
                 }
               },
               {
@@ -69,7 +69,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Short Allign"
+            "pathName": "human - 4R align"
           }
         },
         {
@@ -91,7 +91,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CoralAlign"
+                  "name": "CoralAlignR"
                 }
               },
               {
@@ -116,7 +116,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "6R - human"
+                  "pathName": "4R - human"
                 }
               },
               {
@@ -138,6 +138,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Start 1",
+  "folder": "Start 3",
   "choreoAuto": false
 }

@@ -25,12 +25,12 @@ public class AlignToCoral extends Command {
   public PIDController yController;
   public PIDController thetaController;
   private double heading;
-  public AlignToCoral() {
+  public AlignToCoral(PoleSide side) {
     camSystem = CameraSystem.getInstance();
     driveBase = DriveSubsystem.getInstance();
-    side = camSystem.poleSide;
-    xController = new PIDController(.0095, 0, 0.01);
-    yController = new PIDController(.95, 0, 0.01);
+    this.side = side;
+    xController = new PIDController(.0095, 0, 0);
+    yController = new PIDController(.95, 0, 0);
     thetaController = new PIDController(0.008, 0, 0);
     //heading = -driveBase.gyro.getAngle() + 90;
     //heading = driveBase.getHeading() % 180;

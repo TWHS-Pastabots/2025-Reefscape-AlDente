@@ -615,6 +615,17 @@ public class CameraSystem{
 
         return targetRange;
     }
+    public double getPitch(int position, int ID){
+        List<PhotonTrackedTarget> targets = lastestResults.get(position).getTargets();
+            for(PhotonTrackedTarget target : targets)
+            {
+               if(target.getFiducialId() == ID)
+               {
+                    return Units.degreesToRadians(target.getPitch());
+                } 
+            }
+        return -1;
+    }
     public void ChangeCamOffset(double encoderVal)
     {
         double camHeight = (encoderVal * -0.570855) + 19.67;
