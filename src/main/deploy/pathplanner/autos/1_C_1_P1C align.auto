@@ -27,6 +27,12 @@
                 }
               },
               {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.35
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "L4Score"
@@ -36,9 +42,21 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HumanIntake"
           }
         },
         {
@@ -91,7 +109,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CoralAlignL"
+                  "name": "CoralAlignR"
                 }
               },
               {
