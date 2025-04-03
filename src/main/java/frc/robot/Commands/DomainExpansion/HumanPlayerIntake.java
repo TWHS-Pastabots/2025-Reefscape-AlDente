@@ -47,14 +47,13 @@ public class HumanPlayerIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!transitionReady){
+    
       pivot.schedule();
       elevator.schedule();
       if(pivot.isFinished()){
         //claw.clawOn(.6);
         wrist.schedule();
       }
-    }
     // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && !transitionReady)
     // {
     //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
@@ -72,7 +71,7 @@ public class HumanPlayerIntake extends Command {
     // {
     //   ended = true;
     // }
-    if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
+    if( elevator.isFinished() )
     {
       ended = true;
     }

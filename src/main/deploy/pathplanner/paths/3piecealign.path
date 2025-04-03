@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.933913934426228,
-        "y": 3.8511782786885242
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 6.9169057377049175,
-        "y": 6.512448770491803
-      },
-      "isLocked": false,
-      "linkedName": "2LScore"
-    },
-    {
-      "anchor": {
         "x": 1.0908811475409836,
         "y": 7.627305327868852
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.25011366290536,
+        "y": 7.414826070520201
+      },
+      "isLocked": false,
+      "linkedName": "sigmahumanR"
+    },
+    {
+      "anchor": {
+        "x": 2.70922131147541,
+        "y": 4.00701844262295
+      },
       "prevControl": {
-        "x": 2.0618852459016397,
-        "y": 6.644313524590164
+        "x": 2.5504525972065046,
+        "y": 4.20013109205172
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "sigmahumanR"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 38.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "CyclePaths RF",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 38.0
   },
   "useDefaultConstraints": true
 }

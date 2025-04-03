@@ -50,7 +50,7 @@ public class Pivot {
         SHOOTINGNET(80),
 
         SIGMATEST(120.3),
-        CLIMB(70);
+        CLIMB(20);
 
         public double position;
         
@@ -79,7 +79,7 @@ public class Pivot {
             //.pid(0.009, 0, .05)
             .positionWrappingEnabled(true)
             .positionWrappingInputRange(0, 360)
-            .outputRange(-1, 1);
+            .outputRange(-.1, .1);
         // config.closedLoop.maxMotion
         //     .allowedClosedLoopError(2)
         //     .maxVelocity(12000)
