@@ -117,15 +117,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "Transition"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "6R - human"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "6R - human"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Transition"
+                }
+              }
+            ]
           }
         }
       ]

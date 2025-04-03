@@ -50,7 +50,7 @@ public class Pivot {
         SHOOTINGNET(80),
 
         SIGMATEST(120.3),
-        CLIMB(20);
+        CLIMB(33);
 
         public double position;
         
@@ -66,7 +66,7 @@ public class Pivot {
         pivotMotor = new SparkMax(Ports.pivot, MotorType.kBrushless);
         config = new SparkMaxConfig();
         config
-        .closedLoopRampRate(1) //was 1.8
+        .closedLoopRampRate(1.1) //was 1 (1.3 state)
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(60);
@@ -79,7 +79,7 @@ public class Pivot {
             //.pid(0.009, 0, .05)
             .positionWrappingEnabled(true)
             .positionWrappingInputRange(0, 360)
-            .outputRange(-.1, .1);
+            .outputRange(-1, 1);
         // config.closedLoop.maxMotion
         //     .allowedClosedLoopError(2)
         //     .maxVelocity(12000)

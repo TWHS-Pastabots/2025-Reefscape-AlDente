@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0069672131147542,
-        "y": 0.7583504098360652
+        "x": 7.22858606557377,
+        "y": 4.138883196721311
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0626134251956831,
-        "y": 1.0020787403211449
+        "x": 7.560740957800759,
+        "y": 4.166615599582521
       },
       "isLocked": false,
-      "linkedName": "sigmahumanL"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0568647540983607,
-        "y": 3.8511782786885242
+        "x": 6.28155737704918,
+        "y": 3.9950307377049183
       },
       "prevControl": {
-        "x": 2.764998041641593,
-        "y": 3.2897511003791067
+        "x": 5.966707744366351,
+        "y": 3.959357322178672
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "5RScore"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "CyclePaths LC",
+  "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -35.0
+    "velocity": 0.0,
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

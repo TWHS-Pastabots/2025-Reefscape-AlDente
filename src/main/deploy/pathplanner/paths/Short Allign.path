@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.0908811475409836,
-        "y": 7.627305327868852
+        "y": 7.675256147540983
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.037909836065573,
-        "y": 7.399538934426229
+        "y": 7.44748975409836
       },
       "isLocked": false,
       "linkedName": "sigmahumanR"

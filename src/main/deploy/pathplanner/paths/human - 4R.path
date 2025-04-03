@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3905737704918033,
-        "y": 0.9741290983606552
+        "x": 1.0069672131147542,
+        "y": 0.7583504098360652
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9461658070867145,
-        "y": 1.3432319167450475
+        "x": 1.5625592497096654,
+        "y": 1.1274532282204575
       },
       "isLocked": false,
       "linkedName": "sigmahumanL"
@@ -48,7 +48,7 @@
   "folder": "CyclePaths LC",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 145.0
+    "rotation": -35.0
   },
   "useDefaultConstraints": true
 }

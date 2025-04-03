@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.3905737704918033,
-        "y": 0.9741290983606552
+        "x": 1.0069672131147542,
+        "y": 0.7583504098360652
       },
       "prevControl": {
-        "x": 2.4215163934426225,
-        "y": 1.6214651639344266
+        "x": 2.037909836065573,
+        "y": 1.4056864754098366
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 145.0
+    "rotation": -35.0
   },
   "reversed": false,
   "folder": "CyclePaths LC",

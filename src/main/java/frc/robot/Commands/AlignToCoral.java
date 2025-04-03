@@ -37,14 +37,14 @@ public class AlignToCoral extends Command {
     //xController.setSetpoint(0.11);//temporary number
     thetaController.setSetpoint(0);
     if(side == PoleSide.LEFT){
-      yController.setSetpoint(0.19);
+      yController.setSetpoint(0.185);
       xController.setSetpoint(14);
       //xController.setSetpoint(15);
       //xController.setSetpoint(-4.5);
       camSystem.focusCamIndex = 0;
     }
     else {
-      yController.setSetpoint(0.10);
+      yController.setSetpoint(0.07);
       xController.setSetpoint(-1.7);
       camSystem.focusCamIndex = 1;
     }
@@ -61,14 +61,14 @@ public class AlignToCoral extends Command {
   @Override
   public void initialize() {
     if(side == PoleSide.LEFT){
-      yController.setSetpoint(0.19);
+      yController.setSetpoint(0.13);
       xController.setSetpoint(14);
       //xController.setSetpoint(15);
       //xController.setSetpoint(-4.5);
       camSystem.focusCamIndex = 0;
     }
     else {
-      yController.setSetpoint(0.10);
+      yController.setSetpoint(0.08);
       xController.setSetpoint(-1.9);
       camSystem.focusCamIndex = 1;
     }
@@ -92,19 +92,20 @@ public class AlignToCoral extends Command {
       if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
       && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
       { 
-        xController.setSetpoint(-18.6);
+        xController.setSetpoint(-20.8);
         xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
         ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
-        //multFactor = 0.4;
+        multFactor = 0.8;
       }
       else{
         xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
         ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+        multFactor = 1.4;
       }
       // xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
       // ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
       driveBase.drive(xSpeed,
-        1.4 * ySpeed, 
+        multFactor * ySpeed, 
         thetaController.calculate(driveBase.getWorkingHeading()),
         //0, 
         false);
@@ -142,21 +143,25 @@ public class AlignToCoral extends Command {
 
       double xSpeed = 0;
       double ySpeed = 0;
+      double multFactor = 1;
       if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
       && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
       { 
-        xController.setSetpoint(-18.6);
+        // was -18.6
+        xController.setSetpoint(-20.8);
         xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
         ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
+        multFactor = .8;
       }
       else{
         xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
         ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+        multFactor = 1.4;
       }
       // xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
       // ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
       driveBase.drive(xSpeed,
-        1.4 * ySpeed, 
+        multFactor * ySpeed, 
         thetaController.calculate(driveBase.getWorkingHeading()),
         //0, 
         false);
