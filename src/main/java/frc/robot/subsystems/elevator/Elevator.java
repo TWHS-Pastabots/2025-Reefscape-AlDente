@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Elevator {
+    public static double adjuster;
     public DigitalInputs bottomLimitSwitch;
     public DigitalInputs topLimitSwitch;
     public static Elevator instance;
@@ -49,9 +50,9 @@ public class Elevator {
         L1CORALSCORE(0),
         L2CORALSCORE(13.5),
         L3CORALSCORE(39.5),
-        L4CORALSCORE(82.5),
-        PROCESSOR(9),
-        HUMANSTATIONINTAKE(13),
+        L4CORALSCORE(82),
+        PROCESSOR(9 ),
+        HUMANSTATIONINTAKE(11.5),
         AUTONTRANSITION(9),
         TEST(60);
 
@@ -109,6 +110,14 @@ public class Elevator {
         if(getBottomLimitSwitch()){
             elevatorMotorL.getEncoder().setPosition(0);
             elevatorMotorR.getEncoder().setPosition(0);
+        }
+        
+    }
+    public void UpdateEnumPoses(){
+        if(elevatorState == ElevatorState.GROUND){
+            elevatorState.position = elevatorState.position;
+        }else{
+            elevatorState.position += adjuster;
         }
         
     }
