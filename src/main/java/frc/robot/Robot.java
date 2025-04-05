@@ -121,6 +121,7 @@ public class Robot extends LoggedRobot {
   public PIDController thetaController;
 
   private boolean usingAlign;
+  private boolean atPoleR;
   // that is a chooser for the autons utilizing the sendableChooser which allows
   // us to choose the auton commands
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -167,6 +168,8 @@ public class Robot extends LoggedRobot {
     outtake = new Outtake();
     autoAllignR = new AutoAllignR();
     autoAllignL = new AutoAllignL();
+
+    elevator.elevatorMotorR.clearFaults();
     
     //alignToCoral = new AlignToCoral();
     // x: .0095 y: .95 theta: .008
@@ -180,6 +183,8 @@ public class Robot extends LoggedRobot {
     xController.setTolerance(.005);
     yController.setTolerance(.005);
     thetaController.setTolerance(.01);
+
+    atPoleR = false;
     // camSystem = CameraSystem.getInstance();
     // camSystem.AddCamera(new PhotonCamera("Cam1"), new Transform3d(
     // new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0.0, 0.0, 0.0))
@@ -403,7 +408,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+    elevator.elevatorMotorR.clearFaults();
+    boolean atRight = false;
     double multFactor = 1;
     usingAlign = false;
     elevator.updatePose();
@@ -457,7 +463,7 @@ public class Robot extends LoggedRobot {
       camSystem.poleSide = PoleSide.RIGHT;
       thetaController.setSetpoint(0);
       //was .11
-      yController.setSetpoint(0.07);
+      yController.setSetpoint(0.06);
       xController.setSetpoint(-1.9);
       camSystem.focusCamIndex = 1;
       if (camSystem.hasDesiredTarget(0, camSystem.lastTag) && camSystem.hasDesiredTarget(1, camSystem.lastTag)) 
@@ -480,7 +486,7 @@ public class Robot extends LoggedRobot {
         else{
           xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
           ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-          multFactor = 1.4;
+          multFactor = 2.4;
         }
         rot = thetaController.calculate(drivebase.getWorkingHeading());
         // drivebase.drive(xSpeed1,
@@ -505,7 +511,7 @@ public class Robot extends LoggedRobot {
         else{
           xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
           ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-          multFactor = 1.4;
+          multFactor = 2.4;
         }
         
         rot = thetaController.calculate(drivebase.getWorkingHeading());
@@ -547,86 +553,117 @@ public class Robot extends LoggedRobot {
     if(driver.getXButton()){
       usingAlign = true;
       camSystem.poleSide = PoleSide.LEFT;
-      //was .2 and 14.1
-      yController.setSetpoint(0.13);
-      //xController.setSetpoint(14);
+      //thetaController.setSetpoint(0);
+      //was .11
+      //yController.setSetpoint(0.07);
+      xController.setSetpoint(-18.8);
       camSystem.focusCamIndex = 0;
-      if (camSystem.hasDesiredTarget(0, camSystem.lastTag) && camSystem.hasDesiredTarget(1, camSystem.lastTag)
-      && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null 
-      && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null) // driver align right so left camera
-      {
-        updateThetaControllerSetpoint(camSystem.lastTag);
-        updateXControllerSetpoint();
-        // if(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .55
-        // && camSystem.focusCamIndex == 0){
-        //   xController.setSetpoint(-4.5);
-        // }
-        // if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
-        // && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
-        // {
-        //   multFactor = .75;
-        //   //xController.setSetpoint(-20.8);
-        //   xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
-        //   ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
-        // }
-        // else{
-        //   xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
-        //   ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-        //   multFactor = 1.4;
-        // }
-        multFactor = .35;
-        xSpeed = 
-        (Math.abs(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue())) < .2)
-        ? xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag)) : 0;
-        ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
-        rot = thetaController.calculate(drivebase.getWorkingHeading());
-        // xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
-        // ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-        // drivebase.drive(xSpeed1,
-        //   multFactor * ySpeed1, 
-        //   thetaController.calculate(drivebase.getWorkingHeading()),
-        //   //0, 
-
-        //   false);
+      if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) == null){
+        xSpeed = .1;
+        ySpeed = 0;
+        rot = 0;
       }
-      else if((camSystem.hasDesiredTarget(camSystem.focusCamIndex, camSystem.lastTag) 
-      && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null 
-      && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null)){
-        updateThetaControllerSetpoint(camSystem.lastTag);
-        updateXControllerSetpoint();
-        // if(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .55
-        // && camSystem.focusCamIndex == 0){
-        //   xController.setSetpoint(-4.5);
-        // }
-        // if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
-        // && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
-        // { 
-        //   xController.setSetpoint(-20.8);
-        //   xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
-        //   ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
-        //   multFactor = .75;
-        // }
-        // else{
-        //   xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
-        //   ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-        //   multFactor = 1.4;
-        // }
-        multFactor = .35;
-        xSpeed = 
-        (Math.abs(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue())) < .2)
-        ? xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag)) : 0;
-        ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
-        rot = thetaController.calculate(drivebase.getWorkingHeading());
-        // xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
-        // ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-        // drivebase.drive(xSpeed1,
-        //   multFactor * ySpeed1, 
+      else if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
+        xSpeed =  xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
+        ySpeed = 0;
+        rot = 0;
+      }
+      // if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null
+      // && xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag)) < .05){
+      //   xSpeed = 0;
+      //   ySpeed = 0;
+      //   rot = 0;
+      // }
+      // usingAlign = true;
+      // camSystem.poleSide = PoleSide.LEFT;
+      // //was .2 and 14.1
+      // yController.setSetpoint(0.17);
+      // //xController.setSetpoint(14);
+      // camSystem.focusCamIndex = 0;
+      // if (camSystem.hasDesiredTarget(0, camSystem.lastTag) && camSystem.hasDesiredTarget(1, camSystem.lastTag)
+      // && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null 
+      // && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null) // driver align right so left camera
+      // {
+      //   updateThetaControllerSetpoint(camSystem.lastTag);
+      //   updateXControllerSetpoint();
+      //   // if(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .55
+      //   // && camSystem.focusCamIndex == 0){
+      //   //   xController.setSetpoint(-4.5);
+      //   // }
+      //   // if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
+      //   // && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
+      //   // {
+      //   //   multFactor = .75;
+      //   //   //xController.setSetpoint(-20.8);
+      //   //   xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
+      //   //   ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
+      //   // }
+      //   // else{
+      //   //   xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+      //   //   ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+      //   //   multFactor = 1.4;
+      //   // }
+      //   multFactor = 0.7;
+      //   // (Math.abs(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue())) < .14)
+      //   // ? .1 : .7;
 
-        //   thetaController.calculate(drivebase.getWorkingHeading()),
-        //   //0, 
-        //   false);
+      //   // xSpeed = 
+      //   // (Math.abs(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue())) < .24)
+      //   // ? xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag)) : 0;
+      //   // ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
+      //   // rot = thetaController.calculate(drivebase.getWorkingHeading());
+
+      //   // xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+      //   // ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+      //   // drivebase.drive(xSpeed1,
+      //   //   multFactor * ySpeed1, 
+      //   //   thetaController.calculate(drivebase.getWorkingHeading()),
+      //   //   //0, 
+
+      //   //   false);
+      // }
+      // else if((camSystem.hasDesiredTarget(camSystem.focusCamIndex, camSystem.lastTag) 
+      // && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null 
+      // && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null)){
+      //   updateThetaControllerSetpoint(camSystem.lastTag);
+      //   updateXControllerSetpoint();
+      //   // if(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .55
+      //   // && camSystem.focusCamIndex == 0){
+      //   //   xController.setSetpoint(-4.5);
+      //   // }
+      //   // if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
+      //   // && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
+      //   // { 
+      //   //   xController.setSetpoint(-20.8);
+      //   //   xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
+      //   //   ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
+      //   //   multFactor = .75;
+      //   // }
+      //   // else{
+      //   //   xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+      //   //   ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+      //   //   multFactor = 1.4;
+      //   // }
+      //   multFactor = .7;
+      //   // (Math.abs(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue())) < .14)
+      //   // ? .1 : .7;
+
+      //   // xSpeed = 
+      //   // (Math.abs(yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue())) < .24)
+      //   // ? xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag)) : 0;
+      //   // ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
+      //   // rot = thetaController.calculate(drivebase.getWorkingHeading());
+
+      //   // xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+      //   // ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+      //   // drivebase.drive(xSpeed1,
+      //   //   multFactor * ySpeed1, 
+
+      //   //   thetaController.calculate(drivebase.getWorkingHeading()),
+      //   //   //0, 
+      //   //   false);
           
-        }
+      //   }
     }
       // alignToCoral.cancel();
       // alignToCoral = new AlignToCoral();
@@ -665,16 +702,18 @@ public class Robot extends LoggedRobot {
     // }
     
     
-    // if(operator.getLeftStickButtonPressed()){
-    //   Elevator.adjuster = Elevator.adjuster -.2;
-    //   elevator.UpdateEnumPoses();
-    // }
-    // if(operator.getRightStickButtonPressed()){
-    //   Elevator.adjuster = Elevator.adjuster +.2;
-    //   elevator.UpdateEnumPoses();
-    // }
+    if(operator.getLeftStickButtonPressed()){
+      Elevator.adjuster = Elevator.adjuster -.2;
+      elevator.UpdateEnumPoses();
+    }
+    if(operator.getRightStickButtonPressed() && elevator.getState() == ElevatorState.GROUND){
+      Elevator.adjuster = Elevator.adjuster +.2;
+      elevator.UpdateEnumPoses();
+      // elevator.elevatorMotorL.getEncoder().setPosition(0);
+      // elevator.elevatorMotorR.getEncoder().setPosition(0);
+    }
 
-    if(operator.getRightTriggerAxis() > 0.5 && mode == "coral" && Timer.getFPGATimestamp() > switchTimer + .5){
+    if(operator.getRightTriggerAxis() > 0.5 && mode == "coral" ){
       switchTimer = Timer.getFPGATimestamp();
       operator.setRumble(RumbleType.kRightRumble, .5);
       mode = "algae";
@@ -761,11 +800,13 @@ public class Robot extends LoggedRobot {
         CancelCommands();
         L4CoralScore.initialize();
         L4CoralScore.schedule();
-      }else if(operator.getPOV() == 180){
-        CancelCommands();
-        L1CoralScore.initialize();
-        L1CoralScore.schedule();
-      }else if(operator.getPOV() == 270){
+      }
+      // }else if(operator.getPOV() == 180){
+      //   CancelCommands();
+      //   L1CoralScore.initialize();
+      //   L1CoralScore.schedule();
+      //}
+      else if(operator.getPOV() == 270){
         CancelCommands();
         L2CoralScore.initialize();
         L2CoralScore.schedule();

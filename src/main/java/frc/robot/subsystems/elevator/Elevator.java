@@ -44,15 +44,15 @@ public class Elevator {
     public static ElevatorFeedforward feedForward;
     public static ElevatorState elevatorState = ElevatorState.GROUND;
     public enum ElevatorState{
-        GROUND(0.25),    
+        GROUND(0),    
         LOWALGAEINTAKE(27),
-        HIGHALGAEINTAKE(39.7),
+        HIGHALGAEINTAKE(47),
         L1CORALSCORE(0),
         L2CORALSCORE(13.5),
         L3CORALSCORE(39.5),
         L4CORALSCORE(82),
         PROCESSOR(9 ),
-        HUMANSTATIONINTAKE(11.5),
+        HUMANSTATIONINTAKE(12.5),
         AUTONTRANSITION(9),
         TEST(60);
 
@@ -74,7 +74,7 @@ public class Elevator {
             .closedLoopRampRate(.5)
             .inverted(false)
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(60);
+            .smartCurrentLimit(50);
         configL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
@@ -85,7 +85,7 @@ public class Elevator {
             .closedLoopRampRate(.5)
             .inverted(true)
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(60);
+            .smartCurrentLimit(50);
         configR.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
@@ -99,6 +99,7 @@ public class Elevator {
 
         topLimitSwitch = DigitalInputs.getInstance();
         bottomLimitSwitch = DigitalInputs.getInstance();
+
     }
     public void updatePose(){
         ControllerL.setReference(elevatorState.position, ControlType.kPosition, ClosedLoopSlot.kSlot0,

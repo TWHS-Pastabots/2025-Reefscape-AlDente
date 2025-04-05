@@ -68,8 +68,8 @@ public class AlignToCoral extends Command {
       camSystem.focusCamIndex = 0;
     }
     else {
-      yController.setSetpoint(0.07);
-      xController.setSetpoint(-1.9);
+      yController.setSetpoint(0.06);
+      xController.setSetpoint(-1.7);
       camSystem.focusCamIndex = 1;
     }
   }

@@ -29,8 +29,7 @@ public class Intake extends Command {
   @Override
   public void execute() {
     claw.clawReverse(.5);
-    if(Timer.getFPGATimestamp() > timer + 1
-    ){
+    if(Timer.getFPGATimestamp() > timer + 1.5){
       claw.clawOff(0);
       ended = true;
     }
