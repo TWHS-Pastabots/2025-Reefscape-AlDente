@@ -713,7 +713,7 @@ public class Robot extends LoggedRobot {
       // elevator.elevatorMotorR.getEncoder().setPosition(0);
     }
 
-    if(operator.getRightTriggerAxis() > 0.5 && mode == "coral" ){
+    if(operator.getRightTriggerAxis() > 0.5 && mode == "coral" && Timer.getFPGATimestamp() > switchTimer + .5){
       switchTimer = Timer.getFPGATimestamp();
       operator.setRumble(RumbleType.kRightRumble, .5);
       mode = "algae";
