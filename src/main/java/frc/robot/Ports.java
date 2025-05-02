@@ -2,8 +2,8 @@ package frc.robot;
 //Jackson is gonna make me lowkey crashout 
 public class Ports {
     //NEW PORTS
-    public static final int elevatorMotorL = 15;
-    public static final int elevatorMotorR = 16;
+    public static final int elevatorMotorL = 16;
+    public static final int elevatorMotorR = 15;
     //OLD PORTS
     // 1 is back
 

@@ -488,6 +488,7 @@ public class Robot extends LoggedRobot {
           ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
           multFactor = 2.4;
         }
+        multFactor = .7;
         rot = thetaController.calculate(drivebase.getWorkingHeading());
         // drivebase.drive(xSpeed1,
         //   multFactor * ySpeed1, 
@@ -513,7 +514,7 @@ public class Robot extends LoggedRobot {
           ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
           multFactor = 2.4;
         }
-        
+        multFactor = .7;
         rot = thetaController.calculate(drivebase.getWorkingHeading());
         // drivebase.drive(xSpeed1,
         //   multFactor * ySpeed1, 
