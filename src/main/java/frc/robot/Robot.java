@@ -488,7 +488,7 @@ public class Robot extends LoggedRobot {
           ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
           multFactor = 2.4;
         }
-        multFactor = .7;
+        multFactor = 1;
         rot = thetaController.calculate(drivebase.getWorkingHeading());
         // drivebase.drive(xSpeed1,
         //   multFactor * ySpeed1, 
@@ -514,7 +514,7 @@ public class Robot extends LoggedRobot {
           ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
           multFactor = 2.4;
         }
-        multFactor = .7;
+        // multFactor = .7;
         rot = thetaController.calculate(drivebase.getWorkingHeading());
         // drivebase.drive(xSpeed1,
         //   multFactor * ySpeed1, 
@@ -556,8 +556,10 @@ public class Robot extends LoggedRobot {
       camSystem.poleSide = PoleSide.LEFT;
       //thetaController.setSetpoint(0);
       //was .11
-      //yController.setSetpoint(0.07);
-      xController.setSetpoint(-18.8);
+      
+      yController.setSetpoint(0.24);
+      xController.setSetpoint(-9.17); //was -18.8
+      updateXControllerSetpoint();
       camSystem.focusCamIndex = 0;
       if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) == null){
         xSpeed = .1;
@@ -565,9 +567,10 @@ public class Robot extends LoggedRobot {
         rot = 0;
       }
       else if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
+        updateThetaControllerSetpoint(camSystem.lastTag);
         xSpeed =  xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
-        ySpeed = 0;
-        rot = 0;
+        ySpeed =  yController.calculate(camSystem.getTargetRange(0, camSystem.lastTag).doubleValue());
+        rot = thetaController.calculate(drivebase.getWorkingHeading());
       }
       // if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null
       // && xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag)) < .05){
@@ -933,7 +936,8 @@ public class Robot extends LoggedRobot {
   }
   private void updateXControllerSetpoint(){
     if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null){
-      xController.setSetpoint(-5.8 + (-15 * .13)/ camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag));
+      double range = camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag);
+      xController.setSetpoint(-259.99*(Math.pow(range, 2)) + 325.25 * (range) - 76.41);
     }
     else{
       xController.setSetpoint(-20.8);
