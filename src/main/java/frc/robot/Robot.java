@@ -45,6 +45,7 @@ import frc.robot.Commands.DomainExpansion.L2CoralScore;
 import frc.robot.Commands.DomainExpansion.L3CoralScore;
 import frc.robot.Commands.DomainExpansion.L4CoralScore;
 import frc.robot.Commands.DomainExpansion.LowAlgaeIntake;
+import frc.robot.Commands.DomainExpansion.NetScore;
 import frc.robot.Commands.DomainExpansion.Outtake;
 import frc.robot.Commands.DomainExpansion.ProcessorScore;
 import frc.robot.Commands.DomainExpansion.Transition;
@@ -101,6 +102,7 @@ public class Robot extends LoggedRobot {
   private AutoAllignL autoAllignL;
   private AlignToCoral alignToCoral;
   private CancelCommands cancel;
+  private NetScore netScore;
   // private LED litty;
   // private CameraSystem camSystem;
   private String mode = "coral";
@@ -168,7 +170,7 @@ public class Robot extends LoggedRobot {
     outtake = new Outtake();
     autoAllignR = new AutoAllignR();
     autoAllignL = new AutoAllignL();
-
+    netScore = new NetScore();
     elevator.elevatorMotorR.clearFaults();
     
     //alignToCoral = new AlignToCoral();
@@ -822,11 +824,8 @@ public class Robot extends LoggedRobot {
     }else if(mode == "algae"){
       if(operator.getPOV() == 0){
         CancelCommands();
-        // pivot.setPivotState(PivotState.SIGMATEST);
-        // elevator.setElevatorState(ElevatorState.L4CORALSCORE);
-        // wristCommand = new WristCommand(WristState.NET);
-        // wristCommand.initialize();
-        // wristCommand.schedule();
+        netScore.initialize();
+        netScore.schedule();
       }else if(operator.getPOV() == 180){
         CancelCommands();
         processorScore.initialize();
@@ -896,6 +895,7 @@ public class Robot extends LoggedRobot {
     L2CoralScore.cancel();
     L1CoralScore.cancel();
     transition.cancel();
+    netScore.cancel();
   }
   @Override
   public void disabledInit() {
