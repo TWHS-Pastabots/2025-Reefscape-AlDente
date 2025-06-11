@@ -45,4 +45,6 @@ public class Ports {
 
     //*BLINKIN */
     public static final int blinkin = 9;
+
+    public static final int vector = 19;
 }

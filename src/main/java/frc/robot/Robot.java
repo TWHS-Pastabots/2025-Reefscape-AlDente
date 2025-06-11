@@ -1,6 +1,7 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import org.ietf.jgss.Oid;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -61,6 +62,9 @@ import frc.robot.subsystems.pivot.Pivot.PivotState;
 import frc.robot.subsystems.claw.Wrist;
 import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.VectorPlate.VectorState;
+import frc.robot.subsystems.climber.*;
+
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
 //import frc.robot.subsystems.claw.Wrist.WristState;
@@ -80,6 +84,7 @@ public class Robot extends LoggedRobot {
   private Claw claw;
   private Pivot pivot; 
   private Elevator elevator;
+  private VectorPlate vectorPlate;
   private CameraSystem camSystem;
   private WristCommand wristCommand;
   private GroundAlgaeIntake groundAlgaeIntake;
@@ -141,6 +146,7 @@ public class Robot extends LoggedRobot {
     climber = Climber.getInstance();
     claw = Claw.getInstance();
     pivot = Pivot.getInstance();
+    vectorPlate = VectorPlate.getInstance();
     camSystem = CameraSystem.getInstance(); 
     camSystem.AddCamera(new PhotonCamera("ClimbCam"), new Transform3d(
       new Translation3d(-0.30043, -0.26457, 0.31945), new Rotation3d(0.0, 0.0, Math.toRadians(-55.56095))), 
@@ -416,6 +422,7 @@ public class Robot extends LoggedRobot {
     usingAlign = false;
     elevator.updatePose();
     pivot.updatePose();
+    vectorPlate.updatePose();
     
     double ySpeed = drivebase.inputDeadband(-driver.getLeftX()) * speedMod;
     double xSpeed = drivebase.inputDeadband(-driver.getLeftY()) * speedMod;
@@ -459,6 +466,15 @@ public class Robot extends LoggedRobot {
     // }else if(driver.getPOV() == 270){
     //   invert = -1;
     // }
+    if(driver.getAButton())
+    {
+      vectorPlate.setVectorState(VectorState.DOWN);
+    }
+    
+    if(driver.getYButton())
+    {
+      vectorPlate.setVectorState(VectorState.UP);
+    }
 
     if(driver.getBButton()){
       usingAlign = true;
