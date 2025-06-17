@@ -33,6 +33,9 @@ public class Ports {
     //Claw
     public static final int claw = 12;
 
+    // 
+    public static final int vector = 19;
+
     
 
     //*DIO */
@@ -46,5 +49,5 @@ public class Ports {
     //*BLINKIN */
     public static final int blinkin = 9;
 
-    public static final int vector = 19;
+    
 }

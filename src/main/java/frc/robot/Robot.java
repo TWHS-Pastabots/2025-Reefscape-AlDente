@@ -298,6 +298,7 @@ public class Robot extends LoggedRobot {
     
     SmartDashboard.putString("Focus Cam", (camSystem.focusCamIndex == 0)  
     ? "climb" : "swerve");
+    SmartDashboard.putNumber("VectorPosition", vectorPlate.getPosition());
     // SmartDashboard.putNumber("Currenr Degree", CameraSystem.get);
 
 
@@ -420,9 +421,9 @@ public class Robot extends LoggedRobot {
     boolean atRight = false;
     double multFactor = 1;
     usingAlign = false;
-    elevator.updatePose();
-    pivot.updatePose();
-    vectorPlate.updatePose();
+    // elevator.updatePose();
+    // pivot.updatePose();
+  //  vectorPlate.updatePose();
     
     double ySpeed = drivebase.inputDeadband(-driver.getLeftX()) * speedMod;
     double xSpeed = drivebase.inputDeadband(-driver.getLeftY()) * speedMod;
@@ -468,12 +469,15 @@ public class Robot extends LoggedRobot {
     // }
     if(driver.getAButton())
     {
-      vectorPlate.setVectorState(VectorState.DOWN);
+     // vectorPlate.setVectorState(VectorState.DOWN);
+      vectorPlate.ClimbOn();
+
     }
-    
+
     if(driver.getYButton())
     {
-      vectorPlate.setVectorState(VectorState.UP);
+     // vectorPlate.setVectorState(VectorState.UP);
+      vectorPlate.ClimbOff();
     }
 
     if(driver.getBButton()){
@@ -892,6 +896,7 @@ public class Robot extends LoggedRobot {
     if(operator.getBButton()){
      pivot.setPivotState(PivotState.SHOOTINGNET);
     }
+    
     // if(operator.getBButton()){
     //   elevator.setElevatorState(ElevatorState.L4CORALSCORE);
     //   pivot.setPivotState(PivotState.SHOOTINGNET);

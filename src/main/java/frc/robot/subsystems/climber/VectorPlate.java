@@ -111,4 +111,11 @@ public class VectorPlate {
             instance = new VectorPlate();
         return instance;
     }
+    public void ClimbOff(){
+        vectorMotor.set(0.5);
+    }
+
+    public void ClimbOn(){
+        vectorMotor.set(-0.5);
+    }
 }
