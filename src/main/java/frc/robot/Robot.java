@@ -146,7 +146,9 @@ public class Robot extends LoggedRobot {
     climber = Climber.getInstance();
     claw = Claw.getInstance();
     pivot = Pivot.getInstance();
+    
     vectorPlate = VectorPlate.getInstance();
+    vectorPlate.vectorMotor.getEncoder().setPosition(0);
     camSystem = CameraSystem.getInstance(); 
     camSystem.AddCamera(new PhotonCamera("ClimbCam"), new Transform3d(
       new Translation3d(-0.30043, -0.26457, 0.31945), new Rotation3d(0.0, 0.0, Math.toRadians(-55.56095))), 
@@ -412,6 +414,7 @@ public class Robot extends LoggedRobot {
     Translation2d testxy = new Translation2d(16.57 - 14.7, 5.54);
     Rotation2d testRot = new Rotation2d(0);
     Pose2d test = new Pose2d(testxy, testRot);
+
     // drivebase.resetOdometry(test);
   }
 
@@ -421,8 +424,8 @@ public class Robot extends LoggedRobot {
     boolean atRight = false;
     double multFactor = 1;
     usingAlign = false;
-    // elevator.updatePose();
-    // pivot.updatePose();
+     elevator.updatePose();
+     pivot.updatePose();
   //  vectorPlate.updatePose();
     
     double ySpeed = drivebase.inputDeadband(-driver.getLeftX()) * speedMod;
@@ -473,11 +476,15 @@ public class Robot extends LoggedRobot {
       vectorPlate.ClimbOn();
 
     }
+  
 
-    if(driver.getYButton())
+    else if(driver.getYButton())
     {
      // vectorPlate.setVectorState(VectorState.UP);
       vectorPlate.ClimbOff();
+    }
+    else{
+      vectorPlate.turnOff();
     }
 
     if(driver.getBButton()){
@@ -892,6 +899,7 @@ public class Robot extends LoggedRobot {
       pivotCommand = new PivotCommand(PivotState.CLIMB);
       pivotCommand.initialize();
       pivotCommand.schedule();
+      
     }
     if(operator.getBButton()){
      pivot.setPivotState(PivotState.SHOOTINGNET);

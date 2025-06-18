@@ -58,11 +58,11 @@ public class VectorPlate {
             .closedLoopRampRate(.5)
             .inverted(false)
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(50);
+            .smartCurrentLimit(20);
         config.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(0,0,0)
-            .outputRange(-1, 1);
+            .outputRange(-0.2, 0.2);
          vectorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         // config.closedLoop.maxMotion
         //     .allowedClosedLoopError(2)
@@ -117,5 +117,8 @@ public class VectorPlate {
 
     public void ClimbOn(){
         vectorMotor.set(-0.5);
+    }
+    public void turnOff(){
+        vectorMotor.set(0.0);
     }
 }
