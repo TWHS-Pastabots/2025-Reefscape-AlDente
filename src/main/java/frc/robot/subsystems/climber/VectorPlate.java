@@ -122,3 +122,4 @@ public class VectorPlate {
         vectorMotor.set(0.0);
     }
 }
+

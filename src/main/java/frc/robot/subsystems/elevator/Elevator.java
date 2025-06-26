@@ -78,8 +78,7 @@ public class Elevator {
         configL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
-            .outputRange(-1, 1
-            );
+            .outputRange(-1, 1);
          elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
          configR

@@ -30,11 +30,11 @@ public class Ports {
     // Climb
     public static final int climber = 14;
 
-    //Claw
-    public static final int claw = 12;
-
     // 
     public static final int vector = 19;
+
+    //Claw
+    public static final int claw = 12;
 
     
 
@@ -48,6 +48,4 @@ public class Ports {
 
     //*BLINKIN */
     public static final int blinkin = 9;
-
-    
 }

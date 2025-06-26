@@ -62,11 +62,10 @@ import frc.robot.subsystems.pivot.Pivot.PivotState;
 import frc.robot.subsystems.claw.Wrist;
 import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.VectorPlate.VectorState;
-import frc.robot.subsystems.climber.*;
-
+import frc.robot.subsystems.climber.VectorPlate;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
+import frc.robot.subsystems.climber.VectorPlate.VectorState;
 //import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.swerve.DriveSubsystem;
 import frc.robot.subsystems.swerve.MAXSwerveModule;
@@ -84,9 +83,9 @@ public class Robot extends LoggedRobot {
   private Claw claw;
   private Pivot pivot; 
   private Elevator elevator;
-  private VectorPlate vectorPlate;
   private CameraSystem camSystem;
   private WristCommand wristCommand;
+  private VectorPlate vectorPlate;
   private GroundAlgaeIntake groundAlgaeIntake;
   private GroundIntakeCoral groundCoralIntake;
   private HighAlgaeIntake highAlgaeIntake;
@@ -139,6 +138,7 @@ public class Robot extends LoggedRobot {
     Elevator.adjuster =0;
     clawZeroPower = .075;
     speedMod = 1;
+    vectorPlate = VectorPlate.getInstance();
     drivebase = DriveSubsystem.getInstance();
     elevator = Elevator.getInstance();
     // litty = LED.getInstance();
@@ -146,9 +146,6 @@ public class Robot extends LoggedRobot {
     climber = Climber.getInstance();
     claw = Claw.getInstance();
     pivot = Pivot.getInstance();
-    
-    vectorPlate = VectorPlate.getInstance();
-    vectorPlate.vectorMotor.getEncoder().setPosition(0);
     camSystem = CameraSystem.getInstance(); 
     camSystem.AddCamera(new PhotonCamera("ClimbCam"), new Transform3d(
       new Translation3d(-0.30043, -0.26457, 0.31945), new Rotation3d(0.0, 0.0, Math.toRadians(-55.56095))), 
@@ -179,6 +176,7 @@ public class Robot extends LoggedRobot {
     autoAllignR = new AutoAllignR();
     autoAllignL = new AutoAllignL();
     netScore = new NetScore();
+
     elevator.elevatorMotorR.clearFaults();
     
     //alignToCoral = new AlignToCoral();
@@ -225,9 +223,10 @@ public class Robot extends LoggedRobot {
     m_chooser.addOption("middlePath", new PathPlannerAuto("middlePath"));
     m_chooser.addOption("1_C_1_P1C align", new PathPlannerAuto("1_C_1_P1C align"));
     m_chooser.addOption("testReal", new PathPlannerAuto("testReal"));
-    m_chooser.addOption("test2", new PathPlannerAuto("test2"));
+    m_chooser.addOption("test", new PathPlannerAuto("test"));
     m_chooser.addOption("testcoral", new PathPlannerAuto("testcoral"));
     m_chooser.addOption("3_C_2_P2C align", new PathPlannerAuto("3_C_2_P2C align"));
+    m_chooser.addOption("no.5path", new PathPlannerAuto("no.5path"));
     // SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData(m_chooser);
     
@@ -300,7 +299,6 @@ public class Robot extends LoggedRobot {
     
     SmartDashboard.putString("Focus Cam", (camSystem.focusCamIndex == 0)  
     ? "climb" : "swerve");
-    SmartDashboard.putNumber("VectorPosition", vectorPlate.getPosition());
     // SmartDashboard.putNumber("Currenr Degree", CameraSystem.get);
 
 
@@ -414,7 +412,6 @@ public class Robot extends LoggedRobot {
     Translation2d testxy = new Translation2d(16.57 - 14.7, 5.54);
     Rotation2d testRot = new Rotation2d(0);
     Pose2d test = new Pose2d(testxy, testRot);
-
     // drivebase.resetOdometry(test);
   }
 
@@ -424,9 +421,8 @@ public class Robot extends LoggedRobot {
     boolean atRight = false;
     double multFactor = 1;
     usingAlign = false;
-     elevator.updatePose();
-     pivot.updatePose();
-  //  vectorPlate.updatePose();
+    elevator.updatePose();
+    pivot.updatePose();
     
     double ySpeed = drivebase.inputDeadband(-driver.getLeftX()) * speedMod;
     double xSpeed = drivebase.inputDeadband(-driver.getLeftY()) * speedMod;
@@ -470,22 +466,6 @@ public class Robot extends LoggedRobot {
     // }else if(driver.getPOV() == 270){
     //   invert = -1;
     // }
-    if(driver.getAButton())
-    {
-     // vectorPlate.setVectorState(VectorState.DOWN);
-      vectorPlate.ClimbOn();
-
-    }
-  
-
-    else if(driver.getYButton())
-    {
-     // vectorPlate.setVectorState(VectorState.UP);
-      vectorPlate.ClimbOff();
-    }
-    else{
-      vectorPlate.turnOff();
-    }
 
     if(driver.getBButton()){
       usingAlign = true;
@@ -746,6 +726,23 @@ public class Robot extends LoggedRobot {
       // elevator.elevatorMotorR.getEncoder().setPosition(0);
     }
 
+    if(driver.getAButton())
+    {
+     // vectorPlate.setVectorState(VectorState.DOWN);
+      vectorPlate.ClimbOn();
+
+    }
+  
+
+    else if(driver.getYButton())
+    {
+     // vectorPlate.setVectorState(VectorState.UP);
+      vectorPlate.ClimbOff();
+    }
+    else{
+      vectorPlate.turnOff();
+    }
+
     if(operator.getRightTriggerAxis() > 0.5 && mode == "coral" && Timer.getFPGATimestamp() > switchTimer + .5){
       switchTimer = Timer.getFPGATimestamp();
       operator.setRumble(RumbleType.kRightRumble, .5);
@@ -867,6 +864,33 @@ public class Robot extends LoggedRobot {
         highAlgaeIntake.schedule();
       }
     }
+    // }else if(mode == "algae"){
+    //   if(operator.getPOV() == 0){
+    //     CancelCommands();
+    //     // pivot.setPivotState(PivotState.SIGMATEST);
+    //     // elevator.setElevatorState(ElevatorState.L4CORALSCORE);
+    //     // wristCommand = new WristCommand(WristState.NET);
+    //     // wristCommand.initialize();
+    //     // wristCommand.schedule();
+    //   }else if(operator.getPOV() == 180){
+    //     CancelCommands();
+    //     processorScore.initialize();
+    //     processorScore.schedule();
+    //   }else if(operator.getPOV() == 270){
+    //     CancelCommands();
+    //     lowAlgaeIntake.initialize();
+    //     lowAlgaeIntake.schedule();
+    //     else if(mode == "algae"){
+    //   if(operator.getPOV() == 0){
+    //     CancelCommands();
+    //     netScore.initialize();
+    //     netScore.schedule();
+    //   }else if(operator.getPOV() == 90){
+    //     CancelCommands();
+    //     highAlgaeIntake.initialize();
+    //     highAlgaeIntake.schedule();
+    //   }
+    
     if(operator.getYButton()){
       CancelCommands();
       humanPlayerIntake.initialize();
@@ -899,12 +923,10 @@ public class Robot extends LoggedRobot {
       pivotCommand = new PivotCommand(PivotState.CLIMB);
       pivotCommand.initialize();
       pivotCommand.schedule();
-      
     }
     if(operator.getBButton()){
      pivot.setPivotState(PivotState.SHOOTINGNET);
     }
-    
     // if(operator.getBButton()){
     //   elevator.setElevatorState(ElevatorState.L4CORALSCORE);
     //   pivot.setPivotState(PivotState.SHOOTINGNET);
@@ -924,7 +946,6 @@ public class Robot extends LoggedRobot {
     L2CoralScore.cancel();
     L1CoralScore.cancel();
     transition.cancel();
-    netScore.cancel();
   }
   @Override
   public void disabledInit() {

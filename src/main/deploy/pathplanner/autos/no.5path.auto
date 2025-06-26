@@ -23,16 +23,40 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoAllignR"
+                  "name": "CoralAlignR"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.35
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4Score"
                 }
               }
             ]
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HumanIntake"
           }
         },
         {
@@ -44,14 +68,32 @@
                 "data": {
                   "pathName": "1R - human"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "HumanIntake"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Short Allign"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -67,16 +109,28 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AutoAllignL"
+                  "name": "CoralAlignR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4Score"
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.1
+            "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Transition"
           }
         }
       ]
