@@ -14,9 +14,9 @@ import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
-
+import frc.robot.Commands.DomainExpansion.*;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class HumanPlayerIntake extends Command {
+public class MovetoTransistion extends Command {
   private WristCommand wrist;
   private PivotCommand pivot;
   private ElevatorCommand elevator;
@@ -24,69 +24,63 @@ public class HumanPlayerIntake extends Command {
   private boolean transitionReady;
   private Claw claw;
   private double timer;
+  private Transition transition;
+  private HumanPlayerIntake humanPlayerIntake;
   /** Creates a new GroundIntakeCoral. */
-  public HumanPlayerIntake() {
-    wrist = new WristCommand(WristState.HUMANSTATIONINTAKE);
-    pivot = new PivotCommand(PivotState.HUMANSTATIONINTAKE);
-    elevator = new ElevatorCommand(ElevatorState.HUMANSTATIONINTAKE);
+  public MovetoTransistion() {
+    // wrist = new WristCommand(WristState.TRANSITIONSTATE);
+    // pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
+    // elevator = new ElevatorCommand(ElevatorState.AUTONTRANSITION);
+    
     claw = Claw.getInstance();
-    timer = -1;
+    transitionReady = false;
+    transition = new Transition();
+    humanPlayerIntake = new HumanPlayerIntake();
+    timer = 0;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    wrist.initialize();
-    pivot.initialize();
-    elevator.initialize();
+    transition.initialize();
+    humanPlayerIntake.initialize();
     timer = Timer.getFPGATimestamp();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-      pivot.schedule();
-      elevator.schedule();
-      if(pivot.isFinished() && Timer.getFPGATimestamp() > timer+.2){
-        //claw.clawOn(.6);
-        wrist.schedule();
-      }
-    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && !transitionReady)
-    // {
-    //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
-    //   wrist = new WristCommand(WristState.TRANSITIONSTATE);
-    //   pivot.initialize();
-    //   wrist.initialize();
-    //   transitionReady = true;
-    //   wrist.schedule();
-    // }
-    // if(transitionReady && wrist.isFinished())
-    // {
-    //   pivot.schedule();
-    // }
-    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && transitionReady)
-    // {
-    //   ended = true;
-    // }
-    if( elevator.isFinished() )
-    {
-      ended = true;
-    }
-    
-  }
 
-  // Called once the command ends or is interrupted.
+      transition.schedule();
+      
+      if(Timer.getFPGATimestamp() > timer + 1.4  ){
+        transition.cancel();
+        humanPlayerIntake.schedule();
+        
+            if(Timer.getFPGATimestamp() > timer +2.5){
+                humanPlayerIntake.cancel();
+                ended = true;
+                
+            }
+      }
+      
+      // if(pivot.isFinished() && wrist.isFinished()){
+      //   claw.clawReverse(.6);
+      // }
+      
+    }
+
   @Override
   public void end(boolean interrupted) {
-    wrist.setLastState();
+  //  claw.clawOff();
+//   wrist.setLastState();
+  humanPlayerIntake.cancel();
   }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
+   public boolean isFinished() {
     return ended;
   }
 }

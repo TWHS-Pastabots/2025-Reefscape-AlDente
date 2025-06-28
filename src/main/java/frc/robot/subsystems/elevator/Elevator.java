@@ -45,8 +45,8 @@ public class Elevator {
     public static ElevatorState elevatorState = ElevatorState.GROUND;
     public enum ElevatorState{
         GROUND(0),    
-        LOWALGAEINTAKE(27),
-        HIGHALGAEINTAKE(47),
+        LOWALGAEINTAKE(15),
+        HIGHALGAEINTAKE(35),
         L1CORALSCORE(0),
         L2CORALSCORE(13.5),
         L3CORALSCORE(39.5),

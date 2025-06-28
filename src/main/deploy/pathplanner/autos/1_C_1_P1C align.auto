@@ -44,19 +44,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.2
           }
         },
         {
           "type": "named",
           "data": {
             "name": "outtake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HumanIntake"
           }
         },
         {
@@ -72,7 +66,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "HumanIntake"
+                  "name": "TransitionToHuman"
                 }
               }
             ]
@@ -122,9 +116,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "outtake"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake2"
+                }
+              }
+            ]
           }
         },
         {
@@ -140,7 +147,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "HumanIntake"
+                  "name": "TransitionToHuman"
                 }
               }
             ]

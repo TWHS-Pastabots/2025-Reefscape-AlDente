@@ -46,11 +46,13 @@ import frc.robot.Commands.DomainExpansion.L2CoralScore;
 import frc.robot.Commands.DomainExpansion.L3CoralScore;
 import frc.robot.Commands.DomainExpansion.L4CoralScore;
 import frc.robot.Commands.DomainExpansion.LowAlgaeIntake;
+import frc.robot.Commands.DomainExpansion.MovetoTransistion;
 import frc.robot.Commands.DomainExpansion.NetScore;
 import frc.robot.Commands.DomainExpansion.Outtake;
 import frc.robot.Commands.DomainExpansion.ProcessorScore;
 import frc.robot.Commands.DomainExpansion.Transition;
 import frc.robot.Commands.DomainExpansion.TransitionAuto;
+import frc.robot.Commands.DomainExpansion.Outtakedos;
 import frc.robot.Commands.AlignToCoral;
 import frc.robot.Commands.CancelCommands;
 import frc.robot.Commands.ElevatorCommand;
@@ -75,6 +77,7 @@ import frc.robot.subsystems.vision.CameraSystem.PoleSide;
 
 public class Robot extends LoggedRobot {
   // all the initialing for the systems
+  public double cameraSame;
   public double speedMod;
   public double clawZeroPower;
   private Climber climber;
@@ -94,6 +97,8 @@ public class Robot extends LoggedRobot {
   private L2CoralScore L2CoralScore;
   private L3CoralScore L3CoralScore;
   private L4CoralScore L4CoralScore;
+  private Outtakedos outtakedos;
+  private MovetoTransistion movetoTransistion;
   private LowAlgaeIntake lowAlgaeIntake;
   private ProcessorScore processorScore;
   private PivotCommand pivotCommand;
@@ -173,9 +178,11 @@ public class Robot extends LoggedRobot {
     transition = new Transition();
     intake = new Intake();
     outtake = new Outtake();
+    outtakedos = new Outtakedos();
     autoAllignR = new AutoAllignR();
     autoAllignL = new AutoAllignL();
     netScore = new NetScore();
+    movetoTransistion = new MovetoTransistion();
 
     elevator.elevatorMotorR.clearFaults();
     
@@ -215,9 +222,11 @@ public class Robot extends LoggedRobot {
     NamedCommands.registerCommand("Elevator", elevatorCommand);
     NamedCommands.registerCommand("Transition", transition);
     NamedCommands.registerCommand("outtake", outtake);
+    NamedCommands.registerCommand("outtake2", outtakedos);
     NamedCommands.registerCommand("intake", intake);
     NamedCommands.registerCommand("AutoAllignR", autoAllignR);
     NamedCommands.registerCommand("AutoAllignL", autoAllignL);
+    NamedCommands.registerCommand("TransitionToHuman", movetoTransistion);
     NamedCommands.registerCommand("CoralAllignL", new AlignToCoral(PoleSide.LEFT));
     NamedCommands.registerCommand("CoralAlignR", new AlignToCoral(PoleSide.RIGHT));
     m_chooser.addOption("middlePath", new PathPlannerAuto("middlePath"));
@@ -234,6 +243,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putBoolean("camChecker",(camSystem.getYawForTag(0, camSystem.lastTag) == camSystem.getYawForTag(1, camSystem.lastTag)));
+    //SmartDashboard.putNumber("climb camera result", camSystem.getCamera(0).getAllUnreadResults()); 
     SmartDashboard.putNumber("adjuster", Elevator.adjuster);
     //camSystem.isBlue = SmartDashboard.getBoolean("isBlue", camSystem.isBlue);
     SmartDashboard.putNumber("MotorL Current", wrist.MotorL.getOutputCurrent());
@@ -268,7 +279,6 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putBoolean("coral Breakbeam", claw.getCoralBreakBeam());
     SmartDashboard.putString("wristlaststate", wrist.lastState.toString());
     SmartDashboard.putBoolean("pivotisfinished", pivotCommand.isFinished());
-
     SmartDashboard.putNumber("Last Tag Seen", camSystem.lastTag);
     SmartDashboard.putNumber("Desired Degree", 
     CameraSystem.aprilTagFieldLayout.getTagPose(18).get().getRotation().toRotation2d().getDegrees());
@@ -946,6 +956,7 @@ public class Robot extends LoggedRobot {
     L2CoralScore.cancel();
     L1CoralScore.cancel();
     transition.cancel();
+    netScore.cancel();
   }
   @Override
   public void disabledInit() {

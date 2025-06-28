@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.claw.Claw;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Outtake extends Command {
+public class Outtakedos extends Command {
   public Claw claw;
   public boolean ended = false;
   public double timer;
   /** Creates a new Outtake. */
-  public Outtake() {
+  public Outtakedos() {
     claw = Claw.getInstance();
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -47,3 +47,4 @@ public class Outtake extends Command {
     return ended;
   }
 }
+

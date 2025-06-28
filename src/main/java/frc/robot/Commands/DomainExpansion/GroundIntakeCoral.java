@@ -5,6 +5,7 @@
 package frc.robot.Commands.DomainExpansion;
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
@@ -16,6 +17,7 @@ import frc.robot.subsystems.pivot.Pivot.PivotState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class GroundIntakeCoral extends Command {
+  private double timer;
   private WristCommand wrist;
   private PivotCommand pivot;
   private ElevatorCommand elevator;
@@ -27,17 +29,18 @@ public class GroundIntakeCoral extends Command {
     wrist = new WristCommand(WristState.GROUND);
     pivot = new PivotCommand(PivotState.GROUND);
     elevator = new ElevatorCommand(ElevatorState.GROUND);
-    
+    timer = 0;
     transitionReady = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
+  // Called when thte command is initially scheduled.
   @Override
   public void initialize() {
     wrist.initialize();
     pivot.initialize();
     elevator.initialize();
+    timer = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,9 +49,10 @@ public class GroundIntakeCoral extends Command {
   {
     if(!transitionReady)
     {
+
       pivot.schedule();
       
-      if(pivot.isFinished())
+      if(pivot.isFinished() && Timer.getFPGATimestamp() >= timer + 2)
       {
         
         wrist.schedule();

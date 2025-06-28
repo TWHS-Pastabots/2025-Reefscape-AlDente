@@ -6,6 +6,7 @@ package frc.robot.Commands.DomainExpansion;
 
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
@@ -25,22 +26,26 @@ public class GroundAlgaeIntake extends Command {
   private Claw claw;
   private double startTime;
   private double duration = .3;
+  private double timer;
   /** Creates a new GroundIntakeCoral. */
   public GroundAlgaeIntake() {
     wrist = new WristCommand(WristState.GROUND);
+
     pivot = new PivotCommand(PivotState.GROUND);
     elevator = new ElevatorCommand(ElevatorState.GROUND);
     claw = Claw.getInstance();
     transitionReady = false;
+    timer = 0;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    wrist.initialize();
-    pivot.initialize();
-    elevator.initialize();
+    //wrist.initialize();
+    //pivot.initialize();
+    //elevator.initialize();
+    timer = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,9 +55,8 @@ public class GroundAlgaeIntake extends Command {
     {
       pivot.schedule();
       
-      if(pivot.isFinished())
+      if(Timer.getFPGATimestamp() >= timer + .1)
       {
-        
         wrist.schedule();
       }
     }
