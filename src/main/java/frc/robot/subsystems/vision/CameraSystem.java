@@ -222,6 +222,29 @@ public class CameraSystem{
             }
             
         }
+    }
+
+        public boolean getSameCamTag(){
+        PhotonPipelineResult result1 = lastestResults.get(0);
+        PhotonPipelineResult result2  = lastestResults.get(1);
+
+
+        if(result1.hasTargets() && result2.hasTargets()){
+            PhotonTrackedTarget target1 = result1.getBestTarget();
+            PhotonTrackedTarget target2 = result2.getBestTarget();
+            int targetID1 = target1.getFiducialId();
+            int targetID2 = target2.getFiducialId();
+
+            if(targetID1 == targetID2){
+                return true;
+            }
+
+
+
+        }
+        return false;
+    }
+       
         
         
         // if(lastestResults.get(focusCamIndex).hasTargets() 
@@ -269,7 +292,7 @@ public class CameraSystem{
         //         lastTag = closestTarget.fiducialId;
         //     }
         //}
-    }
+    
     // updating to get all the latest results
     public PhotonCamera getCamera(int position)
     {

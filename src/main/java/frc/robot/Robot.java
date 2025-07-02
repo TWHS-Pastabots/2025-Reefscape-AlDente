@@ -243,7 +243,9 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putBoolean("camChecker",(camSystem.getYawForTag(0, camSystem.lastTag) == camSystem.getYawForTag(1, camSystem.lastTag)));
+
+    
+    // SmartDashboard.putBoolean("CamChecker", camSystem.getSameCamTag());
     //SmartDashboard.putNumber("climb camera result", camSystem.getCamera(0).getAllUnreadResults()); 
     SmartDashboard.putNumber("adjuster", Elevator.adjuster);
     //camSystem.isBlue = SmartDashboard.getBoolean("isBlue", camSystem.isBlue);
@@ -483,7 +485,7 @@ public class Robot extends LoggedRobot {
       thetaController.setSetpoint(0);
       //was .11
       yController.setSetpoint(0.06);
-      xController.setSetpoint(-1.9);
+      xController.setSetpoint(-1.5);
       camSystem.focusCamIndex = 1;
       if (camSystem.hasDesiredTarget(0, camSystem.lastTag) && camSystem.hasDesiredTarget(1, camSystem.lastTag)) 
       // driver align right so left camera
@@ -576,7 +578,7 @@ public class Robot extends LoggedRobot {
       //thetaController.setSetpoint(0);
       //was .11
       
-      yController.setSetpoint(0.24);
+      yController.setSetpoint(0.215);
       xController.setSetpoint(-9.17); //was -18.8
       updateXControllerSetpoint();
       camSystem.focusCamIndex = 0;
@@ -998,7 +1000,7 @@ public class Robot extends LoggedRobot {
   private void updateXControllerSetpoint(){
     if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null){
       double range = camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag);
-      xController.setSetpoint(-259.99*(Math.pow(range, 2)) + 325.25 * (range) - 76.41);
+      xController.setSetpoint(-579.92142 * (Math.pow(range, 2)) + 532.84093 * (range) - 99.40781);
     }
     else{
       xController.setSetpoint(-20.8);

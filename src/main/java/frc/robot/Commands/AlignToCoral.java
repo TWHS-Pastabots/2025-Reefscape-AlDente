@@ -37,15 +37,15 @@ public class AlignToCoral extends Command {
     //xController.setSetpoint(0.11);//temporary number
     thetaController.setSetpoint(0);
     if(side == PoleSide.LEFT){
-      yController.setSetpoint(0.185);
-      xController.setSetpoint(14);
+      yController.setSetpoint(0.215);
+      xController.setSetpoint(-9.17);
       //xController.setSetpoint(15);
       //xController.setSetpoint(-4.5);
       camSystem.focusCamIndex = 0;
     }
     else {
       yController.setSetpoint(0.06);
-      xController.setSetpoint(-1.7);
+      xController.setSetpoint(-1.5);
       camSystem.focusCamIndex = 1;
     }
     

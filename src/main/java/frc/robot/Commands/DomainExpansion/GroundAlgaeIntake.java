@@ -35,17 +35,19 @@ public class GroundAlgaeIntake extends Command {
     elevator = new ElevatorCommand(ElevatorState.GROUND);
     claw = Claw.getInstance();
     transitionReady = false;
-    timer = 0;
+    timer = -1;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+   
     //wrist.initialize();
     //pivot.initialize();
     //elevator.initialize();
     timer = Timer.getFPGATimestamp();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -43,7 +43,7 @@ public class Pivot {
         L1CORALSCORE(94.444),
         L2CORALSCORE(110),
         L3CORALSCORE(107),
-        L4CORALSCORE(103),
+        L4CORALSCORE(101),//103
         PROCESSOR(38),
         HUMANSTATIONINTAKE(78), //was 80.289
         TRANSITIONSTATE(95),
