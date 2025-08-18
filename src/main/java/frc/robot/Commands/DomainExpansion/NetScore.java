@@ -26,7 +26,7 @@ public class NetScore extends Command {
   private Claw claw;
   public NetScore() {
     wrist = new WristCommand(WristState.NET);
-     pivot = new PivotCommand(PivotState.SIGMATEST);
+    pivot = new PivotCommand(PivotState.SHOOTINGNET);
     elevatorCommand = new ElevatorCommand(ElevatorState.L4CORALSCORE);
     claw = Claw.getInstance();
     // Use addRequirements() here to declare subsystem dependencies.
@@ -39,19 +39,37 @@ public class NetScore extends Command {
     pivot.initialize();
     elevatorCommand.initialize();
     claw = Claw.getInstance();
+    transitionReady = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pivot.schedule();
-    wrist.schedule();
-    elevatorCommand.schedule();
-    if(pivot.isFinished() && elevatorCommand.isFinished() && wrist.isFinished())
+    if(!transitionReady)
+    {
+      pivot.schedule();
+      
+      // if(pivot.isFinished()){
+        wrist.schedule();
+        elevatorCommand.schedule();
+      
+    }
+      // if(pivot.isFinished() && wrist.isFinished()){
+      //   claw.clawReverse(.6);
+      // }
+      if(pivot.isFinished() && elevatorCommand.isFinished() && wrist.isFinished())
     {
       ended = true;
     }
   }
+  //   pivot.schedule();
+  //   wrist.schedule();
+  //   elevatorCommand.schedule();
+  //   if(pivot.isFinished() && elevatorCommand.isFinished() && wrist.isFinished())
+  //   {
+  //     ended = true;
+  //   }
+  // }
 
   // Called once the command ends or is interrupted.
   @Override

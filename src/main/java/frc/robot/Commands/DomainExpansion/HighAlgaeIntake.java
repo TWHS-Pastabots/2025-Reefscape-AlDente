@@ -47,11 +47,12 @@ public class HighAlgaeIntake extends Command {
     {
       pivot.schedule();
      
-      if(pivot.isFinished()){
+      // if(pivot.isFinished()){
         //claw.clawOn(.6);
         wrist.schedule();
+        elevator.schedule();
       }
-    }
+    
     // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && !transitionReady)
     // {
     //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);

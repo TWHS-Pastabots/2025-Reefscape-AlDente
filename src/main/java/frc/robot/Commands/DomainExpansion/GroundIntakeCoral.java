@@ -52,7 +52,7 @@ public class GroundIntakeCoral extends Command {
 
       pivot.schedule();
       
-      if(pivot.isFinished() && Timer.getFPGATimestamp() >= timer + 2)
+      if(pivot.isFinished() && Timer.getFPGATimestamp() >= timer + 1)
       {
         
         wrist.schedule();

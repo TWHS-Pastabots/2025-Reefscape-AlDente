@@ -47,7 +47,7 @@ public class L4CoralScore extends Command {
     {
       pivot.schedule();
       
-      if(pivot.isFinished()){
+      // if(pivot.isFinished()){
         wrist.schedule();
         elevator.schedule();
       }
@@ -55,7 +55,7 @@ public class L4CoralScore extends Command {
       //   claw.clawReverse(.6);
       // }
       
-    }
+    
     // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && !claw.getAlgaeBreakBeam())
     // {
     //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);

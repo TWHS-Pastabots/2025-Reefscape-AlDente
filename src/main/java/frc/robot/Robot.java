@@ -167,6 +167,7 @@ public class Robot extends LoggedRobot {
     pivotCommand = new PivotCommand(PivotState.TRANSITIONSTATE);
     elevatorCommand = new ElevatorCommand(ElevatorState.TEST);
     groundAlgaeIntake = new GroundAlgaeIntake();
+    groundCoralIntake = new GroundIntakeCoral();
     highAlgaeIntake = new HighAlgaeIntake();
     humanPlayerIntake = new HumanPlayerIntake();
     L1CoralScore = new L1CoralScore();
@@ -214,6 +215,7 @@ public class Robot extends LoggedRobot {
     
    
     NamedCommands.registerCommand("L4Score", L4CoralScore);
+    NamedCommands.registerCommand("L2Score", L2CoralScore);
     NamedCommands.registerCommand("HumanIntake", humanPlayerIntake);
     NamedCommands.registerCommand("L3Score", L3CoralScore);
     NamedCommands.registerCommand("HighAlgae", highAlgaeIntake);
@@ -226,11 +228,12 @@ public class Robot extends LoggedRobot {
     NamedCommands.registerCommand("intake", intake);
     NamedCommands.registerCommand("AutoAllignR", autoAllignR);
     NamedCommands.registerCommand("AutoAllignL", autoAllignL);
+    NamedCommands.registerCommand("NetScore", netScore);
     NamedCommands.registerCommand("TransitionToHuman", movetoTransistion);
     NamedCommands.registerCommand("CoralAllignL", new AlignToCoral(PoleSide.LEFT));
     NamedCommands.registerCommand("CoralAlignR", new AlignToCoral(PoleSide.RIGHT));
     m_chooser.addOption("middlePath", new PathPlannerAuto("middlePath"));
-    m_chooser.addOption("1_C_1_P1C align", new PathPlannerAuto("1_C_1_P1C align"));
+    m_chooser.addOption("1.eR.fR.fL", new PathPlannerAuto("1.eR.fR.fL"));
     m_chooser.addOption("testReal", new PathPlannerAuto("testReal"));
     m_chooser.addOption("test", new PathPlannerAuto("test"));
     m_chooser.addOption("testcoral", new PathPlannerAuto("testcoral"));
@@ -496,19 +499,10 @@ public class Robot extends LoggedRobot {
         //   xController.setSetpoint(-4.5);
         // }
 
-        if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
-        && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
-        { 
-          multFactor = 1;
-          xController.setSetpoint(-7.1);
-          xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
-          ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
-        }
-        else{
-          xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
-          ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-          multFactor = 2.4;
-        }
+        
+        xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+        ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+        multFactor = 2.4;
         multFactor = 1;
         rot = thetaController.calculate(drivebase.getWorkingHeading());
         // drivebase.drive(xSpeed1,
@@ -522,19 +516,10 @@ public class Robot extends LoggedRobot {
       || (camSystem.focusCamIndex == 0 && camSystem.hasDesiredTarget(1, camSystem.lastTag))){
         updateThetaControllerSetpoint(camSystem.lastTag);
 
-        if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null
-        && yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue()) < .20)
-        { 
-          multFactor = 1;
-          xController.setSetpoint(-7.1);
-          xSpeed = xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
-          ySpeed = yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());
-        }
-        else{
-          xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
-          ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-          multFactor = 2.4;
-        }
+        
+        xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+        ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+        multFactor = 2.4;
         // multFactor = .7;
         rot = thetaController.calculate(drivebase.getWorkingHeading());
         // drivebase.drive(xSpeed1,
@@ -578,16 +563,12 @@ public class Robot extends LoggedRobot {
       //thetaController.setSetpoint(0);
       //was .11
       
-      yController.setSetpoint(0.215);
-      xController.setSetpoint(-9.17); //was -18.8
+      yController.setSetpoint(0.186);//was.215
+      xController.setSetpoint(-15.8); //was -18.8
       updateXControllerSetpoint();
       camSystem.focusCamIndex = 0;
-      if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) == null){
-        xSpeed = .1;
-        ySpeed = 0;
-        rot = 0;
-      }
-      else if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
+
+     if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
         updateThetaControllerSetpoint(camSystem.lastTag);
         xSpeed =  xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
         ySpeed =  yController.calculate(camSystem.getTargetRange(0, camSystem.lastTag).doubleValue());
@@ -909,8 +890,8 @@ public class Robot extends LoggedRobot {
       humanPlayerIntake.schedule();
     }else if(operator.getAButton()){
       CancelCommands();
-      groundAlgaeIntake.initialize();
-      groundAlgaeIntake.schedule();
+      groundCoralIntake.initialize();
+      groundCoralIntake.schedule();
     }else if(operator.getXButton()){
       CancelCommands();
       pivotCommand = new PivotCommand(PivotState.CLIMB);
