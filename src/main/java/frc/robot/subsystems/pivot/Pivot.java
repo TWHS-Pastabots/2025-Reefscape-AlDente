@@ -50,7 +50,7 @@ public class Pivot {
         SHOOTINGNET(80),//changed it to 105
 
         SIGMATEST(120.3),
-        CLIMB(33);
+        CLIMB(35);
 
         public double position;
         
@@ -125,4 +125,5 @@ public class Pivot {
             instance = new Pivot();
         return instance;
     }
+    
 }

@@ -4,90 +4,48 @@
 
 package frc.robot.Commands.DomainExpansion;
 
-
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
 import frc.robot.Commands.WristCommand;
-import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 
+
+
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class GroundAlgaeIntake extends Command {
+public class GroundIntakeCoral1 extends Command {
+
+  
   private WristCommand wrist;
   private PivotCommand pivot;
   private ElevatorCommand elevator;
   private boolean ended;
-  private boolean transitionReady;
-  private Claw claw;
-  private double startTime;
-  private double duration = .3;
-  private double timer;
-  private double connor = 0;
-  /** Creates a new GroundIntakeCoral. */
-  public GroundAlgaeIntake() {
-    wrist = new WristCommand(WristState.GROUND);
 
+  /** Creates a new GroundIntakeCoral1. */
+  public GroundIntakeCoral1() {
+    wrist = new WristCommand(WristState.GROUND);
     pivot = new PivotCommand(PivotState.GROUND);
     elevator = new ElevatorCommand(ElevatorState.GROUND);
-    claw = Claw.getInstance();
-    transitionReady = false;
-    timer = -1;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   
-    //wrist.initialize();
-    //pivot.initialize();
-    //elevator.initialize();
-    timer = Timer.getFPGATimestamp();
-
+    wrist.initialize();
+    pivot.initialize();
+    elevator.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!transitionReady)
-    {
-      pivot.schedule();
-      
-      // if(Timer.getFPGATimestamp() - 0.09 >= timer + 0.1 && connor == 0)
-      // {
-        wrist.schedule();
-      //   connor += 1;
-      // }
-      // else if(Timer.getFPGATimestamp() >= timer + 0.06){
-      //   wrist.schedule();
-      //   connor += 1;
-      // }
-    }
-    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished()&& !transitionReady)
-    // {
-    //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
-    //   wrist = new WristCommand(WristState.TRANSITIONSTATE);
-    //   pivot.initialize();
-    //   wrist.initialize();
-    //   transitionReady = true;
-    //   pivot.schedule();
-    // }
-    // if(transitionReady && pivot.isFinished())
-    // {
-    //   wrist.schedule();
-    // }
-    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && transitionReady)
-    // {
-    //   ended = true;
-    // }
     if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
     {
       ended = true;
+      // end();
     }
   }
 
@@ -95,6 +53,7 @@ public class GroundAlgaeIntake extends Command {
   @Override
   public void end(boolean interrupted) {
     wrist.setLastState();
+
   }
 
   // Returns true when the command should end.

@@ -126,6 +126,7 @@ public class Robot extends LoggedRobot {
   Double targetRange = null;
   Double targetAngle = null;
   double invert = 1;
+  double timie = 0.5;
   
   public PIDController xController;
   public PIDController yController;
@@ -890,8 +891,15 @@ public class Robot extends LoggedRobot {
       humanPlayerIntake.schedule();
     }else if(operator.getAButton()){
       CancelCommands();
-      groundCoralIntake.initialize();
-      groundCoralIntake.schedule();
+      // timie = Timer.getFPGATimestamp();
+      // pivotCommand = new PivotCommand(PivotState.CLIMB);
+      // pivotCommand.initialize();
+      // pivotCommand.schedule();      
+      //  if(Timer.getFPGATimestamp() <= Timer.getFPGATimestamp() + 1){
+          groundAlgaeIntake.initialize();
+          groundAlgaeIntake.schedule();
+        // }
+        // timie = Timer.getFPGATimestamp();
     }else if(operator.getXButton()){
       CancelCommands();
       pivotCommand = new PivotCommand(PivotState.CLIMB);
