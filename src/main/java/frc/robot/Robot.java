@@ -889,18 +889,20 @@ public class Robot extends LoggedRobot {
       CancelCommands();
       humanPlayerIntake.initialize();
       humanPlayerIntake.schedule();
-    }else if(operator.getAButton()){
+    }
+     if(operator.getAButton()){
       CancelCommands();
       // timie = Timer.getFPGATimestamp();
       // pivotCommand = new PivotCommand(PivotState.CLIMB);
       // pivotCommand.initialize();
       // pivotCommand.schedule();      
-      //  if(Timer.getFPGATimestamp() <= Timer.getFPGATimestamp() + 1){
-          groundAlgaeIntake.initialize();
-          groundAlgaeIntake.schedule();
-        // }
+        if(Timer.getFPGATimestamp() <= Timer.getFPGATimestamp() + 0.3){
+          groundCoralIntake.initialize();
+          groundCoralIntake.schedule();
+         }
         // timie = Timer.getFPGATimestamp();
-    }else if(operator.getXButton()){
+    }
+    if(operator.getXButton()){
       CancelCommands();
       pivotCommand = new PivotCommand(PivotState.CLIMB);
       pivotCommand.initialize();
@@ -936,8 +938,8 @@ public class Robot extends LoggedRobot {
   }
   public void CancelCommands(){
    // transTimer = Timer.getFPGATimestamp();
-  // groundCoralIntake.cancel();
     groundAlgaeIntake.cancel();
+    groundCoralIntake.cancel();
     humanPlayerIntake.cancel();
     highAlgaeIntake.cancel();
     lowAlgaeIntake.cancel();
