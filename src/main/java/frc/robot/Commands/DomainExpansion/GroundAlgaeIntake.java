@@ -54,21 +54,7 @@ public class GroundAlgaeIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!transitionReady)
-    {
-      pivot.schedule();
-      
-      // if(Timer.getFPGATimestamp() - 0.09 >= timer + 0.1 && connor == 0)
-      // {
-        wrist.schedule();
-      //   connor += 1;
-      // }
-      // else if(Timer.getFPGATimestamp() >= timer + 0.06){
-      //   wrist.schedule();
-      //   connor += 1;
-      // }
-    }
-    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished()&& !transitionReady)
+        // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished()&& !transitionReady)
     // {
     //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
     //   wrist = new WristCommand(WristState.TRANSITIONSTATE);

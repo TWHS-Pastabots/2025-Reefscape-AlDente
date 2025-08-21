@@ -892,16 +892,15 @@ public class Robot extends LoggedRobot {
     }
      if(operator.getAButton()){
       CancelCommands();
-      // timie = Timer.getFPGATimestamp();
+      // timie = Timer.getFPGATimestamp();      
       // pivotCommand = new PivotCommand(PivotState.CLIMB);
       // pivotCommand.initialize();
-      // pivotCommand.schedule();      
-        if(Timer.getFPGATimestamp() <= Timer.getFPGATimestamp() + 0.3){
-          groundCoralIntake.initialize();
-          groundCoralIntake.schedule();
-         }
-        // timie = Timer.getFPGATimestamp();
-    }
+      //   if (pivotCommand.isFinished()) {
+        groundCoralIntake.initialize();
+        groundCoralIntake.schedule();
+        // }
+    
+      }
     if(operator.getXButton()){
       CancelCommands();
       pivotCommand = new PivotCommand(PivotState.CLIMB);

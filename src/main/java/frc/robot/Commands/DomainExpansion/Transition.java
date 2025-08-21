@@ -72,17 +72,6 @@ public class Transition extends Command {
       pivot.initialize();
       pivot.schedule();
       
-     if(Timer.getFPGATimestamp() > timer +1.8){
-      wrist.initialize();
-      wrist.schedule();
-     }
-          elevator.initialize();
-          elevator.schedule();
-        
-          if(wrist.isFinished() && pivot.isFinished() && elevator.isFinished())
-          {
-            ended = true;
-          }
     }
     else{
       wrist.initialize();

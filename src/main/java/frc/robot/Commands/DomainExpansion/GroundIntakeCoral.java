@@ -100,6 +100,7 @@
 
 package frc.robot.Commands.DomainExpansion;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
@@ -118,6 +119,7 @@ public class GroundIntakeCoral extends Command {
   private PivotCommand pivot;
   private ElevatorCommand elevator;
   private boolean ended;
+  private double timie = 0;
 
   /** Creates a new GroundIntakeCoral1. */
   public GroundIntakeCoral() {
@@ -130,14 +132,19 @@ public class GroundIntakeCoral extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timie = Timer.getFPGATimestamp();
     wrist.initialize();
     pivot.initialize();
     elevator.initialize();
+    // if (Timer.getFPGATimestamp() > timie + 0.1) {
+    //  // wrist.schedule();
+    // }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
     {
       ended = true;
