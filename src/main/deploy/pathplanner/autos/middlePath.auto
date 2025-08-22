@@ -73,9 +73,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "algae pickup "
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "algae pickup "
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "HighAlgae"
+                }
+              }
+            ]
           }
         },
         {
@@ -86,12 +99,6 @@
                 "type": "wait",
                 "data": {
                   "waitTime": 1.75
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "HighAlgae"
                 }
               },
               {

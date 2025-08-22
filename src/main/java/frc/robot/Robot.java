@@ -290,6 +290,11 @@ public class Robot extends LoggedRobot {
     CameraSystem.aprilTagFieldLayout.getTagPose(18).get().getRotation().toRotation2d().getDegrees());
     SmartDashboard.putNumber("Currenr Degree", DriveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees());
 
+    //test
+    SmartDashboard.putBoolean("Transition ready ", groundCoralIntake.transitionReady);
+    SmartDashboard.putNumber("Ground Timer ", groundCoralIntake.timer);
+
+
     if(camSystem.getTargetRange(1, camSystem.lastTag) != null && camSystem.getYawForTag(1, camSystem.lastTag)!= null)
     {
       SmartDashboard.putNumber("SwerveCam dist", camSystem.getTargetRange(1, camSystem.lastTag));
