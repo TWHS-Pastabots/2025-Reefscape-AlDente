@@ -48,6 +48,7 @@ import frc.robot.Commands.DomainExpansion.L4CoralScore;
 import frc.robot.Commands.DomainExpansion.LowAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.MovetoTransistion;
 import frc.robot.Commands.DomainExpansion.NetScore;
+import frc.robot.Commands.DomainExpansion.NewGround;
 import frc.robot.Commands.DomainExpansion.Outtake;
 import frc.robot.Commands.DomainExpansion.ProcessorScore;
 import frc.robot.Commands.DomainExpansion.Transition;
@@ -93,6 +94,7 @@ public class Robot extends LoggedRobot {
   private GroundIntakeCoral groundCoralIntake;
   private HighAlgaeIntake highAlgaeIntake;
   private HumanPlayerIntake humanPlayerIntake;
+  private NewGround newground;
   private L1CoralScore L1CoralScore;
   private L2CoralScore L2CoralScore;
   private L3CoralScore L3CoralScore;
@@ -188,6 +190,7 @@ public class Robot extends LoggedRobot {
 
     elevator.elevatorMotorR.clearFaults();
     
+    newground = new NewGround();
     //alignToCoral = new AlignToCoral();
     // x: .0095 y: .95 theta: .008
 
@@ -292,7 +295,7 @@ public class Robot extends LoggedRobot {
 
     //test
     SmartDashboard.putBoolean("Transition ready ", groundCoralIntake.transitionReady);
-    SmartDashboard.putNumber("Ground Timer ", groundCoralIntake.timer);
+    //SmartDashboard.putNumber("Ground Timer ", groundCoralIntake.timer);
 
 
     if(camSystem.getTargetRange(1, camSystem.lastTag) != null && camSystem.getYawForTag(1, camSystem.lastTag)!= null)
@@ -897,12 +900,15 @@ public class Robot extends LoggedRobot {
     }
      if(operator.getAButton()){
       CancelCommands();
-      // timie = Timer.getFPGATimestamp();      
+      timie = Timer.getFPGATimestamp();      
       // pivotCommand = new PivotCommand(PivotState.CLIMB);
       // pivotCommand.initialize();
       //   if (pivotCommand.isFinished()) {
         groundCoralIntake.initialize();
+        newground.initialize();
         groundCoralIntake.schedule();
+        if(groundCoralIntake.isFinished())
+        newground.schedule();
         // }
     
       }
@@ -943,6 +949,7 @@ public class Robot extends LoggedRobot {
   public void CancelCommands(){
    // transTimer = Timer.getFPGATimestamp();
     groundAlgaeIntake.cancel();
+    newground.cancel();
     groundCoralIntake.cancel();
     humanPlayerIntake.cancel();
     highAlgaeIntake.cancel();

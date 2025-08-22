@@ -48,7 +48,7 @@ public class Pivot {
         HUMANSTATIONINTAKE(78), //was 80.289
         TRANSITIONSTATE(95),
         SHOOTINGNET(80),//changed it to 105
-
+        HALFGROUND(43),//test
         SIGMATEST(120.3),
         CLIMB(35);
 
