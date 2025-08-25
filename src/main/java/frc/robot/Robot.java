@@ -38,6 +38,7 @@ import frc.robot.Commands.DomainExpansion.AutoAllignL;
 import frc.robot.Commands.DomainExpansion.AutoAllignR;
 import frc.robot.Commands.DomainExpansion.GroundAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.GroundIntakeCoral;
+import frc.robot.Commands.DomainExpansion.GroundSequence;
 import frc.robot.Commands.DomainExpansion.HighAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.HumanPlayerIntake;
 import frc.robot.Commands.DomainExpansion.Intake;
@@ -114,6 +115,8 @@ public class Robot extends LoggedRobot {
   private AlignToCoral alignToCoral;
   private CancelCommands cancel;
   private NetScore netScore;
+
+  private GroundSequence groundSequence;
   // private LED litty;
   // private CameraSystem camSystem;
   private String mode = "coral";
@@ -191,6 +194,8 @@ public class Robot extends LoggedRobot {
     elevator.elevatorMotorR.clearFaults();
     
     newground = new NewGround();
+
+    groundSequence = new GroundSequence();
     //alignToCoral = new AlignToCoral();
     // x: .0095 y: .95 theta: .008
 
@@ -899,18 +904,18 @@ public class Robot extends LoggedRobot {
       humanPlayerIntake.schedule();
     }
      if(operator.getAButton()){
-      CancelCommands();
-      timie = Timer.getFPGATimestamp();      
+      CancelCommands();    
       // pivotCommand = new PivotCommand(PivotState.CLIMB);
       // pivotCommand.initialize();
       //   if (pivotCommand.isFinished()) {
-        groundCoralIntake.initialize();
-        newground.initialize();
-        groundCoralIntake.schedule();
-        if(groundCoralIntake.isFinished())
-        newground.schedule();
+        // groundCoralIntake.initialize();
+        // newground.initialize();
+        // groundCoralIntake.schedule();
+        // if(groundCoralIntake.isFinished())
+        // newground.schedule();
         // }
-    
+        groundSequence.initialize();
+        groundSequence.schedule();
       }
     if(operator.getXButton()){
       CancelCommands();
@@ -961,6 +966,7 @@ public class Robot extends LoggedRobot {
     L1CoralScore.cancel();
     transition.cancel();
     netScore.cancel();
+    groundSequence.cancel();
   }
   @Override
   public void disabledInit() {

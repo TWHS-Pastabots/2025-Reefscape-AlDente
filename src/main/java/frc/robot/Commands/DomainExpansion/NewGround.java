@@ -6,6 +6,7 @@ package frc.robot.Commands.DomainExpansion;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
 import frc.robot.Commands.WristCommand;
@@ -22,12 +23,15 @@ public class NewGround extends Command {
   private PivotCommand pivot;
   private ElevatorCommand elevator;
   private boolean ended;
+   private WaitCommand waitCommand;
   public boolean transitionReady;
   /** Creates a new NewGround. */
   public NewGround() {
     wrist = new WristCommand(WristState.GROUND);
     pivot = new PivotCommand(PivotState.GROUND);
     elevator = new ElevatorCommand(ElevatorState.GROUND);
+    waitCommand = new WaitCommand(2);
+    
     transitionReady = true;
 
 
@@ -44,8 +48,12 @@ public class NewGround extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    waitCommand.initialize();
     elevator.schedule();
     pivot.schedule();
+    wrist.schedule();
+    waitCommand.schedule();
+    // while(!waitCommand.isFinished()){}
 
   }
 

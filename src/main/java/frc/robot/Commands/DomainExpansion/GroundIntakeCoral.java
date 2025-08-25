@@ -170,8 +170,10 @@
 
 package frc.robot.Commands.DomainExpansion;
 
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
 import frc.robot.Commands.WristCommand;
@@ -180,8 +182,6 @@ import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 
-import edu.wpi.first.wpilibj2.command.Command;
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class GroundIntakeCoral extends Command {
   private WristCommand wrist;
@@ -189,12 +189,16 @@ public class GroundIntakeCoral extends Command {
   private ElevatorCommand elevator;
   private boolean ended;
   public boolean transitionReady;
+  private WaitCommand waitCommand;
   /** Creates a new NewGround. */
   public GroundIntakeCoral() {
     wrist = new WristCommand(WristState.TRANSITIONSTATE);
     pivot = new PivotCommand(PivotState.HALFGROUND);
     elevator = new ElevatorCommand(ElevatorState.GROUND);
+
+    //waitCommand = new WaitCommand(2);
     transitionReady = true;
+    ended = false;
 
 
   }
@@ -210,8 +214,12 @@ public class GroundIntakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // waitCommand.initialize();
     elevator.schedule();
     pivot.schedule();
+    //waitCommand.schedule();
+    //while(!waitCommand.isFinished()){}
+    ended = true;
 
   }
 
@@ -222,6 +230,6 @@ public class GroundIntakeCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return ended;
   }
 }
