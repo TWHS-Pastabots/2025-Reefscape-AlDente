@@ -234,6 +234,7 @@ public class Robot extends LoggedRobot {
     NamedCommands.registerCommand("Transition", transition);
     NamedCommands.registerCommand("outtake", outtake);
     NamedCommands.registerCommand("outtake2", outtakedos);
+    NamedCommands.registerCommand("groundSequence", groundSequence);
     NamedCommands.registerCommand("intake", intake);
     NamedCommands.registerCommand("AutoAllignR", autoAllignR);
     NamedCommands.registerCommand("AutoAllignL", autoAllignL);
@@ -248,6 +249,7 @@ public class Robot extends LoggedRobot {
     m_chooser.addOption("testcoral", new PathPlannerAuto("testcoral"));
     m_chooser.addOption("3_C_2_P2C align", new PathPlannerAuto("3_C_2_P2C align"));
     m_chooser.addOption("no.5path", new PathPlannerAuto("no.5path"));
+    m_chooser.addOption("1G.eR.fR.aL", new PathPlannerAuto("1G.eR.fR.aL"));
     // SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData(m_chooser);
     
