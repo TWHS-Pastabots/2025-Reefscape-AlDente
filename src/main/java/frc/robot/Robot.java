@@ -839,6 +839,7 @@ public class Robot extends LoggedRobot {
         CancelCommands();
         L4CoralScore.initialize();
         L4CoralScore.schedule();
+        
       }
       // }else if(operator.getPOV() == 180){
       //   CancelCommands();

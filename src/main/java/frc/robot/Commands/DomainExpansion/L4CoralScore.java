@@ -27,8 +27,8 @@ public class L4CoralScore extends Command {
     wrist = new WristCommand(WristState.L4CORALSCORE);
     pivot = new PivotCommand(PivotState.L4CORALSCORE);
     elevator = new ElevatorCommand(ElevatorState.L4CORALSCORE);
-    claw = Claw.getInstance();
-    transitionReady = false;
+    // claw = Claw.getInstance();
+    // transitionReady = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -43,14 +43,14 @@ public class L4CoralScore extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!transitionReady)
-    {
+    // if(!transitionReady)
+    // {
       pivot.schedule();
       
       // if(pivot.isFinished()){
         wrist.schedule();
         elevator.schedule();
-      }
+      // }
       // if(pivot.isFinished() && wrist.isFinished()){
       //   claw.clawReverse(.6);
       // }
@@ -74,10 +74,11 @@ public class L4CoralScore extends Command {
     // {
     //   ended = true;
     // }
-    if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
-    {
+    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
+    // {
       ended = true;
-    }
+    // }
+
   }
 
   // Called once the command ends or is interrupted.

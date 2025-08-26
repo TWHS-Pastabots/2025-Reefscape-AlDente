@@ -46,7 +46,7 @@ public class Pivot {
         L4CORALSCORE(101),//103
         PROCESSOR(38),
         HUMANSTATIONINTAKE(78), //was 80.289
-        TRANSITIONSTATE(95),
+        TRANSITIONSTATE(100),
         SHOOTINGNET(80),//changed it to 105
         HALFGROUND(55),//test
         SIGMATEST(120.3),

@@ -51,7 +51,7 @@ public class Elevator {
         L2CORALSCORE(16.5),//13.5
         L3CORALSCORE(41.5),//39.5 
         L4CORALSCORE(82),
-        PROCESSOR(9 ),
+        PROCESSOR(9),
         HUMANSTATIONINTAKE(12.5),
         AUTONTRANSITION(9),
         TEST(60);
@@ -71,7 +71,7 @@ public class Elevator {
         //.6
 
         configL
-            .closedLoopRampRate(.5)
+            .closedLoopRampRate(1)
             .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(50);
@@ -82,7 +82,7 @@ public class Elevator {
          elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
          configR
-            .closedLoopRampRate(.5)
+            .closedLoopRampRate(1)
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(50);
