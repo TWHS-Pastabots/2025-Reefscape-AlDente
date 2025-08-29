@@ -27,7 +27,7 @@ public class Wrist  {
         GROUND(90,107), //was 84.6, 96.5//104
         LOWALGAEINTAKE(0,111.2),//was 76, 98.2
         HIGHALGAEINTAKE(0,117.2),// 104.2
-        L1CORALSCORE(5.04,347.04), //was 264.2
+        L1CORALSCORE(98.04,201.04), //was 264.2
         L2CORALSCORE(98.64,201), // was r: 95
         L3CORALSCORE(96.12,201),// was r:98.64, t: 202.68
         L4CORALSCORE(96.12,205.56), // t: 

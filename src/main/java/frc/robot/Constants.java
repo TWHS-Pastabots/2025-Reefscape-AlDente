@@ -148,7 +148,7 @@ public final class Constants {
     // p:.13
     public static final double elevatorPCoefficient = .075;
     public static final double elevatorICoefficient = 0;
-    public static final double elevatorDCoefficient = 8;
+    public static final double elevatorDCoefficient = 8;//was 8
 
    
   }

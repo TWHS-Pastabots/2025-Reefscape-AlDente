@@ -43,15 +43,15 @@ public class HighAlgaeIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!transitionReady)
-    {
+    // if(!transitionReady)
+    // {
       pivot.schedule();
      
       // if(pivot.isFinished()){
         //claw.clawOn(.6);
         wrist.schedule();
         elevator.schedule();
-      }
+      // }
     
     // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && !transitionReady)
     // {
@@ -70,10 +70,10 @@ public class HighAlgaeIntake extends Command {
     // {
     //   ended = true;
     // }
-    if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
-    {
+    //if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
+    //{
       ended = true;
-    }
+    //}
     
   }
 

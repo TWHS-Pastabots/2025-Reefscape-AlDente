@@ -14,7 +14,6 @@ import frc.robot.Ports;
 
 
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Ports;
 import frc.robot.subsystems.IO.DigitalInputs;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 
@@ -71,7 +70,7 @@ public class Elevator {
         //.6
 
         configL
-            .closedLoopRampRate(1)
+            .closedLoopRampRate(.5)
             .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(50);
@@ -82,7 +81,8 @@ public class Elevator {
          elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
          configR
-            .closedLoopRampRate(1)
+            .closedLoopRampRate(.5
+            )
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(50);

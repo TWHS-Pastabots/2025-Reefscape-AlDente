@@ -839,14 +839,14 @@ public class Robot extends LoggedRobot {
         CancelCommands();
         L4CoralScore.initialize();
         L4CoralScore.schedule();
-        
+
       }
-      // }else if(operator.getPOV() == 180){
-      //   CancelCommands();
-      //   L1CoralScore.initialize();
-      //   L1CoralScore.schedule();
-      //}
-      else if(operator.getPOV() == 270){
+        else if(operator.getPOV() == 180){
+         CancelCommands();
+         L1CoralScore.initialize();
+         L1CoralScore.schedule();
+      
+        }else if(operator.getPOV() == 270){
         CancelCommands();
         L2CoralScore.initialize();
         L2CoralScore.schedule();
@@ -855,7 +855,8 @@ public class Robot extends LoggedRobot {
         L3CoralScore.initialize();
         L3CoralScore.schedule();
       }
-    }else if(mode == "algae"){
+    }
+    else if(mode == "algae"){
       if(operator.getPOV() == 0){
         CancelCommands();
         netScore.initialize();
