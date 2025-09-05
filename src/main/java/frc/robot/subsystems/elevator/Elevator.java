@@ -71,7 +71,7 @@ public class Elevator {
 
         configL
             .closedLoopRampRate(.5)
-            .inverted(false)
+            .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(50);
         configL.closedLoop
@@ -83,7 +83,7 @@ public class Elevator {
          configR
             .closedLoopRampRate(.5
             )
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(50);
         configR.closedLoop

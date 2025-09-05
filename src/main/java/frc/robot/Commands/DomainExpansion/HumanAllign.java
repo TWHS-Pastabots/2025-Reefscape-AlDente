@@ -1,4 +1,3 @@
-
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -17,7 +16,7 @@ import frc.robot.subsystems.vision.CameraSystem;
 import frc.robot.Constants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoAllignR extends Command {
+public class HumanAllign extends Command {
   /** Creates a new AutoAllignR. */
   private DriveSubsystem drivebase;
   private CameraSystem camSystem;
@@ -29,7 +28,7 @@ public class AutoAllignR extends Command {
   private double timer;
   Pose2d desPose = null;
   
-  public AutoAllignR() {
+  public HumanAllign() {
     // Use addRequirements() here to declare subsystem dependencies.
     camSystem = CameraSystem.getInstance();
     drivebase = DriveSubsystem.getInstance();
@@ -61,22 +60,24 @@ public class AutoAllignR extends Command {
       if(yaw != null){
         rot = -yaw * .002 * Constants.DriveConstants.kMaxAngularSpeed;
       }
-      ArrayList<Double> speeds = camSystem.getPoseToTravel(1);
+      ArrayList<Double> speeds = camSystem.getPoseToTravel(0);
       if(!camSystem.side.getSelected()){
         xSpeed = -MathUtil.clamp(speeds.get(0), -.4, .4);
-        ySpeed = -MathUtil.clamp(speeds.get(1), -.4, .4);
-        if(!camSystem.hasTargets()){
+      ySpeed = -MathUtil.clamp(speeds.get(1), -.4, .4);
+      if(!camSystem.hasTargets()){
         xSpeed = -MathUtil.clamp(speeds.get(0), -.1, .1);
         ySpeed = -MathUtil.clamp(speeds.get(1), -.1, .1);
       }
-      }else{
+      }
+      else{
         xSpeed = MathUtil.clamp(speeds.get(0), -.4, .4);
         ySpeed = MathUtil.clamp(speeds.get(1), -.4, .4);
         if(!camSystem.hasTargets()){
         xSpeed = MathUtil.clamp(speeds.get(0), -.1, .1);
         ySpeed = MathUtil.clamp(speeds.get(1), -.1, .1);
+        }
       }
-    }
+      
       if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
         rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
       }

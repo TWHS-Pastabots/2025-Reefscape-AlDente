@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-public class CameraSystem{
+public class CameraSystem2{
 
     public enum PoleSide{
         LEFT,
@@ -67,10 +67,10 @@ public class CameraSystem{
     //new AprilTagFieldLayout("c:\\Documents/GitHub/2024-OffSeason-Juno/src/main/java/frc/robot/subsystems/vision/BucketFieldLayout.json");
     // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     public HashMap<Integer, ArrayList<Pose2d>> dictionary = new HashMap<>();
-    private static CameraSystem instance;
+    private static CameraSystem2 instance;
     public SendableChooser<Boolean> side = new SendableChooser<>();
 
-    private CameraSystem() {
+    private CameraSystem2() {
         focusCamIndex = 0;
         double inchesToMeters = 0.0254;
         cameras = new ArrayList<PhotonCamera>();
@@ -138,7 +138,6 @@ public class CameraSystem{
         poses22.add(new Pose2d(new Translation2d(5.406, 2.988), new Rotation2d()));
         dictionary.put(22, poses22);
     }
-    
 
     private void fillDictionary(boolean s){
         // Positiions for the red side of the field and their associated april tag
@@ -500,7 +499,8 @@ public class CameraSystem{
                     robotPose3d.getY(),
                     robotPose3d.getZ(),
                     robotPose3d.getRotation()
-                );  
+                );
+
             }
 
             // if (fiducialPose != null) {
@@ -554,9 +554,9 @@ public class CameraSystem{
         powers.add((isBlueSide ? 1 : 1) *(desPose.getY() - curPose.getY()));
         return powers;
     }
-    public static CameraSystem getInstance() {
+    public static CameraSystem2 getInstance() {
         if (instance == null) {
-            instance = new CameraSystem();
+            instance = new CameraSystem2();
         }
         return instance;
     }

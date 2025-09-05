@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.WristCommand;
+import frc.robot.Commands.DomainExpansion.HumanAllign;
 import frc.robot.Commands.DomainExpansion.AutoAllignL;
 import frc.robot.Commands.DomainExpansion.AutoAllignR;
 import frc.robot.Commands.DomainExpansion.GroundAlgaeIntake;
@@ -110,6 +111,7 @@ public class Robot extends LoggedRobot {
   private TransitionAuto transitionAuto;
   private Outtake outtake;
   private Intake intake;
+  private HumanAllign humanAllign;
   private AutoAllignR autoAllignR;
   private AutoAllignL autoAllignL;
   private AlignToCoral alignToCoral;
@@ -1012,7 +1014,7 @@ public class Robot extends LoggedRobot {
   private void updateXControllerSetpoint(){
     if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null){
       double range = camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag);
-      xController.setSetpoint(-579.92142 * (Math.pow(range, 2)) + 532.84093 * (range) - 99.40781);
+      xController.setSetpoint(-579.92142 * (Math.pow(range, 2)) + 532.84093 * (range) - 99.40781);//reg
     }
     else{
       xController.setSetpoint(-20.8);

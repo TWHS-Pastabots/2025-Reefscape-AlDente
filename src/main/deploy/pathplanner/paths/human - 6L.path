@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.975,
-        "y": 7.4765
+        "x": 0.24375,
+        "y": 8.16875
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7994537969479159,
-        "y": 6.94070804460351
+        "x": 1.0682037969479157,
+        "y": 7.632958044603511
       },
       "isLocked": false,
       "linkedName": "sigmahumanR"
