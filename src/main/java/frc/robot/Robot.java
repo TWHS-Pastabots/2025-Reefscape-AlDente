@@ -244,6 +244,7 @@ public class Robot extends LoggedRobot {
     NamedCommands.registerCommand("TransitionToHuman", movetoTransistion);
     NamedCommands.registerCommand("CoralAllignL", new AlignToCoral(PoleSide.LEFT));
     NamedCommands.registerCommand("CoralAlignR", new AlignToCoral(PoleSide.RIGHT));
+    NamedCommands.registerCommand("HumanAllign", new AlignToCoral(PoleSide.MID));
     m_chooser.addOption("middlePath", new PathPlannerAuto("middlePath"));
     m_chooser.addOption("1.eR.fR.fL", new PathPlannerAuto("1.eR.fR.fL"));
     m_chooser.addOption("testReal", new PathPlannerAuto("testReal"));
@@ -285,6 +286,9 @@ public class Robot extends LoggedRobot {
 
 
     SmartDashboard.putString("intakemode", mode);
+    SmartDashboard.putNumber("lasttag",camSystem.lastTag);
+    SmartDashboard.putBoolean("zryu", camSystem.hasDesiredTarget(1, camSystem.lastTag));
+    SmartDashboard.putBoolean("ended", new AlignToCoral(PoleSide.LEFT).isFinished());
 
 
     SmartDashboard.putNumber("pivot feedforward", pivot.feedForward.calculate(Math.toRadians(pivot.pivotMotor.getAbsoluteEncoder().getPosition()),0));
@@ -530,22 +534,22 @@ public class Robot extends LoggedRobot {
         //   false);
       }
 
-      else if((camSystem.hasDesiredTarget(camSystem.focusCamIndex, camSystem.lastTag))
-      || (camSystem.focusCamIndex == 0 && camSystem.hasDesiredTarget(1, camSystem.lastTag))){
-        updateThetaControllerSetpoint(camSystem.lastTag);
+      // else if((camSystem.hasDesiredTarget(camSystem.focusCamIndex, camSystem.lastTag))
+      // || (camSystem.focusCamIndex == 0 && camSystem.hasDesiredTarget(1, camSystem.lastTag))){
+      //   updateThetaControllerSetpoint(camSystem.lastTag);
 
         
-        xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
-        ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
-        multFactor = 2.4;
-        // multFactor = .7;
-        rot = thetaController.calculate(drivebase.getWorkingHeading());
-        // drivebase.drive(xSpeed1,
-        //   multFactor * ySpeed1, 
-        //   thetaController.calculate(drivebase.getWorkingHeading()),
-        //   //0, 
-        //   false);
-        }
+      //   xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+      //   ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+      //   multFactor = 2.4;
+      //   // multFactor = .7;
+      //   rot = thetaController.calculate(drivebase.getWorkingHeading());
+      //   // drivebase.drive(xSpeed1,
+      //   //   multFactor * ySpeed1, 
+      //   //   thetaController.calculate(drivebase.getWorkingHeading()),
+      //   //   //0, 
+      //   //   false);
+      //   }
     }
       // alignToCoral.cancel();
       // alignToCoral = new AlignToCoral();
@@ -574,6 +578,35 @@ public class Robot extends LoggedRobot {
       //   xSpeed = speeds.get(0) * .6;
       //   ySpeed = speeds.get(1) * .6;
       // }
+    
+      
+      if(driver.getYButton()){
+        usingAlign = true;
+        camSystem.poleSide = PoleSide.MID;
+        thetaController.setSetpoint(0);
+
+        yController.setSetpoint(0);
+        xController.setSetpoint(10);
+        camSystem.focusCamIndex = 0;
+  
+     if(camSystem.focusCamIndex == 0 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag) != null){
+        updateThetaControllerSetpoint(camSystem.lastTag);
+        xSpeed =  xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
+        ySpeed =  yController.calculate(camSystem.getTargetRange(0, camSystem.lastTag).doubleValue());
+        rot = thetaController.calculate(drivebase.getWorkingHeading());
+      }else if((camSystem.hasDesiredTarget(camSystem.focusCamIndex, camSystem.lastTag))
+        || (camSystem.focusCamIndex == 0 && camSystem.hasDesiredTarget(1, camSystem.lastTag)))
+      {
+        updateThetaControllerSetpoint(camSystem.lastTag);      
+        xSpeed = xController.calculate(camSystem.getYawForTag(1, camSystem.lastTag));
+        ySpeed = yController.calculate(camSystem.getTargetRange(1, camSystem.lastTag).doubleValue());
+        multFactor = 2.4;
+        // multFactor = .7;
+        rot = thetaController.calculate(drivebase.getWorkingHeading());
+    }
+  }
+
+
     
     if(driver.getXButton()){
       usingAlign = true;
@@ -745,11 +778,11 @@ public class Robot extends LoggedRobot {
     }
   
 
-    else if(driver.getYButton())
-    {
-     // vectorPlate.setVectorState(VectorState.UP);
-      vectorPlate.ClimbOff();
-    }
+    // else if(driver.getYButton())
+    // {
+    //  // vectorPlate.setVectorState(VectorState.UP);
+    //   vectorPlate.ClimbOff();
+    // }
     else{
       vectorPlate.turnOff();
     }
@@ -1015,6 +1048,8 @@ public class Robot extends LoggedRobot {
     if(camSystem.focusCamIndex == 0 && camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag) != null){
       double range = camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag);
       xController.setSetpoint(-579.92142 * (Math.pow(range, 2)) + 532.84093 * (range) - 99.40781);//reg
+      // xController.setSetpoint(-184.449 * (Math.pow(range, 2)) + 279.54 * (range) - 78.71919);//reg
+
     }
     else{
       xController.setSetpoint(-20.8);

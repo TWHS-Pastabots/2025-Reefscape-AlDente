@@ -25,14 +25,12 @@ public class HumanAllign extends Command {
   private double ySpeed;
   private boolean ended = false;
   private SwerveDrivePoseEstimator swerveEst ;
-  private double timer;
   Pose2d desPose = null;
   
   public HumanAllign() {
     // Use addRequirements() here to declare subsystem dependencies.
     camSystem = CameraSystem.getInstance();
     drivebase = DriveSubsystem.getInstance();
-    timer = Timer.getFPGATimestamp();
   }
 
   // Called when the command is initially scheduled.
@@ -97,3 +95,7 @@ public class HumanAllign extends Command {
     return ended;
   }
 }
+/* super awesome comment that
+ * no one should delete cuz
+ * that would be kinda sad :(
+ */

@@ -43,17 +43,22 @@ public class AlignToCoral extends Command {
       //xController.setSetpoint(-4.5);
       camSystem.focusCamIndex = 0;
     }
-    else {
+    else if(side == PoleSide.RIGHT) {
       yController.setSetpoint(0.06);
       xController.setSetpoint(-1.5);
       camSystem.focusCamIndex = 1;
+    }else if(side == PoleSide.MID){
+      yController.setSetpoint(-10);
+      xController.setSetpoint(-10);
+      camSystem.focusCamIndex = 1;
     }
+  
     
     thetaController.enableContinuousInput(0, 360);
 
     xController.setTolerance(.01);
-    yController.setTolerance(.01);
-    thetaController.setTolerance(.1);
+      yController.setTolerance(.01);
+      thetaController.setTolerance(.1);
     
   }
 
