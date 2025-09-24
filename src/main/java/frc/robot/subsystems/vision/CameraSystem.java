@@ -42,11 +42,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 public class CameraSystem{
 
     public enum PoleSide{
         LEFT,
-        RIGHT;
+        RIGHT,
+        MID;
     }
     public PoleSide poleSide = PoleSide.LEFT;
     private final Map<Integer, Pose3d> fiducialMap = new HashMap<>();
@@ -124,7 +126,7 @@ public class CameraSystem{
         ArrayList<Pose2d> poses19 = new ArrayList<Pose2d>();
         poses19.add(new Pose2d(new Translation2d(3.872, 5.232), new Rotation2d()));
         poses19.add(new Pose2d(new Translation2d(3.564, 5.074), new Rotation2d()));
-        dictionary.put(19, poses19);
+        poses19.add(new Pose2d(new Translation2d(-10, 10), new Rotation2d()));
         ArrayList<Pose2d> poses20 = new ArrayList<Pose2d>();
         poses20.add(new Pose2d(new Translation2d(5.249, 5.104), new Rotation2d()));
         poses20.add(new Pose2d(new Translation2d(4.989, 5.300), new Rotation2d()));
@@ -138,12 +140,15 @@ public class CameraSystem{
         poses22.add(new Pose2d(new Translation2d(5.406, 2.988), new Rotation2d()));
         dictionary.put(22, poses22);
     }
-    // checks to see if the camera at the given position sees a tag
+    
+
+    // // checks to see if the camera at the given position sees a tag
     public List<PhotonPipelineResult> getResult(int position){
         return cameras.get(position).getAllUnreadResults();
     }
     // Updates the results list to include only the latest piprline result and sets the last tag seen as the closest target instead of
     // the "best" target, made for Reefscape 2025 Season
+
     public void updateLatestResult(boolean buttonPressed)
     {
         int cameraCount = 0;
@@ -220,6 +225,28 @@ public class CameraSystem{
             }
             
         }
+    }
+
+        public boolean getSameCamTag(){
+        PhotonPipelineResult result1 = lastestResults.get(0);
+        PhotonPipelineResult result2  = lastestResults.get(1);
+
+        if(result1.hasTargets() && result2.hasTargets()){
+            PhotonTrackedTarget target1 = result1.getBestTarget();
+            PhotonTrackedTarget target2 = result2.getBestTarget();
+            int targetID1 = target1.getFiducialId();
+            int targetID2 = target2.getFiducialId();
+
+            if(targetID1 == targetID2){
+                return true;
+            }
+
+
+
+        }
+        return false;
+    }
+       
         
         
         // if(lastestResults.get(focusCamIndex).hasTargets() 
@@ -267,7 +294,7 @@ public class CameraSystem{
         //         lastTag = closestTarget.fiducialId;
         //     }
         //}
-    }
+    
     // updating to get all the latest results
     public PhotonCamera getCamera(int position)
     {
@@ -452,7 +479,7 @@ public class CameraSystem{
             
                 
             // gets the position of the april tag scanned
-            //Pose3d fiducialPose = fiducialMap.get(target.getFiducialId());
+            Pose3d fiducialPose = fiducialMap.get(target.getFiducialId());
 
             if(!pnpResult.isEmpty())
             {
@@ -464,8 +491,7 @@ public class CameraSystem{
                     robotPose3d.getY(),
                     robotPose3d.getZ(),
                     robotPose3d.getRotation()
-                );
-
+                );  
             }
 
             // if (fiducialPose != null) {
@@ -592,7 +618,7 @@ public class CameraSystem{
         //     targetRange = PhotonUtils.calculateDistanceToTargetMeters(-offsets.get(position).getZ(), 57.13 * 0.0254, -offsets.get(position).getRotation().getY(), Units.degreesToRadians(getResult(position).getBestTarget().getPitch()));
         // }
         // else if(getResult(position).hasTargets() && getResult(position).getBestTarget().getFiducialId() == 3){
-        //     List<PhotonTrackedTarget> targets = getResult(position).getTargets();
+        //     List<PhotonTrackedTarget> gettargets = getResult(position).getTargets();
         //         for(PhotonTrackedTarget target : targets){
         //             if(target.getFiducialId() == 4){
         //                 targetRange = PhotonUtils.calculateDistanceToTargetMeters(-offsets.get(position).getZ(), 57.13 * 0.0254, -offsets.get(position).getRotation().getY(), Units.degreesToRadians(getResult(position).getBestTarget().getPitch()));
@@ -614,6 +640,20 @@ public class CameraSystem{
 
         return targetRange;
     }
+<<<<<<< Updated upstream
+=======
+    public double getPitch(int position, int ID){
+        List<PhotonTrackedTarget> targets = lastestResults.get(position).getTargets();
+            for(PhotonTrackedTarget target : targets)
+            {
+                if(target.getFiducialId() == ID)
+                {
+                    return Units.degreesToRadians(target.getPitch());
+                } 
+            }
+        return -1;
+    }
+>>>>>>> Stashed changes
     public void ChangeCamOffset(double encoderVal)
     {
         double camHeight = (encoderVal * -0.570855) + 19.67;
@@ -625,21 +665,21 @@ public class CameraSystem{
     }
     // Field coordinates for the april tags (converting inches to meters)
     private void initializeFiducialMap(double inchesToMeters) {
-        fiducialMap.put(1, new Pose3d(593.68 * inchesToMeters, 9.68 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(120))));
-        fiducialMap.put(2, new Pose3d(637.21 * inchesToMeters, 34.79 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(120))));
-        fiducialMap.put(3, new Pose3d(652.73 * inchesToMeters, 196.17 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(180))));
-        fiducialMap.put(4, new Pose3d(652.73 * inchesToMeters, 218.42 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(180))));
-        fiducialMap.put(5, new Pose3d(578.77 * inchesToMeters, 323.00 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(270))));
-        fiducialMap.put(6, new Pose3d(72.50 * inchesToMeters, 323.00 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(270))));
-        fiducialMap.put(7, new Pose3d(-1.50 * inchesToMeters, 218.42 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(0))));
-        fiducialMap.put(8, new Pose3d(-1.50 * inchesToMeters, 196.17 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(0))));
-        fiducialMap.put(9, new Pose3d(14.02 * inchesToMeters, 34.79 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(60))));
-        fiducialMap.put(10, new Pose3d(57.54 * inchesToMeters, 9.68 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(60))));
-        fiducialMap.put(11, new Pose3d(468.69 * inchesToMeters, 146.19 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(300))));
-        fiducialMap.put(12, new Pose3d(468.69 * inchesToMeters, 177.10 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(60))));
-        fiducialMap.put(13, new Pose3d(441.74 * inchesToMeters, 161.62 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(180))));
-        fiducialMap.put(14, new Pose3d(209.48 * inchesToMeters, 161.62 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(0))));
-        fiducialMap.put(15, new Pose3d(182.73 * inchesToMeters, 177.10 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(120))));
-        fiducialMap.put(16, new Pose3d(182.73 * inchesToMeters, 146.19 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(240))));
+        fiducialMap.put(1, new Pose3d(593.68 * inchesToMeters, 9.68 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(120))));//red left human
+        fiducialMap.put(2, new Pose3d(637.21 * inchesToMeters, 34.79 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(120))));//red reight human
+        fiducialMap.put(3, new Pose3d(652.73 * inchesToMeters, 196.17 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(180))));//red processor
+        fiducialMap.put(4, new Pose3d(652.73 * inchesToMeters, 218.42 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(180))));//blue red side barge
+        fiducialMap.put(5, new Pose3d(578.77 * inchesToMeters, 323.00 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(270))));//red red side barge
+        fiducialMap.put(6, new Pose3d(72.50 * inchesToMeters, 323.00 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(270))));// reef
+        fiducialMap.put(7, new Pose3d(-1.50 * inchesToMeters, 218.42 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(0))));//reef
+        fiducialMap.put(8, new Pose3d(-1.50 * inchesToMeters, 196.17 * inchesToMeters, 57.13 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(0))));//reef
+        fiducialMap.put(9, new Pose3d(14.02 * inchesToMeters, 34.79 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(60))));//reef
+        fiducialMap.put(10, new Pose3d(57.54 * inchesToMeters, 9.68 * inchesToMeters, 53.38 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(60))));//reef
+        fiducialMap.put(11, new Pose3d(468.69 * inchesToMeters, 146.19 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(300))));//reef
+        fiducialMap.put(12, new Pose3d(468.69 * inchesToMeters, 177.10 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(60))));//blue right human
+        fiducialMap.put(13, new Pose3d(441.74 * inchesToMeters, 161.62 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(180))));//blue left human
+        fiducialMap.put(14, new Pose3d(209.48 * inchesToMeters, 161.62 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(0))));//blue blue side barge
+        fiducialMap.put(15, new Pose3d(182.73 * inchesToMeters, 177.10 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(120))));//red blue side barge
+        fiducialMap.put(16, new Pose3d(182.73 * inchesToMeters, 146.19 * inchesToMeters, 52.00 * inchesToMeters, new Rotation3d(0.0, 0.0, Math.toRadians(240))));//blue processor
     }
 }

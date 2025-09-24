@@ -6,6 +6,7 @@ package frc.robot.Commands.DomainExpansion;
 
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
@@ -25,38 +26,35 @@ public class GroundAlgaeIntake extends Command {
   private Claw claw;
   private double startTime;
   private double duration = .3;
+  private double timer;
+  private double connor = 0;
   /** Creates a new GroundIntakeCoral. */
   public GroundAlgaeIntake() {
     wrist = new WristCommand(WristState.GROUND);
+
     pivot = new PivotCommand(PivotState.GROUND);
     elevator = new ElevatorCommand(ElevatorState.GROUND);
     claw = Claw.getInstance();
     transitionReady = false;
+    timer = -1;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    wrist.initialize();
-    pivot.initialize();
-    elevator.initialize();
+   
+    //wrist.initialize();
+    //pivot.initialize();
+    //elevator.initialize();
+    timer = Timer.getFPGATimestamp();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!transitionReady)
-    {
-      pivot.schedule();
-      
-      if(pivot.isFinished())
-      {
-        
-        wrist.schedule();
-      }
-    }
-    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished()&& !transitionReady)
+        // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished()&& !transitionReady)
     // {
     //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
     //   wrist = new WristCommand(WristState.TRANSITIONSTATE);

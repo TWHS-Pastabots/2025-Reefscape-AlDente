@@ -1,3 +1,169 @@
+// // Copyright (c) FIRST and other WPILib contributors.
+// // Open Source Software; you can modify and/or share it under the terms of
+// // the WPILib BSD license file in the root directory of this project.
+
+// package frc.robot.Commands.DomainExpansion;
+
+
+// import edu.wpi.first.wpilibj.Timer;
+// import edu.wpi.first.wpilibj2.command.Command;
+// import frc.robot.Commands.ElevatorCommand;
+// import frc.robot.Commands.PivotCommand;
+// import frc.robot.Commands.WristCommand;
+// import frc.robot.subsystems.claw.Claw;
+// import frc.robot.subsystems.claw.Wrist.WristState;
+// import frc.robot.subsystems.elevator.Elevator.ElevatorState;
+// import frc.robot.subsystems.pivot.Pivot.PivotState;
+
+// /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+// public class GroundIntakeCoral extends Command {
+//   public double timer;
+//   private WristCommand wrist;
+//   private PivotCommand pivot;
+//   private ElevatorCommand elevator;
+//   private boolean ended;
+//   public boolean transitionReady;
+//   private Claw claw;
+//   /** Creates a new GroundIntakeCoral. */
+//   public GroundIntakeCoral() {
+//     wrist = new WristCommand(WristState.GROUND);
+//     pivot = new PivotCommand(PivotState.GROUND);
+//     elevator = new ElevatorCommand(ElevatorState.GROUND);
+//     timer = 0;
+//     transitionReady = true;
+//     // Use addRequirements() here to declare subsystem dependencies.
+//   }
+
+//   // Called when thte command is initially scheduled.
+//   @Override
+//   public void initialize() {
+//     wrist.initialize();
+//     pivot.initialize();
+//     elevator.initialize();
+//     timer = Timer.getFPGATimestamp();
+//   }
+
+//   // Called every time the scheduler runs while the command is scheduled.
+//   @Override
+//   public void execute() 
+//   {
+//     if(transitionReady)
+//     {
+
+//       pivot.schedule();
+      
+//       if(pivot.isFinished() && Timer.getFPGATimestamp() >= timer + 20)
+//       {
+        
+//         wrist.schedule();
+//       }
+//     }
+//     // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && claw.getCoralBreakBeam() && !transitionReady)
+//     // {
+//     //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
+//     //   wrist = new WristCommand(WristState.TRANSITIONSTATE);
+//     //   pivot.initialize();
+//     //   wrist.initialize();
+//     //   transitionReady = true;
+//     //   wrist.schedule();
+//     // }
+//     if(!transitionReady && wrist.isFinished())
+//     {
+//       pivot.schedule();
+//     }
+//     if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && transitionReady)
+//     {
+//       ended = true;
+//     }
+//     if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
+//     {
+//       ended = true;
+//     }
+    
+//   }
+
+//   // Called once the command ends or is interrupted.
+//   @Override
+//   public void end(boolean interrupted) {
+//     wrist.setLastState();
+//   }
+
+//   // Returns true when the command should end.
+//   @Override
+//   public boolean isFinished() {
+//     return ended;
+//   }
+// }
+
+// // package frc.robot.Commands.DomainExpansion;
+
+// // import edu.wpi.first.wpilibj.Timer;
+// // import edu.wpi.first.wpilibj2.command.Command;
+// // import frc.robot.Commands.ElevatorCommand;
+// // import frc.robot.Commands.PivotCommand;
+// // import frc.robot.Commands.WristCommand;
+// // import frc.robot.subsystems.claw.Wrist.WristState;
+// // import frc.robot.subsystems.elevator.Elevator.ElevatorState;
+// // import frc.robot.subsystems.pivot.Pivot.PivotState;
+
+
+
+// // /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+// // public class GroundIntakeCoral extends Command {
+
+  
+// //   private WristCommand wrist;
+// //   private PivotCommand pivot;
+// //   private ElevatorCommand elevator;
+// //   private boolean ended;
+// //   private double timie = 0;
+
+// //   /** Creates a new GroundIntakeCoral1. */
+// //   public GroundIntakeCoral() {
+// //     wrist = new WristCommand(WristState.GROUND);
+// //     pivot = new PivotCommand(PivotState.GROUND);
+// //     elevator = new ElevatorCommand(ElevatorState.GROUND);
+// //     // Use addRequirements() here to declare subsystem dependencies.
+// //   }
+
+// //   // Called when the command is initially scheduled.
+// //   @Override
+// //   public void initialize() {
+// //     timie = Timer.getFPGATimestamp();
+// //     wrist.initialize();
+// //     pivot.initialize();
+// //     elevator.initialize();
+// //     // if (Timer.getFPGATimestamp() > timie + 0.1) {
+// //     //  // wrist.schedule();
+// //     // }
+// //   }
+
+// //   // Called every time the scheduler runs while the command is scheduled.
+// //   @Override
+// //   public void execute() {
+    
+// //     if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
+// //     {
+// //       ended = true;
+// //       // end();
+// //     }
+// //   }
+
+// //   // Called once the command ends or is interrupted.
+// //   @Override
+// //   public void end(boolean interrupted) {
+
+// //   }
+
+// //   // Returns true when the command should end.
+// //   @Override
+// //   public boolean isFinished() {
+// //     return ended;
+// //   }
+// // }
+
+
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -5,7 +171,9 @@
 package frc.robot.Commands.DomainExpansion;
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
 import frc.robot.Commands.WristCommand;
@@ -20,16 +188,19 @@ public class GroundIntakeCoral extends Command {
   private PivotCommand pivot;
   private ElevatorCommand elevator;
   private boolean ended;
-  private boolean transitionReady;
-  private Claw claw;
-  /** Creates a new GroundIntakeCoral. */
+  public boolean transitionReady;
+  private WaitCommand waitCommand;
+  /** Creates a new NewGround. */
   public GroundIntakeCoral() {
-    wrist = new WristCommand(WristState.GROUND);
-    pivot = new PivotCommand(PivotState.GROUND);
+    wrist = new WristCommand(WristState.TRANSITIONSTATE);
+    pivot = new PivotCommand(PivotState.HALFGROUND);
     elevator = new ElevatorCommand(ElevatorState.GROUND);
-    
-    transitionReady = false;
-    // Use addRequirements() here to declare subsystem dependencies.
+
+    //waitCommand = new WaitCommand(2);
+    transitionReady = true;
+    ended = false;
+
+
   }
 
   // Called when the command is initially scheduled.
@@ -42,47 +213,19 @@ public class GroundIntakeCoral extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
-  {
-    if(!transitionReady)
-    {
-      pivot.schedule();
-      
-      if(pivot.isFinished())
-      {
-        
-        wrist.schedule();
-      }
-    }
-    // if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && claw.getCoralBreakBeam() && !transitionReady)
-    // {
-    //   pivot = new PivotCommand(PivotState.TRANSITIONSTATE);
-    //   wrist = new WristCommand(WristState.TRANSITIONSTATE);
-    //   pivot.initialize();
-    //   wrist.initialize();
-    //   transitionReady = true;
-    //   wrist.schedule();
-    // }
-    if(transitionReady && wrist.isFinished())
-    {
-      pivot.schedule();
-    }
-    if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished() && transitionReady)
-    {
-      ended = true;
-    }
-    if(pivot.isFinished() && elevator.isFinished() && wrist.isFinished())
-    {
-      ended = true;
-    }
-    
+  public void execute() {
+    // waitCommand.initialize();
+    elevator.schedule();
+    pivot.schedule();
+    //waitCommand.schedule();
+    //while(!waitCommand.isFinished()){}
+    ended = true;
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    wrist.setLastState();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

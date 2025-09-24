@@ -28,8 +28,13 @@ public class Outtake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+<<<<<<< Updated upstream
     claw.clawOn(.5);
     if(Timer.getFPGATimestamp() > timer + 1){
+=======
+    claw.clawOn(1);
+    if(Timer.getFPGATimestamp() > timer + .4){
+>>>>>>> Stashed changes
       claw.clawOff(0);
       ended = true;
     }

@@ -38,11 +38,12 @@ public class Pivot {
     public enum PivotState {
         GROUND(0),
         //0
-        LOWALGAEINTAKE(40.3), //was 163.7
-        HIGHALGAEINTAKE(50.5), // was 153.5
-        L1CORALSCORE(94.444),
+        LOWALGAEINTAKE(135.3), //was 40.3
+        HIGHALGAEINTAKE(128.5), // was 50.5
+        L1CORALSCORE(106.556),
         L2CORALSCORE(110),
         L3CORALSCORE(107),
+<<<<<<< Updated upstream
         L4CORALSCORE(107),
         PROCESSOR(38),
         HUMANSTATIONINTAKE(80.289),
@@ -51,6 +52,16 @@ public class Pivot {
 
         SIGMATEST(120.3),
         CLIMB(70);
+=======
+        L4CORALSCORE(101),//103
+        PROCESSOR(38),
+        HUMANSTATIONINTAKE(78), //was 80.289
+        TRANSITIONSTATE(100),
+        SHOOTINGNET(80),//changed it to 105
+        HALFGROUND(55),//test
+        SIGMATEST(120.3),
+        CLIMB(35);
+>>>>>>> Stashed changes
 
         public double position;
         
@@ -125,4 +136,5 @@ public class Pivot {
             instance = new Pivot();
         return instance;
     }
+    
 }

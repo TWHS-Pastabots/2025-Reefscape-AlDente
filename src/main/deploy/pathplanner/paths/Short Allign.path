@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 1.2467213114754097,
         "y": 7.111834016393442
       },
@@ -10,18 +11,36 @@
       "nextControl": {
         "x": 2.1937499999999996,
         "y": 6.884067622950819
+=======
+        "x": 1.092,
+        "y": 7.574
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1352500000000005,
+        "y": 6.76475
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "sigmahumanR"
     },
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 3.6322745901639335,
         "y": 6.392571721311475
       },
       "prevControl": {
         "x": 3.260655737704917,
         "y": 6.692264344262294
+=======
+        "x": 3.315,
+        "y": 5.936
+      },
+      "prevControl": {
+        "x": 2.40825,
+        "y": 6.7452499999999995
+>>>>>>> Stashed changes
       },
       "nextControl": null,
       "isLocked": false,

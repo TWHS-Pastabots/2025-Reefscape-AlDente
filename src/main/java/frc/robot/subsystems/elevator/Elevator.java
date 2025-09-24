@@ -14,7 +14,6 @@ import frc.robot.Ports;
 
 
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Ports;
 import frc.robot.subsystems.IO.DigitalInputs;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 
@@ -43,6 +42,7 @@ public class Elevator {
     public static ElevatorFeedforward feedForward;
     public static ElevatorState elevatorState = ElevatorState.GROUND;
     public enum ElevatorState{
+<<<<<<< Updated upstream
         GROUND(0.25),    
         LOWALGAEINTAKE(27),
         HIGHALGAEINTAKE(39.7),
@@ -52,6 +52,17 @@ public class Elevator {
         L4CORALSCORE(80.6),
         PROCESSOR(9),
         HUMANSTATIONINTAKE(13.5),
+=======
+        GROUND(0),    
+        LOWALGAEINTAKE(15),
+        HIGHALGAEINTAKE(35),
+        L1CORALSCORE(0),
+        L2CORALSCORE(16.5),//13.5
+        L3CORALSCORE(41.1),//39.5 
+        L4CORALSCORE(82),
+        PROCESSOR(9),
+        HUMANSTATIONINTAKE(12.5),
+>>>>>>> Stashed changes
         AUTONTRANSITION(9),
         TEST(60);
 
@@ -71,19 +82,29 @@ public class Elevator {
 
         configL
             .closedLoopRampRate(.5)
-            .inverted(false)
+            .inverted(true)
             .idleMode(IdleMode.kBrake)
             
             .smartCurrentLimit(60);
         configL.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.elevatorPCoefficient, ElevatorConstants.elevatorICoefficient, ElevatorConstants.elevatorDCoefficient)
+<<<<<<< Updated upstream
             .outputRange(-.7, .7);
          elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
          configR
             .closedLoopRampRate(.7)
             .inverted(true)
+=======
+            .outputRange(-1, 1);
+         elevatorMotorL.configure(configL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+         configR
+            .closedLoopRampRate(.5
+            )
+            .inverted(false)
+>>>>>>> Stashed changes
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(60);
         configR.closedLoop

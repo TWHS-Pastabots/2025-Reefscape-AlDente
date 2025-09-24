@@ -3,17 +3,19 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "CyclePaths RC",
-    "CyclePaths RF",
     "CyclePaths LC",
     "CyclePaths LF",
+    "CyclePaths RC",
+    "CyclePaths RF",
+    "3 piece path test",
     "start1",
     "start2",
     "start3"
   ],
   "autoFolders": [
-    "Start 2",
+    "Training",
     "Start 1",
+    "Start 2",
     "Start 3"
   ],
   "defaultMaxVel": 2.0,

@@ -25,12 +25,6 @@
                 "data": {
                   "name": "AutoAllignR"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4Score"
-                }
               }
             ]
           }
@@ -50,20 +44,8 @@
                 "data": {
                   "pathName": "1R - human"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "HumanIntake"
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intake"
           }
         },
         {
@@ -87,12 +69,6 @@
                 "data": {
                   "name": "AutoAllignL"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4Score"
-                }
               }
             ]
           }
@@ -101,18 +77,6 @@
           "type": "wait",
           "data": {
             "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "outtake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Transition"
           }
         }
       ]

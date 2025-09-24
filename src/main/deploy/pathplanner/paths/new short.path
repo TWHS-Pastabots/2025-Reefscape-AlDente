@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 7.192622950819672,
         "y": 6.296670081967212
       },
@@ -10,18 +11,32 @@
       "nextControl": {
         "x": 6.425409836065573,
         "y": 6.1648053278688515
+=======
+        "x": 7.283250000000001,
+        "y": 6.443
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.756616607880718,
+        "y": 5.929746533675475
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "midbarge"
     },
     {
       "anchor": {
-        "x": 5.574282786885245,
-        "y": 6.008965163934425
+        "x": 5.2065,
+        "y": 5.7604999999999995
       },
       "prevControl": {
+<<<<<<< Updated upstream
         "x": 6.377459016393442,
         "y": 6.15281762295082
+=======
+        "x": 6.482953503633541,
+        "y": 6.159644190514677
+>>>>>>> Stashed changes
       },
       "nextControl": null,
       "isLocked": false,

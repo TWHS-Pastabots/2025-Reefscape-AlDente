@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 1.3905737704918033,
         "y": 0.9741290983606552
       },
@@ -10,6 +11,15 @@
       "nextControl": {
         "x": 2.7092213114754085,
         "y": -0.20066598360655785
+=======
+        "x": 0.73125,
+        "y": 0.21274999999999977
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.049897540983605,
+        "y": -0.9620450819672133
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "sigmahumanL"
@@ -48,7 +58,7 @@
   "folder": "CyclePaths LF",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -35.0
+    "rotation": 143.0
   },
   "useDefaultConstraints": true
 }

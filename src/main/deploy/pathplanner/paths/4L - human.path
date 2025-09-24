@@ -16,12 +16,21 @@
     },
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 1.3905737704918033,
         "y": 0.9741290983606552
       },
       "prevControl": {
         "x": 1.1421567952824336,
         "y": 0.8329486716671887
+=======
+        "x": 0.73125,
+        "y": 0.21274999999999977
+      },
+      "prevControl": {
+        "x": 0.4828330247906303,
+        "y": 0.07156957330653324
+>>>>>>> Stashed changes
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -35.0
+    "rotation": 143.0
   },
   "reversed": false,
   "folder": "CyclePaths LC",

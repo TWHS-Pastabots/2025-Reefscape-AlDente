@@ -3,37 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.560348360655738,
-        "y": 5.061936475409836
+        "x": 3.6952499999999997,
+        "y": 5.302249999999999
       },
       "prevControl": null,
       "nextControl": {
+<<<<<<< Updated upstream
         "x": 3.804332405879717,
         "y": 5.0074223884584494
+=======
+        "x": 2.77875,
+        "y": 6.160249999999999
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "6RScore"
     },
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 1.2467213114754097,
         "y": 7.111834016393442
       },
       "prevControl": {
         "x": 0.988382514096265,
         "y": 7.291783515945477
+=======
+        "x": 1.092,
+        "y": 7.574
+      },
+      "prevControl": {
+        "x": 0.6434999999989127,
+        "y": 8.090749999998405
+>>>>>>> Stashed changes
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "sigmahumanR"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6338832487309625,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.3,
+      "maxWaypointRelativePos": 0.5,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 4.5,

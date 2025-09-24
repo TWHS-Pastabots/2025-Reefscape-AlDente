@@ -68,8 +68,7 @@ public class AutoAllignL extends Command {
         xSpeed = -MathUtil.clamp(speeds.get(0), -.1, .1);
         ySpeed = -MathUtil.clamp(speeds.get(1), -.1, .1);
       }
-      }
-      else{
+      }else{
         xSpeed = MathUtil.clamp(speeds.get(0), -.4, .4);
         ySpeed = MathUtil.clamp(speeds.get(1), -.4, .4);
         if(!camSystem.hasTargets()){

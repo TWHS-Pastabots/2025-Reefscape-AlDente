@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 1.2467213114754097,
         "y": 7.111834016393442
       },
@@ -10,6 +11,15 @@
       "nextControl": {
         "x": 2.24672131147541,
         "y": 7.111834016393442
+=======
+        "x": 1.092,
+        "y": 7.574
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.092,
+        "y": 7.574
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "sigmahumanR"
