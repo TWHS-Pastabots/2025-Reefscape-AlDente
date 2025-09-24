@@ -619,7 +619,7 @@ public class CameraSystem{
         //     targetRange = PhotonUtils.calculateDistanceToTargetMeters(-offsets.get(position).getZ(), 57.13 * 0.0254, -offsets.get(position).getRotation().getY(), Units.degreesToRadians(getResult(position).getBestTarget().getPitch()));
         // }
         // else if(getResult(position).hasTargets() && getResult(position).getBestTarget().getFiducialId() == 3){
-        //     List<PhotonTrackedTarget> targets = getResult(position).getTargets();
+        //     List<PhotonTrackedTarget> gettargets = getResult(position).getTargets();
         //         for(PhotonTrackedTarget target : targets){
         //             if(target.getFiducialId() == 4){
         //                 targetRange = PhotonUtils.calculateDistanceToTargetMeters(-offsets.get(position).getZ(), 57.13 * 0.0254, -offsets.get(position).getRotation().getY(), Units.degreesToRadians(getResult(position).getBestTarget().getPitch()));
@@ -645,8 +645,8 @@ public class CameraSystem{
         List<PhotonTrackedTarget> targets = lastestResults.get(position).getTargets();
             for(PhotonTrackedTarget target : targets)
             {
-               if(target.getFiducialId() == ID)
-               {
+                if(target.getFiducialId() == ID)
+                {
                     return Units.degreesToRadians(target.getPitch());
                 } 
             }

@@ -47,10 +47,11 @@ public class AlignToCoral extends Command {
       yController.setSetpoint(0.06);
       xController.setSetpoint(-1.5);
       camSystem.focusCamIndex = 1;
-    }else if(side == PoleSide.MID){
+    }
+    else if(side == PoleSide.MID){
       yController.setSetpoint(-10);
       xController.setSetpoint(-10);
-      camSystem.focusCamIndex = 1;
+      camSystem.focusCamIndex = 2;
     }
   
     
@@ -65,23 +66,29 @@ public class AlignToCoral extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(side == PoleSide.LEFT){
-      //xController.setSetpoint(15);
-      //xController.setSetpoint(-4.5);
-      //camSystem.focusCamIndex = 0;
-      yController.setSetpoint(0.186);//was.215
-      xController.setSetpoint(-15.8); //was -18.8
-      //updateXControllerSetpoint();
-      camSystem.focusCamIndex = 0;
+    // if(side == PoleSide.LEFT){
+    //   //xController.setSetpoint(15);
+    //   //xController.setSetpoint(-4.5);
+    //   //camSystem.focusCamIndex = 0;
+    //   yController.setSetpoint(0.186);//was.215
+    //   xController.setSetpoint(-15.8); //was -18.8
+    //   //updateXControllerSetpoint();
+    //   camSystem.focusCamIndex = 0;
 
 
-    }
-    else {
-      yController.setSetpoint(0.06);
-      xController.setSetpoint(-1.5);
-      camSystem.focusCamIndex = 1;
-    }
+    // }
+    // else if(side == PoleSide.RIGHT){
+    //   yController.setSetpoint(0.06);
+    //   xController.setSetpoint(-1.5);
+    //   camSystem.focusCamIndex = 1;
+    // }
+    // else if(side == PoleSide.MID) {
+    //   yController.setSetpoint(-10); //was .67
+    //   xController.setSetpoint(-10);
+    //   camSystem.focusCamIndex = 0;
+    // }
   }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -106,6 +113,13 @@ public class AlignToCoral extends Command {
         
       }
       else if(camSystem.focusCamIndex == 1 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag ) != null) {
+        updateThetaControllerSetpoint(camSystem.lastTag);
+        xSpeed =  xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
+        ySpeed =  yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());        
+        
+      }
+
+      else if(camSystem.focusCamIndex == 2 && camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag ) != null) {
         updateThetaControllerSetpoint(camSystem.lastTag);
         xSpeed =  xController.calculate(camSystem.getYawForTag(camSystem.focusCamIndex, camSystem.lastTag));
         ySpeed =  yController.calculate(camSystem.getTargetRange(camSystem.focusCamIndex, camSystem.lastTag).doubleValue());        

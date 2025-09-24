@@ -77,7 +77,7 @@ public class HumanAllign extends Command {
       }
       
       if(Math.abs(speeds.get(0)) < .5 && Math.abs(speeds.get(1)) < .5){
-        rot = camSystem.getPerpendicularYaw() * .0014 * Constants.DriveConstants.kMaxAngularSpeed;
+        rot = camSystem.getPerpendicularYaw() * .014 * Constants.DriveConstants.kMaxAngularSpeed;//.0014 
       }
     drivebase.drive(xSpeed, ySpeed, rot, true);
     if(Math.abs(xSpeed) < .05 && Math.abs(ySpeed) < .05 && Math.abs(rot) < .05){
@@ -95,7 +95,3 @@ public class HumanAllign extends Command {
     return ended;
   }
 }
-/* super awesome comment that
- * no one should delete cuz
- * that would be kinda sad :(
- */
