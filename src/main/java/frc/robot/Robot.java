@@ -190,6 +190,7 @@ public class Robot extends LoggedRobot {
     outtakedos = new Outtakedos();
     autoAllignR = new AutoAllignR();
     autoAllignL = new AutoAllignL();
+    humanAllign = new HumanAllign();
     netScore = new NetScore();
     movetoTransistion = new MovetoTransistion();
 
@@ -582,6 +583,18 @@ public class Robot extends LoggedRobot {
       
       if(driver.getYButton())
       {
+        // alignToCoral.initialize();
+        // alignToCoral.schedule();
+
+        // autoAllignL.initialize();
+        // autoAllignL.schedule();
+
+        // autoAllignR.initialize();
+        // autoAllignR.schedule();
+
+        humanAllign.initialize();
+        humanAllign.schedule();
+
       //     usingAlign = true;
       //     camSystem.poleSide = PoleSide.MID;
       //     thetaController.setSetpoint(0);
@@ -596,18 +609,6 @@ public class Robot extends LoggedRobot {
       //     ySpeed =  yController.calculate(camSystem.getTargetRange(2, camSystem.lastTag).doubleValue());
       //     rot = thetaController.calculate(drivebase.getWorkingHeading());
       //   }
-
-        // alignToCoral.initialize();
-        // alignToCoral.schedule();
-
-        // autoAllignL.initialize();
-        // autoAllignL.schedule();
-
-        // autoAllignR.initialize();
-        // autoAllignR.schedule();
-
-        humanAllign.initialize();
-        humanAllign.schedule();
     }
 
 
@@ -757,6 +758,8 @@ public class Robot extends LoggedRobot {
     //   alignToCoral.cancel();
     //   alignToCoral = new AlignToCoral();
     // }
+
+    
     drivebase.drive(xSpeed, multFactor * ySpeed, rot, !usingAlign);
     // if(driver.getYButton()){
     //   drivebase.drive(0, 0, thetaController.calculate(drivebase.getWorkingHeading()), false);
