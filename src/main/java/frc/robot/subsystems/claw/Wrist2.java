@@ -1,4 +1,7 @@
+//OLD WRIST CODE, DO NOT USE
+
 package frc.robot.subsystems.claw;
+
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -17,7 +20,7 @@ import frc.robot.subsystems.pivot.Pivot;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
-public class Wrist  {
+public class Wrist2  {
     public enum WristState {
         GROUND(90,107), //was 84.6, 96.5//104
         LOWALGAEINTAKE(0,111.2),//was 76, 98.2
@@ -51,13 +54,9 @@ public class Wrist  {
     public ArmFeedforward feedforwardR;
     
     // PID
-    //OLD
-    // public PIDController pitchPID = new PIDController(13, 0, 2);
-    // public PIDController rollPID = new PIDController(70, 0, 0);
+    public PIDController pitchPID = new PIDController(13, 0, 2);
+    public PIDController rollPID = new PIDController(70, 0, 0);
     
-    public PIDController pitchPID = new PIDController(0, 0, 0);
-    public PIDController rollPID = new PIDController(0, 0, 0);
-
     // // Motors
     // private SparkFlex leftMotor = new SparkFlex(WristIDs.kDiffWristLeftMotorID, MotorType.kBrushless);
     // private SparkFlex rightMotor = new SparkFlex(WristIDs.kDiffWristRightMotorID, MotorType.kBrushless);
@@ -76,8 +75,9 @@ public class Wrist  {
     // Variables
     public static boolean runPID = true;
     public WristState lastState = WristState.TRANSITIONSTATE;
+    /* ----- Initialization ----- */
 
-    public Wrist() {
+    public Wrist2() {
         pitchPID.enableContinuousInput(0, 1);
         rollPID.enableContinuousInput(0, 1);
         pivot = Pivot.getInstance();
@@ -92,12 +92,8 @@ public class Wrist  {
         MotorConfigL = new SparkMaxConfig();
         MotorConfigR = new SparkMaxConfig();
 
-        // feedforwardR = new ArmFeedforward(0, .37,0);
-        // feedforwardL = new ArmFeedforward(0, .37, 0);
-
-        feedforwardR = new ArmFeedforward(0, 0,0);
-        feedforwardL = new ArmFeedforward(0, 0, 0);
-
+        feedforwardR = new ArmFeedforward(0, .37,0);
+        feedforwardL = new ArmFeedforward(0, .37, 0);
         // el: 88.2 piv: 56.5 rt:
         MotorConfigL
                 .inverted(false)
@@ -130,7 +126,7 @@ public class Wrist  {
     
        
         if (runPID) {
-            pitchPID.setSetpoint(0.22);//LOOK OVER THIS LATER
+            pitchPID.setSetpoint(0.22);//Look over this later
             rollPID.setSetpoint(0);
         }
         
@@ -146,7 +142,7 @@ public class Wrist  {
     public void updatePID(double pitchPos, double rollPos) {
         double pitchVoltage = pitchPID.calculate(pitchPos);
         double rollVoltage = rollPID.calculate(rollPos);
-        double angle = pivot.pivotMotor.getAbsoluteEncoder().getPosition();
+        double angle = pivot.pivotMotor.getAbsoluteEncoder().getPosition() - 12.3;
         if(angle < 0){
             angle += 360.0;
         }

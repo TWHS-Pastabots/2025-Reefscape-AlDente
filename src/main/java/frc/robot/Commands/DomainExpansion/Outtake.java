@@ -30,7 +30,7 @@ public class Outtake extends Command {
   public void execute() {
     claw.clawOn(1);
     if(Timer.getFPGATimestamp() > timer + .4){
-      claw.clawOff(0);
+      claw.clawOff();
       ended = true;
     }
   }

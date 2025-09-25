@@ -1,9 +1,7 @@
 package frc.robot.subsystems.elevator;
 
-import com.fasterxml.jackson.databind.ser.std.ToEmptyObjectSerializer;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,18 +10,13 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Ports;
 
-
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.IO.DigitalInputs;
-import frc.robot.subsystems.pivot.Pivot.PivotState;
 
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
@@ -40,8 +33,8 @@ public class Elevator {
     public SparkClosedLoopController ControllerR;
     public SparkClosedLoopController ControllerL;
 
-    public static ElevatorFeedforward feedForward;
-    public static ElevatorState elevatorState = ElevatorState.GROUND;
+    public  ElevatorFeedforward feedForward;
+    public  ElevatorState elevatorState = ElevatorState.GROUND;
     public enum ElevatorState{
         GROUND(0),    
         LOWALGAEINTAKE(15),
@@ -61,13 +54,10 @@ public class Elevator {
         }
     }
     public Elevator() {
-        elevatorMotorL = new SparkFlex(Ports.elevatorMotorL, MotorType.kBrushless); //LABEL THE PORT LATER
-        elevatorMotorR = new SparkFlex(Ports.elevatorMotorR, MotorType.kBrushless); //LABEL THE PORT LATER
+        elevatorMotorL = new SparkFlex(Ports.elevatorMotorL, MotorType.kBrushless); 
+        elevatorMotorR = new SparkFlex(Ports.elevatorMotorR, MotorType.kBrushless); 
         configL = new SparkFlexConfig();
         configR = new SparkFlexConfig();
-
-        //closed .7
-        //.6
 
         configL
             .closedLoopRampRate(.5)

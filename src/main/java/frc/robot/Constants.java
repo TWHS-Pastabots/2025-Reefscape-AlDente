@@ -156,9 +156,9 @@ public final class Constants {
 
   public static final class PivotConstants {
     //P = .0007 I = 0 D = 6
-    public static final double pivotPCoefficient = .008; //was .0065
-    public static final double pivotICoefficient = 0.0;
-    public static final double pivotDCoefficient = .2;
+    public static final double pivotPCoefficient = 0; 
+    public static final double pivotICoefficient = 0;
+    public static final double pivotDCoefficient = 0;
 
     //4.5
     

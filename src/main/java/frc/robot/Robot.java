@@ -1,13 +1,8 @@
 package frc.robot;
 
-import java.util.ArrayList;
-import java.util.Vector;
 
-import org.ietf.jgss.Oid;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -21,18 +16,13 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.WristCommand;
 import frc.robot.Commands.DomainExpansion.HumanAllign;
 import frc.robot.Commands.DomainExpansion.AutoAllignL;
@@ -54,27 +44,19 @@ import frc.robot.Commands.DomainExpansion.NewGround;
 import frc.robot.Commands.DomainExpansion.Outtake;
 import frc.robot.Commands.DomainExpansion.ProcessorScore;
 import frc.robot.Commands.DomainExpansion.Transition;
-import frc.robot.Commands.DomainExpansion.TransitionAuto;
 import frc.robot.Commands.DomainExpansion.Outtakedos;
 import frc.robot.Commands.AlignToCoral;
-import frc.robot.Commands.CancelCommands;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
-import frc.robot.subsystems.IO.LED;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 import frc.robot.subsystems.claw.Wrist;
-import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.VectorPlate;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
-import frc.robot.subsystems.climber.VectorPlate.VectorState;
-//import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.swerve.DriveSubsystem;
-import frc.robot.subsystems.swerve.MAXSwerveModule;
-import frc.robot.subsystems.swerve.DriveSubsystem.DriveState;
 import frc.robot.subsystems.vision.CameraSystem;
 import frc.robot.subsystems.vision.CameraSystem.PoleSide;
 
@@ -90,7 +72,6 @@ public class Robot extends LoggedRobot {
   private Pivot pivot; 
   private Elevator elevator;
   private CameraSystem camSystem;
-  private WristCommand wristCommand;
   private VectorPlate vectorPlate;
   private GroundAlgaeIntake groundAlgaeIntake;
   private GroundIntakeCoral groundCoralIntake;
@@ -108,14 +89,12 @@ public class Robot extends LoggedRobot {
   private PivotCommand pivotCommand;
   private ElevatorCommand elevatorCommand;
   private Transition transition;
-  private TransitionAuto transitionAuto;
   private Outtake outtake;
   private Intake intake;
   private HumanAllign humanAllign;
   private AutoAllignR autoAllignR;
   private AutoAllignL autoAllignL;
   private AlignToCoral alignToCoral;
-  private CancelCommands cancel;
   private NetScore netScore;
 
   private GroundSequence groundSequence;
@@ -140,7 +119,6 @@ public class Robot extends LoggedRobot {
   public PIDController thetaController;
 
   private boolean usingAlign;
-  private boolean atPoleR;
   // that is a chooser for the autons utilizing the sendableChooser which allows
   // us to choose the auton commands
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -154,7 +132,6 @@ public class Robot extends LoggedRobot {
     vectorPlate = VectorPlate.getInstance();
     drivebase = DriveSubsystem.getInstance();
     elevator = Elevator.getInstance();
-    // litty = LED.getInstance();
     wrist = Wrist.getInstance();
     climber = Climber.getInstance();
     claw = Claw.getInstance();
@@ -166,12 +143,7 @@ public class Robot extends LoggedRobot {
     camSystem.AddCamera(new PhotonCamera("SwerveCam"), new Transform3d(
       new Translation3d(0.28831, -0.2421, 0.29561), new Rotation3d(0.0, Math.toRadians(2.5), Math.toRadians(-105))), 
       true);
-      // camSystem.AddCamera(new PhotonCamera("MiddleCam"), new Transform3d(
-      //   new Translation3d(0.00833, -0.22138, 0.14534), new Rotation3d(0.0, 0.0, Math.toRadians(-90))), 
-      //   true);
     
-    transitionAuto = new TransitionAuto();
-    wristCommand = new WristCommand(WristState.TEST);
     pivotCommand = new PivotCommand(PivotState.TRANSITIONSTATE);
     elevatorCommand = new ElevatorCommand(ElevatorState.TEST);
     groundAlgaeIntake = new GroundAlgaeIntake();
@@ -212,7 +184,6 @@ public class Robot extends LoggedRobot {
     yController.setTolerance(.005);
     thetaController.setTolerance(.01);
 
-    atPoleR = false;
     // camSystem = CameraSystem.getInstance();
     // camSystem.AddCamera(new PhotonCamera("Cam1"), new Transform3d(
     // new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0.0, 0.0, 0.0))
@@ -254,7 +225,6 @@ public class Robot extends LoggedRobot {
     m_chooser.addOption("3_C_2_P2C align", new PathPlannerAuto("3_C_2_P2C align"));
     m_chooser.addOption("no.5path", new PathPlannerAuto("no.5path"));
     m_chooser.addOption("1G.eR.fR.aL", new PathPlannerAuto("1G.eR.fR.aL"));
-    // SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData(m_chooser);
     
   }
@@ -263,10 +233,7 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
 
     
-    // SmartDashboard.putBoolean("CamChecker", camSystem.getSameCamTag());
-    //SmartDashboard.putNumber("climb camera result", camSystem.getCamera(0).getAllUnreadResults()); 
     SmartDashboard.putNumber("adjuster", Elevator.adjuster);
-    //camSystem.isBlue = SmartDashboard.getBoolean("isBlue", camSystem.isBlue);
     SmartDashboard.putNumber("MotorL Current", wrist.MotorL.getOutputCurrent());
     SmartDashboard.putNumber("feedforwards/feedforwardL", wrist.feedforwardL.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
     SmartDashboard.putNumber("feedforwards/feedforwardR", wrist.feedforwardR.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
