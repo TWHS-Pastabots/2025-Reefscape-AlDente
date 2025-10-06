@@ -93,7 +93,6 @@ public class Robot extends LoggedRobot {
   private HumanAllign humanAllign;
   private AutoAllignR autoAllignR;
   private AutoAllignL autoAllignL;
-  private AlignToCoral alignToCoral;
   private NetScore netScore;
 
   private GroundSequence groundSequence;
@@ -126,7 +125,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     Elevator.adjuster =0;
-    clawZeroPower = .075;
+    clawZeroPower = 0;
     speedMod = 1;
     vectorPlate = VectorPlate.getInstance();
     drivebase = DriveSubsystem.getInstance();
@@ -163,6 +162,12 @@ public class Robot extends LoggedRobot {
     autoAllignL = new AutoAllignL();
     humanAllign = new HumanAllign();
     netScore = new NetScore();
+
+
+
+
+
+
     movetoTransistion = new MovetoTransistion();
 
     elevator.elevatorMotorR.clearFaults();
@@ -230,8 +235,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-
-    
     SmartDashboard.putNumber("adjuster", Elevator.adjuster);
     SmartDashboard.putNumber("MotorL Current", wrist.MotorL.getOutputCurrent());
     SmartDashboard.putNumber("feedforwards/feedforwardL", wrist.feedforwardL.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
@@ -771,13 +774,13 @@ public class Robot extends LoggedRobot {
       operator.setRumble(RumbleType.kLeftRumble, .5);
       mode = "coral";
       rumbleTimer = Timer.getFPGATimestamp();
-      clawZeroPower = .075;
+      clawZeroPower = .0;
     }else if(Timer.getFPGATimestamp() > rumbleTimer + 0.5){
       operator.setRumble(RumbleType.kRightRumble, 0);
       operator.setRumble(RumbleType.kLeftRumble, 0);
     }
 
-    if(driver.getRightBumperButton()){
+    if(driver.getRightBumper()){
       climber.ClimbDown();
     }else if (driver.getLeftBumperButton()){
       climber.ClimbUp();
@@ -915,6 +918,8 @@ public class Robot extends LoggedRobot {
       humanPlayerIntake.initialize();
       humanPlayerIntake.schedule();
     }
+
+
      if(operator.getAButton()){
       CancelCommands();    
       // pivotCommand = new PivotCommand(PivotState.CLIMB);
@@ -929,6 +934,7 @@ public class Robot extends LoggedRobot {
         groundSequence.initialize();
         groundSequence.schedule();
       }
+
     if(operator.getXButton()){
       CancelCommands();
       pivotCommand = new PivotCommand(PivotState.CLIMB);
@@ -937,9 +943,9 @@ public class Robot extends LoggedRobot {
     }
 
     if(operator.getRightBumperButton()){
-      claw.clawOn(1);
+      claw.clawOn(.5);
     }else if(operator.getLeftBumperButton()){
-      claw.clawReverse(1);
+      claw.clawReverse(.5);
     }else{
       claw.clawReverse(clawZeroPower);
     }
@@ -1032,5 +1038,53 @@ public class Robot extends LoggedRobot {
     }
   }
 }
+                                                                       
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

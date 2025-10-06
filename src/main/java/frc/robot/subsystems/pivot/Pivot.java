@@ -69,8 +69,7 @@ public class Pivot {
             .positionConversionFactor(360);
         config.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pid(PivotConstants.pivotPCoefficient, PivotConstants.pivotICoefficient, PivotConstants.pivotDCoefficient)
-            //.pid(0.009, 0, .05)
+            .pid(0.008, 0., 0.2)
             .positionWrappingEnabled(true)
             .positionWrappingInputRange(0, 360)
             .outputRange(-1, 1);
@@ -82,8 +81,8 @@ public class Pivot {
         pivotMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         pivotController = pivotMotor.getClosedLoopController();
-        feedForward = new ArmFeedforward(0, 0, 0, 0);
-        //was .73
+        feedForward = new ArmFeedforward(0, 0.6, 0, 0);
+
     }
     public void updatePose() {
         // pivotMotor.setVoltage(pid.calculate(pivotMotor.getAbsoluteEncoder().getPosition(), getState().position) 

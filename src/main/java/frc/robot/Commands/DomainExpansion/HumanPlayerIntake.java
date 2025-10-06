@@ -21,15 +21,12 @@ public class HumanPlayerIntake extends Command {
   private PivotCommand pivot;
   private ElevatorCommand elevator;
   private boolean ended;
-  private boolean transitionReady;
-  private Claw claw;
   private double timer;
   /** Creates a new GroundIntakeCoral. */
   public HumanPlayerIntake() {
     wrist = new WristCommand(WristState.HUMANSTATIONINTAKE);
     pivot = new PivotCommand(PivotState.HUMANSTATIONINTAKE);
     elevator = new ElevatorCommand(ElevatorState.HUMANSTATIONINTAKE);
-    claw = Claw.getInstance();
     timer = -1;
     // Use addRequirements() here to declare subsystem dependencies.
   }

@@ -19,19 +19,19 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
     public enum WristState {
-        GROUND(90,107), //was 84.6, 96.5//104
-        LOWALGAEINTAKE(0,111.2),//was 76, 98.2
-        HIGHALGAEINTAKE(0,119.2),// 104.2
-        L1CORALSCORE(98.04,201.04), //was 264.2
-        L2CORALSCORE(98.64,201), // was r: 95
-        L3CORALSCORE(96.12,201),// was r:98.64, t: 202.68
-        L4CORALSCORE(96.12,205.56), // t: 
-        PROCESSOR(0,60),
-        HUMANSTATIONINTAKE(91.08,74.88), //was 91.08
-        TRANSITIONSTATE(0,84.6),
-        TEST(90,110),
-        CLIMB(90,84.6),
-        NET(98,90);
+        GROUND(0,0), //was 84.6, 96.5//104
+        LOWALGAEINTAKE(0,0),//was 76, 98.2
+        HIGHALGAEINTAKE(0,0),// 104.2
+        L1CORALSCORE(0,0), //was 264.2
+        L2CORALSCORE(0,0), // was r: 95
+        L3CORALSCORE(0,0),// was r:98.64, t: 202.68
+        L4CORALSCORE(0,0), // t: 
+        PROCESSOR(0,0),
+        HUMANSTATIONINTAKE(0,0), //was 91.08
+        TRANSITIONSTATE(0,0),
+        TEST(0,0),
+        CLIMB(0,0),
+        NET(0,0);
         public double rotate;
         public double tilt;
         private WristState(double rotate, double tilt) {
@@ -167,7 +167,7 @@ public class Wrist  {
         + pivot.feedForward.calculate(Math.toRadians(angle),0);
         lVolts = MathUtil.clamp(lVolts, -14, 14);
         rVolts = MathUtil.clamp(rVolts, -14, 14);
-        setVoltage(lVolts, rVolts);
+        // setVoltage(lVolts, rVolts);
     }
 
     // @Override

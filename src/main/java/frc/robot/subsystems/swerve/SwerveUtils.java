@@ -18,10 +18,11 @@
                         } else if (_target < _current) {
                             return _current - _stepsize;
                         } else {
+
                             return _current + _stepsize;
                         }
                     }
-
+                                                                                                           
                     /**
                      * Steps a value (angle) towards a target (angle) taking the shortest path with
                      * a specified step size.
