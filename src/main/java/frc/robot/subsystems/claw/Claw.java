@@ -14,6 +14,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public class Claw {
     public double zeroPower;
     public SparkMax clawMotor;
+    public SparkMax flywheelMotor;
+    public SparkMaxConfig flywheelConfig;
     public SparkMaxConfig clawConfig;
     public static Claw instance;
     private DigitalInputs coralBreakBeam;
@@ -31,6 +33,15 @@ public class Claw {
             .smartCurrentLimit(60);
         clawMotor.configure(clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+        flywheelMotor = new SparkMax(Ports.flywheel, MotorType.kBrushless);
+        flywheelConfig = new SparkMaxConfig();
+
+        flywheelConfig
+            .inverted(true)
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(60);
+        flywheelMotor.configure(flywheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
         coralBreakBeam = DigitalInputs.getInstance();
         algaeBreakBeam = DigitalInputs.getInstance();
     }
@@ -43,6 +54,17 @@ public class Claw {
     public void clawOff(){
         clawMotor.set(zeroPower);
     }
+
+    public void flywheelOn(double speed){
+        flywheelMotor.set(speed);
+    }
+    public void flywheelReverse(double speed){
+        flywheelMotor.set(-speed);
+    }
+    public void flywheelOff(){
+        flywheelMotor.set(0);
+    }
+
     public static Claw getInstance() {
         if (instance == null)
             instance = new Claw();

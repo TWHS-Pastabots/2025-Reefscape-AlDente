@@ -51,6 +51,7 @@ import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 import frc.robot.subsystems.claw.Wrist;
+import frc.robot.subsystems.claw.Wrist.WristState;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.VectorPlate;
 import frc.robot.subsystems.elevator.Elevator;
@@ -58,6 +59,7 @@ import frc.robot.subsystems.elevator.Elevator.ElevatorState;
 import frc.robot.subsystems.swerve.DriveSubsystem;
 import frc.robot.subsystems.vision.CameraSystem;
 import frc.robot.subsystems.vision.CameraSystem.PoleSide;
+import frc.robot.subsystems.IO.*;;
 
 public class Robot extends LoggedRobot {
   // all the initialing for the systems
@@ -72,6 +74,7 @@ public class Robot extends LoggedRobot {
   private Elevator elevator;
   private CameraSystem camSystem;
   private VectorPlate vectorPlate;
+  private DigitalInputs digitalInput;
   private GroundAlgaeIntake groundAlgaeIntake;
   private GroundIntakeCoral groundCoralIntake;
   private HighAlgaeIntake highAlgaeIntake;
@@ -135,6 +138,7 @@ public class Robot extends LoggedRobot {
     claw = Claw.getInstance();
     pivot = Pivot.getInstance();
     camSystem = CameraSystem.getInstance(); 
+    digitalInput = DigitalInputs.getInstance();
     camSystem.AddCamera(new PhotonCamera("ClimbCam"), new Transform3d(
       new Translation3d(-0.30043, -0.26457, 0.31945), new Rotation3d(0.0, 0.0, Math.toRadians(-55.56095))), 
       true);
@@ -239,8 +243,8 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("MotorL Current", wrist.MotorL.getOutputCurrent());
     SmartDashboard.putNumber("feedforwards/feedforwardL", wrist.feedforwardL.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
     SmartDashboard.putNumber("feedforwards/feedforwardR", wrist.feedforwardR.calculate(2*Math.PI*wrist.MotorL.getAbsoluteEncoder().getPosition(), 0));
-    SmartDashboard.putNumber("Left abs encoder", wrist.MotorL.getAbsoluteEncoder().getPosition());
-    SmartDashboard.putNumber("Right abs encoder", wrist.MotorR.getAbsoluteEncoder().getPosition());
+    SmartDashboard.putNumber("rot abs encoder", wrist.MotorL.getAbsoluteEncoder().getPosition());
+    SmartDashboard.putNumber("tilt abs encoder", wrist.MotorR.getAbsoluteEncoder().getPosition());
     SmartDashboard.putNumber("Reefscape/DiffWrist/pitch Encoder Pos", wrist.getPitchAngle());
     SmartDashboard.putNumber("Reefscape/DiffWrist/roll Encoder Pos", wrist.getRollAngle());
     SmartDashboard.putNumber("Reefscape/DiffWrist/pitchPID Setpoint",wrist. pitchPID.getSetpoint());
@@ -253,7 +257,6 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("Pivot Encoder", pivot.pivotMotor.getAbsoluteEncoder().getPosition());
     SmartDashboard.putString("Pivot Desired Pos", pivot.getState().toString());
     SmartDashboard.putString("Elevator Desired Pos", elevator.getState().toString());
-
 
     SmartDashboard.putString("intakemode", mode);
     SmartDashboard.putNumber("lasttag",camSystem.lastTag);
@@ -309,7 +312,8 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("Currenr Degree", CameraSystem.get);
 
 
-    
+    SmartDashboard.putBoolean("Beam2", digitalInput.getInputs()[2]);
+    SmartDashboard.putBoolean("Beam3", digitalInput.getInputs()[3]);
 
     // SmartDashboard.putNumber("currentPose Angle L", wrist.ThoseWhoTroll[0]);
     // SmartDashboard.putNumber("currentPose Angle R", wrist.ThoseWhoTroll2[0]);
@@ -322,10 +326,6 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("2st Angle R", wrist.WrapAngle(wrist.currentPositionL, wrist.wristState.tiltPosition)[1]);
 
     // SmartDashboard.putString("Wrist State", wrist.wristState.toString());
-
-    
-   
-    
     // Pose2d cameraPositionTele = camSystem.calculateRobotPosition();
 
     // Pose2d posTele = drivebase.updateOdometry(cameraPositionTele);
@@ -430,6 +430,7 @@ public class Robot extends LoggedRobot {
     usingAlign = false;
     elevator.updatePose();
     pivot.updatePose();
+
     
     double ySpeed = drivebase.inputDeadband(-driver.getLeftX()) * speedMod;
     double xSpeed = drivebase.inputDeadband(-driver.getLeftY()) * speedMod;
@@ -787,6 +788,8 @@ public class Robot extends LoggedRobot {
     }else{
       climber.ClimbZero();
     }
+
+  
     // if(driver.getBButton()){
     //   Double yaw = camSystem.getYawForTag(0, 18);
     //   if(yaw != null){
@@ -943,11 +946,11 @@ public class Robot extends LoggedRobot {
     }
 
     if(operator.getRightBumperButton()){
-      claw.clawOn(.5);
+      claw.flywheelOn(0.5);
     }else if(operator.getLeftBumperButton()){
-      claw.clawReverse(.5);
+      claw.flywheelReverse(0.5);
     }else{
-      claw.clawReverse(clawZeroPower);
+      claw.flywheelReverse(0);
     }
     
     if(operator.getLeftTriggerAxis() > .5){

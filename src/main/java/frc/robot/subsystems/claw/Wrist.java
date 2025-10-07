@@ -14,21 +14,24 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Ports;
 import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.Pivot.PivotState;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
+    private static WristState wristState = WristState.TRANSITIONSTATE;
+
     public enum WristState {
-        GROUND(0,0), //was 84.6, 96.5//104
-        LOWALGAEINTAKE(0,0),//was 76, 98.2
-        HIGHALGAEINTAKE(0,0),// 104.2
-        L1CORALSCORE(0,0), //was 264.2
-        L2CORALSCORE(0,0), // was r: 95
-        L3CORALSCORE(0,0),// was r:98.64, t: 202.68
-        L4CORALSCORE(0,0), // t: 
+        GROUND(0,0), 
+        LOWALGAEINTAKE(0,0),
+        HIGHALGAEINTAKE(0,0),
+        L1CORALSCORE(0,.725),
+        L2CORALSCORE(0,0),
+        L3CORALSCORE(0,0),
+        L4CORALSCORE(0,0), 
         PROCESSOR(0,0),
-        HUMANSTATIONINTAKE(0,0), //was 91.08
-        TRANSITIONSTATE(0,0),
+        HUMANSTATIONINTAKE(0,0),
+        TRANSITIONSTATE(0,.4),
         TEST(0,0),
         CLIMB(0,0),
         NET(0,0);
@@ -55,7 +58,7 @@ public class Wrist  {
     // public PIDController pitchPID = new PIDController(13, 0, 2);
     // public PIDController rollPID = new PIDController(70, 0, 0);
     
-    public PIDController pitchPID = new PIDController(0, 0, 0);
+    public PIDController pitchPID = new PIDController(5 , 0, 0);
     public PIDController rollPID = new PIDController(0, 0, 0);
 
     // // Motors
@@ -95,8 +98,8 @@ public class Wrist  {
         // feedforwardR = new ArmFeedforward(0, .37,0);
         // feedforwardL = new ArmFeedforward(0, .37, 0);
 
-        feedforwardR = new ArmFeedforward(0, 0,0);
-        feedforwardL = new ArmFeedforward(0, 0, 0);
+        feedforwardR = new ArmFeedforward(0, 0.3,0);
+        feedforwardL = new ArmFeedforward(0, 0.3, 0);
 
         // el: 88.2 piv: 56.5 rt:
         MotorConfigL
@@ -109,7 +112,7 @@ public class Wrist  {
         MotorConfigL.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                 .outputRange(-1, 1)
-                .positionWrappingEnabled(true);
+                .positionWrappingEnabled(false);
         MotorL.configure(MotorConfigL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         MotorConfigR
@@ -122,7 +125,7 @@ public class Wrist  {
         MotorConfigR.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                 .outputRange(-1, 1)
-                .positionWrappingEnabled(true);
+                .positionWrappingEnabled(false);
         MotorR.configure(MotorConfigR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         //Diff Wrist Start point
         rollEncoder = MotorR.getAbsoluteEncoder(); //Max: 0.35, 0.8    positions to go to: Score: .75, hold: .5
@@ -167,15 +170,15 @@ public class Wrist  {
         + pivot.feedForward.calculate(Math.toRadians(angle),0);
         lVolts = MathUtil.clamp(lVolts, -14, 14);
         rVolts = MathUtil.clamp(rVolts, -14, 14);
-        // setVoltage(lVolts, rVolts);
+        setVoltage(lVolts, rVolts);
     }
 
     // @Override
     public void periodic() {
         runPID = true;
         runPID = SmartDashboard.getBoolean("Reefscape/DiffWrist/RunPID?", true);
-        pitchPos = pitchEncoder.getPosition();
-        rollPos = rollEncoder.getPosition();
+        pitchPos = pitchEncoder.getPosition()*360;
+        rollPos = rollEncoder.getPosition()*360;
         if (runPID) {
             updatePID(pitchPos, rollPos);
         }
@@ -279,6 +282,8 @@ public class Wrist  {
         return rollPID.getSetpoint() * 360;
     }
 
-    
+    public void setWristState(WristState state){
+        wristState = state;
+    }
 
 }

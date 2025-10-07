@@ -35,14 +35,15 @@ public class Ports {
 
     //Claw
     public static final int claw = 12;
-
+    public static final int flywheel = 18;
     
 
     //*DIO */
 
     public static final int algaeBreakBeam = 4;
     public static final int coralBreakBeam = 3;
-    public static final int elevatorBottom = 0;
+    public static final int 
+    elevatorBottom = 0;
     public static final int elevatorTop = 1;
 
 
