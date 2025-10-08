@@ -270,8 +270,8 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("elevator encoder", elevator.getElevatorPosition());
     SmartDashboard.putBoolean("elevator Top Switch", elevator.getTopLimitSwitch());
     SmartDashboard.putBoolean("elevator Bot Switch", elevator.getBottomLimitSwitch());
-    SmartDashboard.putBoolean("algae Breakbeam", claw.getAlgaeBreakBeam());
-    SmartDashboard.putBoolean("coral Breakbeam", claw.getCoralBreakBeam());
+    // SmartDashboard.putBoolean("algae Breakbeam", claw.getAlgaeBreakBeam());
+    // SmartDashboard.putBoolean("coral Breakbeam", claw.getCoralBreakBeam());
     SmartDashboard.putString("wristlaststate", wrist.lastState.toString());
     SmartDashboard.putBoolean("pivotisfinished", pivotCommand.isFinished());
     SmartDashboard.putNumber("Last Tag Seen", camSystem.lastTag);
@@ -314,6 +314,8 @@ public class Robot extends LoggedRobot {
 
     SmartDashboard.putBoolean("Beam2", digitalInput.getInputs()[2]);
     SmartDashboard.putBoolean("Beam3", digitalInput.getInputs()[3]);
+
+    SmartDashboard.putNumber("target tilt", Wrist.wristState.tilt);
 
     // SmartDashboard.putNumber("currentPose Angle L", wrist.ThoseWhoTroll[0]);
     // SmartDashboard.putNumber("currentPose Angle R", wrist.ThoseWhoTroll2[0]);
@@ -859,7 +861,7 @@ public class Robot extends LoggedRobot {
          CancelCommands();
          L1CoralScore.initialize();
          L1CoralScore.schedule();
-      
+          Wrist.wristState = WristState.L1CORALSCORE;
         }else if(operator.getPOV() == 270){
         CancelCommands();
         L2CoralScore.initialize();
@@ -946,12 +948,17 @@ public class Robot extends LoggedRobot {
     }
 
     if(operator.getRightBumperButton()){
-      claw.flywheelOn(0.5);
-    }else if(operator.getLeftBumperButton()){
-      claw.flywheelReverse(0.5);
+      claw.flywheelOn(0.8);
+      claw.clawOn(.5);
+    }else if(operator.getLeftBumperButton()&&digitalInput.getInputs()[2]){//intake
+      
+      claw.flywheelReverse(0.8);
+      claw.clawReverse(.5);
     }else{
-      claw.flywheelReverse(0);
+      claw.flywheelOff();
+      claw.clawOff();
     }
+
     
     if(operator.getLeftTriggerAxis() > .5){
       CancelCommands();

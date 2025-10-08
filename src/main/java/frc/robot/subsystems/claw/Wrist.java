@@ -14,24 +14,23 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Ports;
 import frc.robot.subsystems.pivot.Pivot;
-import frc.robot.subsystems.pivot.Pivot.PivotState;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
-    private static WristState wristState = WristState.TRANSITIONSTATE;
+    public static WristState wristState = WristState.TRANSITIONSTATE;
 
     public enum WristState {
         GROUND(0,0), 
         LOWALGAEINTAKE(0,0),
         HIGHALGAEINTAKE(0,0),
-        L1CORALSCORE(0,.725),
+        L1CORALSCORE(0,0),
         L2CORALSCORE(0,0),
         L3CORALSCORE(0,0),
         L4CORALSCORE(0,0), 
         PROCESSOR(0,0),
         HUMANSTATIONINTAKE(0,0),
-        TRANSITIONSTATE(0,.4),
+        TRANSITIONSTATE(0,  .25),
         TEST(0,0),
         CLIMB(0,0),
         NET(0,0);
@@ -58,8 +57,8 @@ public class Wrist  {
     // public PIDController pitchPID = new PIDController(13, 0, 2);
     // public PIDController rollPID = new PIDController(70, 0, 0);
     
-    public PIDController pitchPID = new PIDController(5 , 0, 0);
-    public PIDController rollPID = new PIDController(0, 0, 0);
+    public PIDController pitchPID = new PIDController(13, 0, 0);
+    public PIDController rollPID = new PIDController(70., 0, 0);
 
     // // Motors
     // private SparkFlex leftMotor = new SparkFlex(WristIDs.kDiffWristLeftMotorID, MotorType.kBrushless);
@@ -70,6 +69,8 @@ public class Wrist  {
 
     public AbsoluteEncoder pitchEncoder;
     public AbsoluteEncoder rollEncoder;
+
+    public IdleMode mode = IdleMode.kBrake;
 
     private double pitchPos;
     private double rollPos;
@@ -98,13 +99,13 @@ public class Wrist  {
         // feedforwardR = new ArmFeedforward(0, .37,0);
         // feedforwardL = new ArmFeedforward(0, .37, 0);
 
-        feedforwardR = new ArmFeedforward(0, 0.3,0);
-        feedforwardL = new ArmFeedforward(0, 0.3, 0);
+        feedforwardR = new ArmFeedforward(0, 0.13,0);
+        feedforwardL = new ArmFeedforward(0, 0.13, 0);
 
         // el: 88.2 piv: 56.5 rt:
         MotorConfigL
                 .inverted(false)
-                .idleMode(IdleMode.kBrake)
+                .idleMode(mode)
                 .smartCurrentLimit(60);
         MotorConfigL.absoluteEncoder
                 .positionConversionFactor(1)
@@ -117,7 +118,7 @@ public class Wrist  {
 
         MotorConfigR
                 .inverted(true)
-                .idleMode(IdleMode.kBrake)
+                .idleMode(mode)
                 .smartCurrentLimit(60);
         MotorConfigR.absoluteEncoder
                 .positionConversionFactor(1)
@@ -133,8 +134,8 @@ public class Wrist  {
     
        
         if (runPID) {
-            pitchPID.setSetpoint(0.22);//LOOK OVER THIS LATER
-            rollPID.setSetpoint(0);
+            pitchPID.setSetpoint(wristState.tilt);//LOOK OVER THIS LATER
+            rollPID.setSetpoint(wristState.rotate);
         }
         
                 
@@ -177,8 +178,8 @@ public class Wrist  {
     public void periodic() {
         runPID = true;
         runPID = SmartDashboard.getBoolean("Reefscape/DiffWrist/RunPID?", true);
-        pitchPos = pitchEncoder.getPosition()*360;
-        rollPos = rollEncoder.getPosition()*360;
+        pitchPos = pitchEncoder.getPosition();
+        rollPos = rollEncoder.getPosition();
         if (runPID) {
             updatePID(pitchPos, rollPos);
         }
@@ -235,7 +236,7 @@ public class Wrist  {
      * @param setpoint
      */
     public void setPitchSetpoint(double setpoint) {
-        setpoint /= 360;
+        // setpoint /= 360;
         pitchPID.setSetpoint(setpoint);
     }
 
@@ -253,7 +254,7 @@ public class Wrist  {
      * @param setpoint
      */
     public void setRollSetpoint(double setpoint) {
-        setpoint /= 360;
+        // setpoint /= 360;
         rollPID.setSetpoint(setpoint);
     }
 

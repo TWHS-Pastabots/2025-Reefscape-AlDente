@@ -18,8 +18,9 @@ public class Claw {
     public SparkMaxConfig flywheelConfig;
     public SparkMaxConfig clawConfig;
     public static Claw instance;
-    private DigitalInputs coralBreakBeam;
-    private DigitalInputs algaeBreakBeam;
+    private DigitalInputs coralBreakBeam = DigitalInputs.getInstance();
+    private DigitalInputs algaeBreakBeam = DigitalInputs.getInstance();
+    private DigitalInputs beam;
     public Claw(){
         zeroPower = 0.0;
 
@@ -42,8 +43,7 @@ public class Claw {
             .smartCurrentLimit(60);
         flywheelMotor.configure(flywheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        coralBreakBeam = DigitalInputs.getInstance();
-        algaeBreakBeam = DigitalInputs.getInstance();
+        beam = DigitalInputs.getInstance();
     }
     public void clawOn(double speed){
         clawMotor.set(speed);
