@@ -22,16 +22,16 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
     public enum WristState {
-        GROUND(0,120),
-        LOWALGAEINTAKE(0,140),
-        HIGHALGAEINTAKE(0,119),
+        GROUND(0,115),//mmostly good
+        LOWALGAEINTAKE(0,140),//change for MTS
+        HIGHALGAEINTAKE(0,119),//change for MTS
         L1CORALSCORE(270,140), 
         L2CORALSCORE(270,140), 
         L3CORALSCORE(270,140),
         L4CORALSCORE(270,140),
         PROCESSOR(0,60),
-        HUMANSTATIONINTAKE(0,74),
-        TRANSITIONSTATE(138,90),//
+        HUMANSTATIONINTAKE(0,74),//change maybe
+        TRANSITIONSTATE(138,90),//ok
         TEST(0,110),
         CLIMB(0,84.6),
         NET(0,90);
@@ -53,7 +53,7 @@ public class Wrist  {
     public ArmFeedforward feedforwardL;
     public ArmFeedforward feedforwardR;
     
-    // PID
+    // PID probably good enough
     public PIDController pitchPID = new PIDController(10, 0, 0);
     public PIDController rollPID = new PIDController(70, 0, 0);
     
@@ -86,8 +86,8 @@ public class Wrist  {
         SmartDashboard.putBoolean("Reefscape/DiffWrist/RunPID?", runPID);
 
         //Motor Configuration
-        MotorR = new SparkMax(Ports.wristR, MotorType.kBrushless); // SAY THE CORRECT PORT NUMBER LATER
-        MotorL = new SparkMax(Ports.wristL, MotorType.kBrushless); // SAY THE CORRECT PORT NUMBER LATER
+        MotorR = new SparkMax(Ports.wristR, MotorType.kBrushless); 
+        MotorL = new SparkMax(Ports.wristL, MotorType.kBrushless);
 
         MotorConfigL = new SparkMaxConfig();
         MotorConfigR = new SparkMaxConfig();
@@ -125,8 +125,9 @@ public class Wrist  {
         pitchEncoder = MotorL.getAbsoluteEncoder(); //Max: .75, .16   Positions to go to:  Grab: .7,  Score: .2   hold: .45
     
        
+        
         if (runPID) {
-            pitchPID.setSetpoint(0.22);//Look over this later
+            pitchPID.setSetpoint(0.22);//Look over this later. yes you gotta look over this
             rollPID.setSetpoint(0);
         }
         
