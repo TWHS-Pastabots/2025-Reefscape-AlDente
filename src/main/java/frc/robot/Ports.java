@@ -24,8 +24,8 @@ public class Ports {
     // Arm 
  
     public static final int pivot = 13;
-    public static final int wristR = 11;
-    public static final int wristL = 10;
+    public static final int wristR = 10;
+    public static final int wristL = 11;
 
     // Climb
     public static final int climber = 14;

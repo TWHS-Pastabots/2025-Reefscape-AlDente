@@ -315,7 +315,7 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putBoolean("Beam2", digitalInput.getInputs()[2]);
     SmartDashboard.putBoolean("Beam3", digitalInput.getInputs()[3]);
 
-    SmartDashboard.putNumber("target tilt", Wrist.wristState.tilt);
+    // SmartDashboard.putNumber("target tilt", Wrist.wristState.tilt);
 
     // SmartDashboard.putNumber("currentPose Angle L", wrist.ThoseWhoTroll[0]);
     // SmartDashboard.putNumber("currentPose Angle R", wrist.ThoseWhoTroll2[0]);
@@ -417,6 +417,10 @@ public class Robot extends LoggedRobot {
     if (m_autoSelected != null) {
       m_autoSelected.cancel();
     }
+    
+    CancelCommands();
+      transition.initialize();
+      transition.schedule();
 
     Translation2d testxy = new Translation2d(16.57 - 14.7, 5.54);
     Rotation2d testRot = new Rotation2d(0);
@@ -861,7 +865,7 @@ public class Robot extends LoggedRobot {
          CancelCommands();
          L1CoralScore.initialize();
          L1CoralScore.schedule();
-          Wrist.wristState = WristState.L1CORALSCORE;
+          wrist.lastState = WristState.L1CORALSCORE;
         }else if(operator.getPOV() == 270){
         CancelCommands();
         L2CoralScore.initialize();
@@ -951,7 +955,6 @@ public class Robot extends LoggedRobot {
       claw.flywheelOn(0.8);
       claw.clawOn(.5);
     }else if(operator.getLeftBumperButton()&&digitalInput.getInputs()[2]){//intake
-      
       claw.flywheelReverse(0.8);
       claw.clawReverse(.5);
     }else{

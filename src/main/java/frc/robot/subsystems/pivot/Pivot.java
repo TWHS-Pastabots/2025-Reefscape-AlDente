@@ -32,7 +32,7 @@ public class Pivot {
     public enum PivotState {
         GROUND(0),
         //0
-        LOWALGAEINTAKE(135.3), //was 40.3
+        LOWALGAEINTAKE(145.3), //was 40.3
         HIGHALGAEINTAKE(128.5), // was 50.5
         L1CORALSCORE(106.556),
         L2CORALSCORE(110),
@@ -87,7 +87,7 @@ public class Pivot {
     public void updatePose() {
         // pivotMotor.setVoltage(pid.calculate(pivotMotor.getAbsoluteEncoder().getPosition(), getState().position) 
         // );
-        double angle = pivotMotor.getAbsoluteEncoder().getPosition() - 12.3;
+        double angle = pivotMotor.getAbsoluteEncoder().getPosition() - 13.5;
         if(angle < 0){
             angle += 360.0;
         }

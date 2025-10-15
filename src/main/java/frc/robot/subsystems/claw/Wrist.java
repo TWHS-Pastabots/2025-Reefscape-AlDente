@@ -1,4 +1,7 @@
+//OLD WRIST CODE, DO NOT USE
+
 package frc.robot.subsystems.claw;
+
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -18,22 +21,20 @@ import frc.robot.subsystems.pivot.Pivot;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
-    public static WristState wristState = WristState.TRANSITIONSTATE;
-
     public enum WristState {
-        GROUND(0,0), 
-        LOWALGAEINTAKE(0,0),
-        HIGHALGAEINTAKE(0,0),
-        L1CORALSCORE(0,0),
-        L2CORALSCORE(0,0),
-        L3CORALSCORE(0,0),
-        L4CORALSCORE(0,0), 
-        PROCESSOR(0,0),
-        HUMANSTATIONINTAKE(0,0),
-        TRANSITIONSTATE(0,  .25),
-        TEST(0,0),
-        CLIMB(0,0),
-        NET(0,0);
+        GROUND(0,120),
+        LOWALGAEINTAKE(0,140),
+        HIGHALGAEINTAKE(0,119),
+        L1CORALSCORE(270,140), 
+        L2CORALSCORE(270,140), 
+        L3CORALSCORE(270,140),
+        L4CORALSCORE(270,140),
+        PROCESSOR(0,60),
+        HUMANSTATIONINTAKE(0,74),
+        TRANSITIONSTATE(138,90),//
+        TEST(0,110),
+        CLIMB(0,84.6),
+        NET(0,90);
         public double rotate;
         public double tilt;
         private WristState(double rotate, double tilt) {
@@ -53,13 +54,9 @@ public class Wrist  {
     public ArmFeedforward feedforwardR;
     
     // PID
-    //OLD
-    // public PIDController pitchPID = new PIDController(13, 0, 2);
-    // public PIDController rollPID = new PIDController(70, 0, 0);
+    public PIDController pitchPID = new PIDController(10, 0, 0);
+    public PIDController rollPID = new PIDController(70, 0, 0);
     
-    public PIDController pitchPID = new PIDController(13, 0, 0);
-    public PIDController rollPID = new PIDController(70., 0, 0);
-
     // // Motors
     // private SparkFlex leftMotor = new SparkFlex(WristIDs.kDiffWristLeftMotorID, MotorType.kBrushless);
     // private SparkFlex rightMotor = new SparkFlex(WristIDs.kDiffWristRightMotorID, MotorType.kBrushless);
@@ -70,8 +67,6 @@ public class Wrist  {
     public AbsoluteEncoder pitchEncoder;
     public AbsoluteEncoder rollEncoder;
 
-    public IdleMode mode = IdleMode.kBrake;
-
     private double pitchPos;
     private double rollPos;
 
@@ -80,6 +75,7 @@ public class Wrist  {
     // Variables
     public static boolean runPID = true;
     public WristState lastState = WristState.TRANSITIONSTATE;
+    /* ----- Initialization ----- */
 
     public Wrist() {
         pitchPID.enableContinuousInput(0, 1);
@@ -96,16 +92,12 @@ public class Wrist  {
         MotorConfigL = new SparkMaxConfig();
         MotorConfigR = new SparkMaxConfig();
 
-        // feedforwardR = new ArmFeedforward(0, .37,0);
-        // feedforwardL = new ArmFeedforward(0, .37, 0);
-
-        feedforwardR = new ArmFeedforward(0, 0.13,0);
-        feedforwardL = new ArmFeedforward(0, 0.13, 0);
-
+        feedforwardR = new ArmFeedforward(0, .3,0);
+        feedforwardL = new ArmFeedforward(0, .3, 0);
         // el: 88.2 piv: 56.5 rt:
         MotorConfigL
-                .inverted(false)
-                .idleMode(mode)
+                .inverted(true)
+                .idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(60);
         MotorConfigL.absoluteEncoder
                 .positionConversionFactor(1)
@@ -113,12 +105,12 @@ public class Wrist  {
         MotorConfigL.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                 .outputRange(-1, 1)
-                .positionWrappingEnabled(false);
+                .positionWrappingEnabled(true);
         MotorL.configure(MotorConfigL, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         MotorConfigR
-                .inverted(true)
-                .idleMode(mode)
+                .inverted(false)
+                .idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(60);
         MotorConfigR.absoluteEncoder
                 .positionConversionFactor(1)
@@ -126,7 +118,7 @@ public class Wrist  {
         MotorConfigR.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                 .outputRange(-1, 1)
-                .positionWrappingEnabled(false);
+                .positionWrappingEnabled(true);
         MotorR.configure(MotorConfigR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         //Diff Wrist Start point
         rollEncoder = MotorR.getAbsoluteEncoder(); //Max: 0.35, 0.8    positions to go to: Score: .75, hold: .5
@@ -134,8 +126,8 @@ public class Wrist  {
     
        
         if (runPID) {
-            pitchPID.setSetpoint(wristState.tilt);//LOOK OVER THIS LATER
-            rollPID.setSetpoint(wristState.rotate);
+            pitchPID.setSetpoint(0.22);//Look over this later
+            rollPID.setSetpoint(0);
         }
         
                 
@@ -150,12 +142,12 @@ public class Wrist  {
     public void updatePID(double pitchPos, double rollPos) {
         double pitchVoltage = pitchPID.calculate(pitchPos);
         double rollVoltage = rollPID.calculate(rollPos);
-        double angle = pivot.pivotMotor.getAbsoluteEncoder().getPosition();
+        double angle = pivot.pivotMotor.getAbsoluteEncoder().getPosition() - 12.3;
         if(angle < 0){
             angle += 360.0;
         }
         //Pitch voltage is being multiplied by 3 due to the fact that its on a 3:1 gear ration (3 times slower than roll)
-        pitchVoltage *= 5;
+        pitchVoltage *= 3;
 
         //  lVolts = pitchVoltage - rollVoltage;
         //  rVolts = pitchVoltage + rollVoltage;
@@ -195,8 +187,6 @@ public class Wrist  {
     public double getVoltageRight(){
         return rVolts;
     }
-    /* ----- Setters & Getters ----- */
-
     public static Wrist getInstance() {
         if (DW == null) {
             DW = new Wrist();
@@ -236,7 +226,7 @@ public class Wrist  {
      * @param setpoint
      */
     public void setPitchSetpoint(double setpoint) {
-        // setpoint /= 360;
+        setpoint /= 360;
         pitchPID.setSetpoint(setpoint);
     }
 
@@ -254,14 +244,14 @@ public class Wrist  {
      * @param setpoint
      */
     public void setRollSetpoint(double setpoint) {
-        // setpoint /= 360;
+        setpoint /= 360;
         rollPID.setSetpoint(setpoint);
     }
 
     public boolean atRollSetpoint() {
         double rollAngle = getRollAngle();
         double rollSetpoint = getRollSetpoint();
-        if ((rollAngle > rollSetpoint - 0.13) && (rollAngle < rollSetpoint + 0.13)) {
+        if ((rollAngle > rollSetpoint - 0.01) && (rollAngle < rollSetpoint + 0.01)) {
             return true;
         }
         return false;
@@ -283,8 +273,6 @@ public class Wrist  {
         return rollPID.getSetpoint() * 360;
     }
 
-    public void setWristState(WristState state){
-        wristState = state;
-    }
+    
 
 }
