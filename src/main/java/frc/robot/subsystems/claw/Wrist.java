@@ -25,10 +25,10 @@ public class Wrist  {
         GROUND(0,115),//mmostly good
         LOWALGAEINTAKE(0,140),//change for MTS
         HIGHALGAEINTAKE(0,119),//change for MTS
-        L1CORALSCORE(270,140), 
-        L2CORALSCORE(270,140), 
-        L3CORALSCORE(270,140),
-        L4CORALSCORE(270,140),
+        L1CORALSCORE(270,141), 
+        L2CORALSCORE(270,167), 
+        L3CORALSCORE(270,167),
+        L4CORALSCORE(270,167),
         PROCESSOR(0,60),
         HUMANSTATIONINTAKE(0,74),//change maybe
         TRANSITIONSTATE(138,90),//ok
