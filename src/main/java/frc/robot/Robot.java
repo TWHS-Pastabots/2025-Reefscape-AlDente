@@ -951,9 +951,10 @@ public class Robot extends LoggedRobot {
       pivotCommand.schedule();
     }
 
+    
     if(operator.getRightBumperButton()){
-      claw.flywheelOn(0.8);
-      claw.clawOn(.5);
+      claw.flywheelReverse(0.8);
+      claw.clawOn(-.5);
     }else if(operator.getLeftBumperButton()&&digitalInput.getInputs()[2]){//intake
       claw.flywheelReverse(0.8);
       claw.clawReverse(.5);
