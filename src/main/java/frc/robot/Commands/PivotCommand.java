@@ -31,7 +31,7 @@ public class PivotCommand extends Command {
   @Override
   public void execute() {
     pivot.updatePose();
-    if(pivot.hasReachedPose(2)){
+    if(pivot.hasReachedPose(1.7)){
       ended = true;
     }
   }

@@ -47,6 +47,7 @@ import frc.robot.Commands.DomainExpansion.Outtakedos;
 import frc.robot.Commands.AlignToCoral;
 import frc.robot.Commands.ElevatorCommand;
 import frc.robot.Commands.PivotCommand;
+import frc.robot.Commands.WristCommand;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
@@ -278,6 +279,9 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("Desired Degree", 
     CameraSystem.aprilTagFieldLayout.getTagPose(18).get().getRotation().toRotation2d().getDegrees());
     SmartDashboard.putNumber("Currenr Degree", DriveSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+
+    //Test for position
+
 
     //test
     SmartDashboard.putBoolean("Transition ready ", groundCoralIntake.transitionReady);
@@ -999,6 +1003,14 @@ public class Robot extends LoggedRobot {
     transition.cancel();
     netScore.cancel();
     groundSequence.cancel();
+    outtake.cancel();
+    outtakedos.cancel();
+    intake.cancel();
+    humanAllign.cancel();
+    movetoTransistion.cancel();
+    autoAllignL.cancel();
+    autoAllignR.cancel();
+    processorScore.cancel();
   }
   @Override
   public void disabledInit() {

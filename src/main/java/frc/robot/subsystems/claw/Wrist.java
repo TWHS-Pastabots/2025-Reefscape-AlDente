@@ -21,17 +21,19 @@ import frc.robot.subsystems.pivot.Pivot;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
+    //rot is not degrees
+    // tilt is degrees
     public enum WristState {
-        GROUND(0,115),
+        GROUND(358,80),
         LOWALGAEINTAKE(0,140),
         HIGHALGAEINTAKE(0,119),
-        L1CORALSCORE(0,0), 
-        L2CORALSCORE(270,167), 
-        L3CORALSCORE(270,167),
-        L4CORALSCORE(270,167),
+        L1CORALSCORE(85,120), 
+        L2CORALSCORE(225,85), 
+        L3CORALSCORE(225 ,85),
+        L4CORALSCORE(225,85),
         PROCESSOR(0,60),
         HUMANSTATIONINTAKE(0,74),
-        TRANSITIONSTATE(0,90),
+        TRANSITIONSTATE(221,101),
         TEST(0,110),
         CLIMB(0,84.6),
         
@@ -93,12 +95,14 @@ public class Wrist  {
         MotorConfigL = new SparkMaxConfig();
         MotorConfigR = new SparkMaxConfig();
 
-        feedforwardR = new ArmFeedforward(0, .3,0);
-        feedforwardL = new ArmFeedforward(0, .3, 0);
+        feedforwardR = new ArmFeedforward(0, .31,0);
+        feedforwardL = new ArmFeedforward(0, .31, 0);
         // el: 88.2 piv: 56.5 rt:
+
+        IdleMode mode = IdleMode.kCoast;
         MotorConfigL
                 .inverted(true)
-                .idleMode(IdleMode.kBrake)
+                .idleMode(mode)
                 .smartCurrentLimit(60);
         MotorConfigL.absoluteEncoder
                 .positionConversionFactor(1)
@@ -111,7 +115,7 @@ public class Wrist  {
 
         MotorConfigR
                 .inverted(false)
-                .idleMode(IdleMode.kBrake)
+                .idleMode(mode)
                 .smartCurrentLimit(60);
         MotorConfigR.absoluteEncoder
                 .positionConversionFactor(1)

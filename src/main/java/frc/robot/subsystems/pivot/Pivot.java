@@ -40,7 +40,7 @@ public class Pivot {
         L4CORALSCORE(101),//103
         PROCESSOR(38),
         HUMANSTATIONINTAKE(78), //was 80.289
-        TRANSITIONSTATE(103),
+        TRANSITIONSTATE(100),
         SHOOTINGNET(80),//changed it to 105
         HALFGROUND(55),//test
         SIGMATEST(120.3),
@@ -81,7 +81,7 @@ public class Pivot {
         pivotMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         pivotController = pivotMotor.getClosedLoopController();
-        feedForward = new ArmFeedforward(0, 0.6, 0, 0);
+        feedForward = new ArmFeedforward(0, 0.62, 0, 0);
 
     }
     public void updatePose() {
