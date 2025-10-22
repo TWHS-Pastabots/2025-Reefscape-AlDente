@@ -4,7 +4,8 @@
 
 package frc.robot.Commands.DomainExpansion;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.WristCommand;
 import frc.robot.subsystems.claw.Wrist.WristState;
@@ -12,15 +13,13 @@ import frc.robot.subsystems.claw.Wrist.WristState;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class HumanPlayerIntake extends SequentialCommandGroup {
-  /** Creates a new HumanSeq. */
-  private HumanPlayerIntake1 h = new HumanPlayerIntake1();
-  private WristCommand w = new WristCommand(WristState.HUMANSTATIONINTAKE);
-  private WaitCommand l = new WaitCommand(0.2);
-  public HumanPlayerIntake() {
-    // Add your commands in the addCommands() call, e.g.
+public class human1 extends ParallelDeadlineGroup {
+  /** Creates a new human1. */
+  public human1() {
+    // Add the deadline command in the super() call. Add other commands using
+    // addCommands().
+    super(new WaitCommand(.35));
     // addCommands(new FooCommand(), new BarCommand());
-    
-    addCommands(new human1(), h);
+    addCommands(new WristCommand(WristState.HUMANSTATIONINTAKE));
   }
 }

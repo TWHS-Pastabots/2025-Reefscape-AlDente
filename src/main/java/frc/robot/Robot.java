@@ -418,13 +418,14 @@ public class Robot extends LoggedRobot {
     robotInit();
     // as soon as we begin teleop we desable the auton selection
     // litty.setBlue();
+
+    CancelCommands();
+    transition.initialize();
+    transition.schedule();
     if (m_autoSelected != null) {
       m_autoSelected.cancel();
     }
-    
-    CancelCommands();
-      transition.initialize();
-      transition.schedule();
+  
 
     Translation2d testxy = new Translation2d(16.57 - 14.7, 5.54);
     Rotation2d testRot = new Rotation2d(0);
@@ -440,6 +441,7 @@ public class Robot extends LoggedRobot {
     usingAlign = false;
     elevator.updatePose();
     pivot.updatePose();
+    
 
     
     double ySpeed = drivebase.inputDeadband(-driver.getLeftX()) * speedMod;
@@ -823,28 +825,7 @@ public class Robot extends LoggedRobot {
 
     //     }else if(operator.getPOV() == 270){
     //       pivotCommand.cancel();
-    //       pivotCommand = new PivotCommand(PivotState.TRANSITIONSTATE);
-    //       pivotCommand.initialize();
-    //       pivotCommand.schedule();
-
-    //     }else if(operator.getPOV() == 90){
-    //       pivotCommand.cancel();
-    //       pivotCommand = new PivotCommand(PivotState.PROCESSOR);
-    //       pivotCommand.initialize();
-    //       pivotCommand.schedule();
-
-    //      }
-
-    //      if(operator.getYButton()){
-    //       elevatorCommand.cancel();
-    //       elevatorCommand = new ElevatorCommand(ElevatorState.HIGHALGAEINTAKE);
-    //       elevatorCommand.initialize();
-    //       elevatorCommand.schedule();
-    //      }else if(operator.getBButton()){
-    //       elevatorCommand.cancel();
-    //       elevatorCommand = new ElevatorCommand(ElevatorState.L4CORALSCORE);
-    //       elevatorCommand.initialize();
-    //       elevatorCommand.schedule();
+    //       pivotCommand = new PivotCommand(PivotState.)
     //      }else if(operator.getAButton()){
     //       elevatorCommand.cancel();
     //       elevatorCommand = new ElevatorCommand(ElevatorState.GROUND);

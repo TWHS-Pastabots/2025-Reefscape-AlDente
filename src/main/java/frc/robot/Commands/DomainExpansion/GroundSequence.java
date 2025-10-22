@@ -29,7 +29,7 @@ public class GroundSequence extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     groundIntakeCoral = new GroundIntakeCoral();
     newGround = new NewGround();
-    waitCommand = new WaitCommand(0.2);
+    waitCommand = new WaitCommand(0.35);
     addCommands(groundIntakeCoral, waitCommand, newGround);
 
   }

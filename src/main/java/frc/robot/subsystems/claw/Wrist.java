@@ -24,17 +24,17 @@ public class Wrist  {
     //rot is not degrees
     // tilt is degrees
     public enum WristState {
-        GROUND(358,80),
+        GROUND(130,80),
         LOWALGAEINTAKE(0,140),
         HIGHALGAEINTAKE(0,119),
-        L1CORALSCORE(85,120), 
-        L2CORALSCORE(225,85), 
-        L3CORALSCORE(225 ,85),
-        L4CORALSCORE(225,85),
+        L1CORALSCORE(4,140), 
+        L2CORALSCORE(4,170), 
+        L3CORALSCORE(4 ,165),
+        L4CORALSCORE(4,165),
         PROCESSOR(0,60),
-        HUMANSTATIONINTAKE(0,74),
-        TRANSITIONSTATE(221,101),
-        TEST(0,110),
+        HUMANSTATIONINTAKE(130,90),
+        TRANSITIONSTATE(130,100),//68
+        TEST(0,140),
         CLIMB(0,84.6),
         
         NET(0,90);
@@ -59,7 +59,7 @@ public class Wrist  {
     // PID probably good enough
     public PIDController pitchPID = new PIDController(10, 0, 0);
     public PIDController rollPID = new PIDController(70, 0, 0);
-    
+
     // // Motors
     // private SparkFlex leftMotor = new SparkFlex(WristIDs.kDiffWristLeftMotorID, MotorType.kBrushless);
     // private SparkFlex rightMotor = new SparkFlex(WristIDs.kDiffWristRightMotorID, MotorType.kBrushless);
@@ -95,11 +95,11 @@ public class Wrist  {
         MotorConfigL = new SparkMaxConfig();
         MotorConfigR = new SparkMaxConfig();
 
-        feedforwardR = new ArmFeedforward(0, .31,0);
-        feedforwardL = new ArmFeedforward(0, .31, 0);
+        feedforwardR = new ArmFeedforward(0, .3,0);
+        feedforwardL = new ArmFeedforward(0, .3, 0);
         // el: 88.2 piv: 56.5 rt:
 
-        IdleMode mode = IdleMode.kCoast;
+        IdleMode mode = IdleMode.kBrake;
         MotorConfigL
                 .inverted(true)
                 .idleMode(mode)
@@ -152,6 +152,7 @@ public class Wrist  {
         if(angle < 0){
             angle += 360.0;
         }
+        angle *= 3/2;
         //Pitch voltage is being multiplied by 3 due to the fact that its on a 3:1 gear ration (3 times slower than roll)
         pitchVoltage *= 3;
 
@@ -213,7 +214,7 @@ public class Wrist  {
      * @return the current encoder value for roll in degrees
      */
     public double getRollAngle() {
-        return rollPos * 360;
+        return rollPos;
     }
 
     /**
