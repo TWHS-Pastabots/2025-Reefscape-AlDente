@@ -36,9 +36,9 @@ public class Elevator {
     public  ElevatorFeedforward feedForward;
     public  ElevatorState elevatorState = ElevatorState.GROUND;
     public enum ElevatorState{
-        GROUND(0),    
-        LOWALGAEINTAKE(15),
-        HIGHALGAEINTAKE(27),
+        GROUND(0),
+        LOWALGAEINTAKE(27.5),
+        HIGHALGAEINTAKE(40),
         L1CORALSCORE(0),
         L2CORALSCORE(14),//13.5
         L3CORALSCORE(41.1),//39.5 

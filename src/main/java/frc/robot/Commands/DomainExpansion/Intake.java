@@ -4,8 +4,10 @@
 
 package frc.robot.Commands.DomainExpansion;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.IO.DigitalInputs;
 import frc.robot.subsystems.claw.Claw;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -28,10 +30,9 @@ public class Intake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    claw.clawReverse(.5);
-    if(Timer.getFPGATimestamp() > timer + 1.5){
-      claw.clawOff();
-      ended = true;
+    claw.clawReverse(.7);
+    if(DigitalInputs.getInstance().getInputs()[2]){
+      ended=true;
     }
   }
 

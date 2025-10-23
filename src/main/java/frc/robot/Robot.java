@@ -33,13 +33,13 @@ import frc.robot.Commands.DomainExpansion.HighAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.HumanPlayerIntake;
 import frc.robot.Commands.DomainExpansion.Intake;
 import frc.robot.Commands.DomainExpansion.L1CoralScore;
-import frc.robot.Commands.DomainExpansion.L2CoralScore;
-import frc.robot.Commands.DomainExpansion.L3CoralScore;
-import frc.robot.Commands.DomainExpansion.L3coraly;
-import frc.robot.Commands.DomainExpansion.L3NTX;
+import frc.robot.Commands.DomainExpansion.L2CoralScore1;
+import frc.robot.Commands.DomainExpansion.L3CoralScore1;
 import frc.robot.Commands.DomainExpansion.L4CoralScore;
-import frc.robot.Commands.DomainExpansion.L4NTX;
-import frc.robot.Commands.DomainExpansion.L2NTX;
+import frc.robot.Commands.DomainExpansion.L4CoralScore1;
+import frc.robot.Commands.DomainExpansion.L3coraly;
+import frc.robot.Commands.DomainExpansion.L3CoralScore;
+import frc.robot.Commands.DomainExpansion.L2CoralScore;
 import frc.robot.Commands.DomainExpansion.L2coraly;
 import frc.robot.Commands.DomainExpansion.L4coraly;
 import frc.robot.Commands.DomainExpansion.LowAlgaeIntake;
@@ -90,9 +90,9 @@ public class Robot extends LoggedRobot {
   private HumanPlayerIntake humanPlayerIntake;
   private NewGround newground;
   private L1CoralScore L1CoralScore;
-  private L2NTX L2CoralScore;
-  private L3NTX L3CoralScore;
-  private L4NTX L4CoralScore;
+  private L2CoralScore L2CoralScore;
+  private L3CoralScore L3CoralScore;
+  private L4CoralScore L4CoralScore;
   private Outtakedos outtakedos;
   private MovetoTransistion movetoTransistion;
   private LowAlgaeIntake lowAlgaeIntake;
@@ -163,9 +163,9 @@ public class Robot extends LoggedRobot {
     highAlgaeIntake = new HighAlgaeIntake();
     humanPlayerIntake = new HumanPlayerIntake();
     L1CoralScore = new L1CoralScore();
-    L2CoralScore = new L2NTX();
-    L3CoralScore = new L3NTX();
-    L4CoralScore = new L4NTX();
+    L2CoralScore = new L2CoralScore();
+    L3CoralScore = new L3CoralScore();
+    L4CoralScore = new L4CoralScore();
     lowAlgaeIntake = new LowAlgaeIntake();
     processorScore = new ProcessorScore();
     transition = new Transitio();
@@ -193,7 +193,7 @@ public class Robot extends LoggedRobot {
     //alignToCoral = new AlignToCoral();
     // x: .0095 y: .95 theta: .008
 
-    xController = new PIDController(.0095, 0, 0);
+    xController = new PIDController(.01, 0, 0);
     yController = new PIDController(2.15 , 0, 0);
     thetaController = new PIDController(0.015, 0, 0);
 
@@ -503,8 +503,8 @@ public class Robot extends LoggedRobot {
       camSystem.poleSide = PoleSide.RIGHT;
       thetaController.setSetpoint(0);
       //was .11
-      yController.setSetpoint(0.06);
-      xController.setSetpoint(-1.5);
+      yController.setSetpoint(0.04);
+      xController.setSetpoint(-1.1);
       camSystem.focusCamIndex = 1;
       if (camSystem.hasDesiredTarget(0, camSystem.lastTag) && camSystem.hasDesiredTarget(1, camSystem.lastTag)) 
       // driver align right so left camera
@@ -612,7 +612,7 @@ public class Robot extends LoggedRobot {
       //thetaController.setSetpoint(0);
       //was .11
       
-      yController.setSetpoint(0.186);//was.215
+      yController.setSetpoint(0.215);//was.186
       xController.setSetpoint(-15.8); //was -18.8
       updateXControllerSetpoint();
       camSystem.focusCamIndex = 0;
@@ -871,6 +871,24 @@ public class Robot extends LoggedRobot {
         L3CoralScore.initialize();
         L3CoralScore.schedule();
       }
+      if(operator.getAButton()){
+        CancelCommands();    
+          groundSequence.initialize();
+          groundSequence.schedule();
+        }
+
+
+      
+    if(operator.getRightBumperButton()){
+      claw.flywheelReverse(0.8);
+      claw.clawOn(-.5);
+    }else if(operator.getLeftBumperButton()&&digitalInput.getInputs()[2]){//intake
+      claw.flywheelReverse(0.8);
+      claw.clawReverse(.5);
+    }else{
+      claw.flywheelOff();
+      claw.clawOff();
+    }
     }
     else if(mode == "algae"){
       if(operator.getPOV() == 0){
@@ -890,44 +908,8 @@ public class Robot extends LoggedRobot {
         highAlgaeIntake.initialize();
         highAlgaeIntake.schedule();
       }
-      if(operator.getRightBumperButton()){
-      //   claw.flywheelOn(0.8);
-      //   claw.clawOn(.5);
-      // }else if(operator.getLeftBumperButton()){//intake
-      //   claw.flywheelReverse(-0.8);
-      //   claw.clawReverse(.5);
-      // }else{
-      //   claw.flywheelOff();
-      //   claw.clawOff();
-      // }
 
-    }
-    // }else if(mode == "algae"){
-    //   if(operator.getPOV() == 0){
-    //     CancelCommands();
-    //     // pivot.setPivotState(PivotState.SIGMATEST);
-    //     // elevator.setElevatorState(ElevatorState.L4CORALSCORE);
-    //     // wristCommand = new WristCommand(WristState.NET);
-    //     // wristCommand.initialize();
-    //     // wristCommand.schedule();
-    //   }else if(operator.getPOV() == 180){
-    //     CancelCommands();
-    //     processorScore.initialize();
-    //     processorScore.schedule();
-    //   }else if(operator.getPOV() == 270){
-    //     CancelCommands();
-    //     lowAlgaeIntake.initialize();
-    //     lowAlgaeIntake.schedule();
-    //     else if(mode == "algae"){
-    //   if(operator.getPOV() == 0){
-    //     CancelCommands();
-    //     netScore.initialize();
-    //     netScore.schedule();
-    //   }else if(operator.getPOV() == 90){
-    //     CancelCommands();
-    //     highAlgaeIntake.initialize();
-    //     highAlgaeIntake.schedule();
-    //   }
+      
     
     if(operator.getYButton()){
       CancelCommands();
@@ -938,15 +920,6 @@ public class Robot extends LoggedRobot {
 
      if(operator.getAButton()){
       CancelCommands();    
-      // pivotCommand = new PivotCommand(PivotState.CLIMB);
-      // pivotCommand.initialize();
-      //   if (pivotCommand.isFinished()) {
-        // groundCoralIntake.initialize();
-        // newground.initialize();
-        // groundCoralIntake.schedule();
-        // if(groundCoralIntake.isFinished())
-        // newground.schedule();
-        // }
         groundSequence.initialize();
         groundSequence.schedule();
       }
@@ -959,32 +932,26 @@ public class Robot extends LoggedRobot {
     }
 
     
-    if(operator.getRightBumperButton()){
-      claw.flywheelReverse(0.8);
-      claw.clawOn(-.5);
-    }else if(operator.getLeftBumperButton()&&digitalInput.getInputs()[2]){//intake
-      claw.flywheelReverse(0.8);
-      claw.clawReverse(.5);
-    }else{
-      claw.flywheelOff();
-      claw.clawOff();
-    }
 
-    if(operator.getLeftStickButton()){
+    if(operator.getLeftBumperButton()){
       claw.flywheelOn(0.8);
       claw.clawOn(0.5);
     }
-    else if(operator.getRightStickButton()){
+    else if(operator.getRightBumperButton()){
       claw.flywheelOn(-0.8);
       claw.clawOn(-.5);
     }
     else{
       claw.flywheelOff();
-      claw.clawOff();
+      claw.clawOn(.07);
     }
-
+  }
     
-    if(operator.getLeftTriggerAxis() > .5){
+    if(operator.getLeftTriggerAxis() > .5&&elevator.getState() == ElevatorState.L4CORALSCORE){
+      CancelCommands();
+      l4Transition.initialize();
+      l4Transition.schedule();
+    }else if(operator.getLeftTriggerAxis() > .5){
       CancelCommands();
       transition.initialize();
       transition.schedule();
@@ -994,11 +961,12 @@ public class Robot extends LoggedRobot {
       pivotCommand.initialize();
       pivotCommand.schedule();
     }
-    if(operator.getBButton()){
-     CancelCommands();
-     l4Transition.initialize();
-     l4Transition.schedule();
-    }
+    // if(operator.getBButton()){
+    //  CancelCommands();
+    //  l4Transition.initialize();
+    //  l4Transition.schedule();
+    // }
+  
     // if(operator.getBButton()){
     //   elevator.setElevatorState(ElevatorState.L4CORALSCORE);
     //   pivot.setPivotState(PivotState.SHOOTINGNET);

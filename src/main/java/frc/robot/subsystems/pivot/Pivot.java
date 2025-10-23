@@ -32,12 +32,12 @@ public class Pivot {
     public enum PivotState {
         GROUND(0),
         //0
-        LOWALGAEINTAKE(145.3), //was 40.3
+        LOWALGAEINTAKE(150), //was 40.3
         HIGHALGAEINTAKE(135), // was 50.5
         L1CORALSCORE(120),
         L2CORALSCORE(145),
-        L3CORALSCORE(147),
-        L4CORALSCORE(138),//103
+        L3CORALSCORE(148),
+        L4CORALSCORE(141),//103
         PROCESSOR(38),
         
         HUMANSTATIONINTAKE(65), //was 80.289

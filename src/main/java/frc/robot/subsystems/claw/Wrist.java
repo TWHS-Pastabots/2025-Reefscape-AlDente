@@ -24,9 +24,9 @@ public class Wrist  {
     //rot is not degrees
     // tilt is degrees
     public enum WristState {
-        GROUND(130,80),
-        LOWALGAEINTAKE(4,90),
-        HIGHALGAEINTAKE(4,95),
+        GROUND(130,90),
+        LOWALGAEINTAKE(130,30),
+        HIGHALGAEINTAKE(130,40),
         L1CORALSCORE(4,140), 
         L2CORALSCORE(4,170), 
         L3CORALSCORE(4 ,165),
@@ -57,7 +57,7 @@ public class Wrist  {
     public ArmFeedforward feedforwardR;
     
     // PID probably good enough
-    public PIDController pitchPID = new PIDController(10, 0, 0);
+    public PIDController pitchPID = new PIDController(11.5, 0, 0);
     public PIDController rollPID = new PIDController(70, 0, 0);
 
     // // Motors

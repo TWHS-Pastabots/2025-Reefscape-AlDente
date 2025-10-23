@@ -47,6 +47,7 @@ public class Transition extends Command {
   @Override
   public void execute() {
     //pivot.schedule();
+   
     if(wristData.lastState == WristState.LOWALGAEINTAKE){
       delay = 4;
     }else if(wristData.lastState == WristState.HIGHALGAEINTAKE){
