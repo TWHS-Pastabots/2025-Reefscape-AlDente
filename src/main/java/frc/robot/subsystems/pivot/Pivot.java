@@ -33,12 +33,13 @@ public class Pivot {
         GROUND(0),
         //0
         LOWALGAEINTAKE(145.3), //was 40.3
-        HIGHALGAEINTAKE(128.5), // was 50.5
+        HIGHALGAEINTAKE(135), // was 50.5
         L1CORALSCORE(120),
         L2CORALSCORE(145),
-        L3CORALSCORE(142),
+        L3CORALSCORE(147),
         L4CORALSCORE(138),//103
         PROCESSOR(38),
+        
         HUMANSTATIONINTAKE(65), //was 80.289
         TRANSITIONSTATE(100),
         SHOOTINGNET(80),//changed it to 105

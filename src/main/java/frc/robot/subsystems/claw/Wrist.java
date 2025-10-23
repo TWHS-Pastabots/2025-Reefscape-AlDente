@@ -25,8 +25,8 @@ public class Wrist  {
     // tilt is degrees
     public enum WristState {
         GROUND(130,80),
-        LOWALGAEINTAKE(0,140),
-        HIGHALGAEINTAKE(0,119),
+        LOWALGAEINTAKE(4,90),
+        HIGHALGAEINTAKE(4,95),
         L1CORALSCORE(4,140), 
         L2CORALSCORE(4,170), 
         L3CORALSCORE(4 ,165),

@@ -35,13 +35,21 @@ import frc.robot.Commands.DomainExpansion.Intake;
 import frc.robot.Commands.DomainExpansion.L1CoralScore;
 import frc.robot.Commands.DomainExpansion.L2CoralScore;
 import frc.robot.Commands.DomainExpansion.L3CoralScore;
+import frc.robot.Commands.DomainExpansion.L3coraly;
+import frc.robot.Commands.DomainExpansion.L3NTX;
 import frc.robot.Commands.DomainExpansion.L4CoralScore;
+import frc.robot.Commands.DomainExpansion.L4NTX;
+import frc.robot.Commands.DomainExpansion.L2NTX;
+import frc.robot.Commands.DomainExpansion.L2coraly;
+import frc.robot.Commands.DomainExpansion.L4coraly;
 import frc.robot.Commands.DomainExpansion.LowAlgaeIntake;
 import frc.robot.Commands.DomainExpansion.MovetoTransistion;
 import frc.robot.Commands.DomainExpansion.NetScore;
 import frc.robot.Commands.DomainExpansion.NewGround;
 import frc.robot.Commands.DomainExpansion.Outtake;
 import frc.robot.Commands.DomainExpansion.ProcessorScore;
+import frc.robot.Commands.DomainExpansion.Tra1;
+import frc.robot.Commands.DomainExpansion.Transitio;
 import frc.robot.Commands.DomainExpansion.Transition;
 import frc.robot.Commands.DomainExpansion.Outtakedos;
 import frc.robot.Commands.AlignToCoral;
@@ -82,16 +90,17 @@ public class Robot extends LoggedRobot {
   private HumanPlayerIntake humanPlayerIntake;
   private NewGround newground;
   private L1CoralScore L1CoralScore;
-  private L2CoralScore L2CoralScore;
-  private L3CoralScore L3CoralScore;
-  private L4CoralScore L4CoralScore;
+  private L2NTX L2CoralScore;
+  private L3NTX L3CoralScore;
+  private L4NTX L4CoralScore;
   private Outtakedos outtakedos;
   private MovetoTransistion movetoTransistion;
   private LowAlgaeIntake lowAlgaeIntake;
   private ProcessorScore processorScore;
   private PivotCommand pivotCommand;
   private ElevatorCommand elevatorCommand;
-  private Transition transition;
+  private Transition l4Transition;
+  private Transitio transition;
   private Outtake outtake;
   private Intake intake;
   private HumanAllign humanAllign;
@@ -154,12 +163,13 @@ public class Robot extends LoggedRobot {
     highAlgaeIntake = new HighAlgaeIntake();
     humanPlayerIntake = new HumanPlayerIntake();
     L1CoralScore = new L1CoralScore();
-    L2CoralScore = new L2CoralScore();
-    L3CoralScore = new L3CoralScore();
-    L4CoralScore = new L4CoralScore();
+    L2CoralScore = new L2NTX();
+    L3CoralScore = new L3NTX();
+    L4CoralScore = new L4NTX();
     lowAlgaeIntake = new LowAlgaeIntake();
     processorScore = new ProcessorScore();
-    transition = new Transition();
+    transition = new Transitio();
+    l4Transition = new Transition();
     intake = new Intake();
     outtake = new Outtake();
     outtakedos = new Outtakedos();
@@ -207,6 +217,7 @@ public class Robot extends LoggedRobot {
     
    
     NamedCommands.registerCommand("L4Score", L4CoralScore);
+    NamedCommands.registerCommand("L4 transition", l4Transition);
     NamedCommands.registerCommand("L2Score", L2CoralScore);
     NamedCommands.registerCommand("HumanIntake", humanPlayerIntake);
     NamedCommands.registerCommand("L3Score", L3CoralScore);
@@ -879,6 +890,17 @@ public class Robot extends LoggedRobot {
         highAlgaeIntake.initialize();
         highAlgaeIntake.schedule();
       }
+      if(operator.getRightBumperButton()){
+      //   claw.flywheelOn(0.8);
+      //   claw.clawOn(.5);
+      // }else if(operator.getLeftBumperButton()){//intake
+      //   claw.flywheelReverse(-0.8);
+      //   claw.clawReverse(.5);
+      // }else{
+      //   claw.flywheelOff();
+      //   claw.clawOff();
+      // }
+
     }
     // }else if(mode == "algae"){
     //   if(operator.getPOV() == 0){
@@ -948,6 +970,19 @@ public class Robot extends LoggedRobot {
       claw.clawOff();
     }
 
+    if(operator.getLeftStickButton()){
+      claw.flywheelOn(0.8);
+      claw.clawOn(0.5);
+    }
+    else if(operator.getRightStickButton()){
+      claw.flywheelOn(-0.8);
+      claw.clawOn(-.5);
+    }
+    else{
+      claw.flywheelOff();
+      claw.clawOff();
+    }
+
     
     if(operator.getLeftTriggerAxis() > .5){
       CancelCommands();
@@ -960,7 +995,9 @@ public class Robot extends LoggedRobot {
       pivotCommand.schedule();
     }
     if(operator.getBButton()){
-     pivot.setPivotState(PivotState.SHOOTINGNET);
+     CancelCommands();
+     l4Transition.initialize();
+     l4Transition.schedule();
     }
     // if(operator.getBButton()){
     //   elevator.setElevatorState(ElevatorState.L4CORALSCORE);
