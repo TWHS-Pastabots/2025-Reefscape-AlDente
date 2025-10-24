@@ -10,6 +10,6 @@ import frc.robot.subsystems.elevator.Elevator.ElevatorState;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 public class L4CoralScore extends SequentialCommandGroup{
     public L4CoralScore(){
-        addCommands(new ElevatorCommand(ElevatorState.L4CORALSCORE),new WaitCommand(0.5), new WristCommand(WristState.L4CORALSCORE), new PivotCommand(PivotState.L4CORALSCORE));
+        addCommands(new ElevatorCommand(ElevatorState.L4CORALSCORE),new WaitCommand(0.2), new WristCommand(WristState.L4CORALSCORE), new PivotCommand(PivotState.L4CORALSCORE));
     }
 }

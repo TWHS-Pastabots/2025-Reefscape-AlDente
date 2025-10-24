@@ -76,7 +76,7 @@ public class WristCommand extends Command {
       //   ended = true;
       // }
       // else if(DW.atRollSetpoint()){
-      //   ended = true;
+        ended = true;
       // }
       if(DW.atPitchSetpoint() && DW.atRollSetpoint())
       {
