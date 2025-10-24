@@ -125,11 +125,11 @@ public class CameraSystem{
         dictionary.put(18, poses18);
         ArrayList<Pose2d> poses19 = new ArrayList<Pose2d>();
         poses19.add(new Pose2d(new Translation2d(3.872, 5.232), new Rotation2d()));
-        poses19.add(new Pose2d(new Translation2d(3.564, 5.074), new Rotation2d()));
-        poses19.add(new Pose2d(new Translation2d(-10, 10), new Rotation2d()));
+        poses19.add(new Pose2d(new Translation2d(3.613, 4.947), new Rotation2d()));
+        //poses19.add(new Pose2d(new Translation2d(-10, 10), new Rotation2d()));
         ArrayList<Pose2d> poses20 = new ArrayList<Pose2d>();
-        poses20.add(new Pose2d(new Translation2d(5.249, 5.104), new Rotation2d()));
-        poses20.add(new Pose2d(new Translation2d(4.989, 5.300), new Rotation2d()));
+        poses20.add(new Pose2d(new Translation2d(5.091, 5.241), new Rotation2d()));
+        poses20.add(new Pose2d(new Translation2d(4.814, 5.200), new Rotation2d()));
         dictionary.put(20, poses20);
         ArrayList<Pose2d> poses21 = new ArrayList<Pose2d>();
         poses21.add(new Pose2d(new Translation2d(5.813, 3.901), new Rotation2d()));

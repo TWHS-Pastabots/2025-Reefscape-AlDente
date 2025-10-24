@@ -11,8 +11,8 @@ import frc.robot.subsystems.pivot.Pivot.PivotState;
 
 public class L4coraly extends ParallelDeadlineGroup{
     public L4coraly(){
-        super(new WaitCommand(.5) );
+        super(new WaitCommand(1));
 
-        addCommands(new WristCommand(WristState.L4CORALSCORE), new ElevatorCommand(ElevatorState.L4CORALSCORE) );
+        addCommands(new ElevatorCommand(ElevatorState.L4CORALSCORE), new WristCommand(WristState.L4CORALSCORE));
     }
 }

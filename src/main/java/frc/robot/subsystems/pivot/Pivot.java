@@ -35,9 +35,9 @@ public class Pivot {
         LOWALGAEINTAKE(150), //was 40.3
         HIGHALGAEINTAKE(135), // was 50.5
         L1CORALSCORE(120),
-        L2CORALSCORE(145),
+        L2CORALSCORE(147),
         L3CORALSCORE(148),
-        L4CORALSCORE(141),//103
+        L4CORALSCORE(143),//103
         PROCESSOR(38),
         
         HUMANSTATIONINTAKE(65), //was 80.289

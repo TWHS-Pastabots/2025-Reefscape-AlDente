@@ -193,8 +193,8 @@ public class Robot extends LoggedRobot {
     //alignToCoral = new AlignToCoral();
     // x: .0095 y: .95 theta: .008
 
-    xController = new PIDController(.01, 0, 0);
-    yController = new PIDController(2.15 , 0, 0);
+    xController = new PIDController(.0095, 0, 0);
+    yController = new PIDController(2.55 , 0, 0);
     thetaController = new PIDController(0.015, 0, 0);
 
     thetaController.enableContinuousInput(0, 360);
