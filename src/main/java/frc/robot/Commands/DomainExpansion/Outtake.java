@@ -28,7 +28,7 @@ public class Outtake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    claw.clawOn(1);
+    claw.flywheelOn(-1);
     if(Timer.getFPGATimestamp() > timer + .4){
       claw.clawOff();
       ended = true;

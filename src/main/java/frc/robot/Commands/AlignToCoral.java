@@ -31,7 +31,7 @@ public class AlignToCoral extends Command {
     this.side = sideNew;
     xController = new PIDController(.0095, 0, 0);
     yController = new PIDController(2.15 , 0, 0);
-    thetaController = new PIDController(0.015, 0, 0);
+    thetaController = new PIDController(0.014, 0, 0);
     //heading = -driveBase.gyro.getAngle() + 90;
     //heading = driveBase.getHeading() % 180;
     //xController.setSetpoint(0.11);//temporary number
