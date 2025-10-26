@@ -850,7 +850,7 @@ public class Robot extends LoggedRobot {
     //      }
 
 
-    if(mode == "coral"){
+    if(mode.equals( "coral")){
       if(operator.getPOV() == 0){
         CancelCommands();
         L4CoralScore.initialize();
@@ -880,8 +880,8 @@ public class Robot extends LoggedRobot {
 
       
     if(operator.getRightBumperButton()){
-      claw.flywheelReverse(0.8);
-      claw.clawOn(-.5);
+      claw.flywheelReverse(1);
+       claw.clawOn(-.5);
     }else if(operator.getLeftBumperButton()&&digitalInput.getInputs()[2]){//intake
       claw.flywheelReverse(0.8);
       claw.clawReverse(.5);
@@ -890,7 +890,7 @@ public class Robot extends LoggedRobot {
       claw.clawOff();
     }
     }
-    else if(mode == "algae"){
+    else if(mode.equals( "algae")){
       if(operator.getPOV() == 0){
         CancelCommands();
         netScore.initialize();
@@ -911,25 +911,7 @@ public class Robot extends LoggedRobot {
 
       
     
-    if(operator.getYButton()){
-      CancelCommands();
-      humanPlayerIntake.initialize();
-      humanPlayerIntake.schedule();
-    }
-
-
-     if(operator.getAButton()){
-      CancelCommands();    
-        groundSequence.initialize();
-        groundSequence.schedule();
-      }
-
-    if(operator.getXButton()){
-      CancelCommands();
-      pivotCommand = new PivotCommand(PivotState.CLIMB);
-      pivotCommand.initialize();
-      pivotCommand.schedule();
-    }
+    
 
     
 
@@ -945,6 +927,25 @@ public class Robot extends LoggedRobot {
       claw.flywheelOff();
       claw.clawOn(.07);
     }
+  }
+  if(operator.getYButton()){
+    CancelCommands();
+    humanPlayerIntake.initialize();
+    humanPlayerIntake.schedule();
+  }
+
+
+   if(operator.getAButton()){
+    CancelCommands();    
+      groundSequence.initialize();
+      groundSequence.schedule();
+    }
+
+  if(operator.getXButton()){
+    CancelCommands();
+    pivotCommand = new PivotCommand(PivotState.CLIMB);
+    pivotCommand.initialize();
+    pivotCommand.schedule();
   }
     
     if(operator.getLeftTriggerAxis() > .5&&elevator.getState() == ElevatorState.L4CORALSCORE){
@@ -986,6 +987,7 @@ public class Robot extends LoggedRobot {
     L4CoralScore.cancel();
     L2CoralScore.cancel();
     L1CoralScore.cancel();
+    l4Transition.cancel();
     transition.cancel();
     netScore.cancel();
     groundSequence.cancel();

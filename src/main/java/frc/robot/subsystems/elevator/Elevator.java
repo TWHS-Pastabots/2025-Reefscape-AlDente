@@ -38,13 +38,13 @@ public class Elevator {
     public enum ElevatorState{
         GROUND(0),
         LOWALGAEINTAKE(27.5),
-        HIGHALGAEINTAKE(40),
+        HIGHALGAEINTAKE(41.5),
         L1CORALSCORE(0),
-        L2CORALSCORE(14),//13.5
-        L3CORALSCORE(41.1),//39.5 
-        L4CORALSCORE(76),
+        L2CORALSCORE(16),//13.5
+        L3CORALSCORE(42.1),//39.5 
+        L4CORALSCORE(78),
         PROCESSOR(9),
-        HUMANSTATIONINTAKE(10.5),
+        HUMANSTATIONINTAKE(11.25),
         AUTONTRANSITION(9),
         TEST(60);
 

@@ -22,15 +22,15 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class Wrist  {
     //rot is not degrees
-    // tilt is degrees
+    // tilt is kinda close to degrees
     public enum WristState {
-        GROUND(130,90),
-        LOWALGAEINTAKE(130,30),
-        HIGHALGAEINTAKE(130,40),
+        GROUND(110,93),
+        LOWALGAEINTAKE(125,30),
+        HIGHALGAEINTAKE(125,40),
         L1CORALSCORE(4,140), 
         L2CORALSCORE(4,170), 
-        L3CORALSCORE(4 ,165),
-        L4CORALSCORE(4,165),
+        L3CORALSCORE(4 ,175),
+        L4CORALSCORE(4,170),
         PROCESSOR(0,60),
         HUMANSTATIONINTAKE(130,90),
         TRANSITIONSTATE(130,100),//68
