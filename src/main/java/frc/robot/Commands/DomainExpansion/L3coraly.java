@@ -13,6 +13,6 @@ public class L3coraly extends ParallelDeadlineGroup{
     public L3coraly(){
         super(new WaitCommand(.3) );
 
-        addCommands(new WristCommand(WristState.L3CORALSCORE), new ElevatorCommand(ElevatorState.L3CORALSCORE) );
+        addCommands(new WristCommand(WristState.L3CORALSCORE), new ElevatorCommand(ElevatorState.L3CORALSCORE));
     }
 }

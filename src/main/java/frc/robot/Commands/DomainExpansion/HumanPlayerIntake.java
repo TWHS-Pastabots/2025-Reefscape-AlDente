@@ -21,6 +21,6 @@ public class HumanPlayerIntake extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
-    addCommands(new human1(), h);
+    addCommands( h);
   }
 }
