@@ -37,7 +37,7 @@ public class Wrist  {
         TEST(0,140),
         CLIMB(0,84.6),
         
-        NET(0,90);
+        NET(130,90);
         public double rotate;
         public double tilt;
         private WristState(double rotate, double tilt) {

@@ -663,7 +663,7 @@ public class Robot extends LoggedRobot {
     }
     else{
       claw.flywheelOff();
-      claw.clawOn(.07);
+      claw.clawOn(.15);
     }
   }
   if(operator.getYButton()){
