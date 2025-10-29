@@ -500,10 +500,10 @@ public class Robot extends LoggedRobot {
     drivebase.drive(xSpeed, multFactor * ySpeed, rot, !usingAlign);
     
     
-    if(operator.getLeftStickButtonPressed()){
-      Elevator.adjuster = Elevator.adjuster -.2;
-      elevator.UpdateEnumPoses();
-    }
+    // if(operator.getLeftStickButtonPressed()){
+    //   Elevator.adjuster = Elevator.adjuster -.2;
+    //   elevator.UpdateEnumPoses();
+    // }
     if(operator.getRightStickButtonPressed() && elevator.getState() == ElevatorState.GROUND){
       Elevator.adjuster = Elevator.adjuster +.2;
       elevator.UpdateEnumPoses();
